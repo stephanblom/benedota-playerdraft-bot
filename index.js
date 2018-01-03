@@ -15,38 +15,38 @@ client.on('ready', () => {
         playerID TEXT NOT NULL PRIMARY KEY, 
         playername TEXT NOT NULL,
         mmr INTEGER NOT NULL,
-        positions TEXT NOT NULL
+        position TEXT NOT NULL,
+        captain TEXT NOT NULL,
+        joined INTEGER NOT NULL DEFAULT 0
     )`);
 
-    db.run(`CREATE TABLE IF NOT EXISTS tournament (
+    db.run(`CREATE TABLE IF NOT EXISTS team (
         ID INTEGER NOT NULL PRIMARY KEY,
-        name TEXT NOT NULL,
-        date DATETIME NOT NULL
+        captain TEXT NOT NULL,
+        avg_mmr TEXT NOT NULL
     )`);
 
-    db.run(`CREATE TABLE IF NOT EXISTS tournament_player (
-        tournamentID INTEGER NOT NULL,
-        playerID TEXT NOT NULL,
-        FOREIGN KEY(tournamentID) REFERENCES tournament(ID),
-        FOREIGN KEY(playerID) REFERENCES player(ID),
-        PRIMARY KEY(tournamentID, playerID)
+    db.run(`CREATE TABLE IF NOT EXISTS team_player (
+        team_ID INTEGER NOT NULL,
+        player_name INTEGER NOT NULL,
+        position INTEGER NOT NULL,
+        PRIMARY KEY (team_ID, player_name)
     )`);
 
     console.log(
         `Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of` +
         ` ${client.guilds.size} guilds.`
     );
-    client.user.setGame(`PlayerDraft on ${client.guilds.size} servers`);
+
+    client.user.setGame(`BeNeDota PlayerDraft`);
 });
 
 client.on("guildCreate", guild => {
     console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
-    client.user.setGame(`on ${client.guilds.size} servers`);
 });
 
 client.on("guildDelete", guild => {
     console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
-    client.user.setGame(`on ${client.guilds.size} servers`);
 });
 
 client.on('message', async message =>
@@ -87,27 +87,9 @@ client.on('message', async message =>
         return;
     };
 
-    if (command === 'register') {
+    if (command === 'register' || command === 'update') {
         var registerPlayer = require('./player/register');
         registerPlayer.register(message, args);
-
-        return;
-    }
-
-    if (command === 'createtournament') {
-        if (message.member.roles.find('name', 'Admin') || message.member.roles.find('name', 'Staff')) {
-            var createTournament = require('./tournament/createTournament.js');
-            createTournament.createTournament(message, args);
-        } else {
-            message.channel.send(`${message.author}, you have no access to this command. `);
-        }
-
-        return;
-    }
-
-    if (command === 'nexttournament') {
-        var nextTournament = require('./tournament/nextTournament');
-        nextTournament.showTournament(message, args);
 
         return;
     }
@@ -117,6 +99,54 @@ client.on('message', async message =>
         joinTournament.joinTournament(message, args);
 
         return;
+    }
+
+    if (command === 'leave' || command === 'leavetournament') {
+        var leaveTournament = require('./player/leaveTournament');
+        leaveTournament.leaveTournament(message, args);
+
+        return;
+    }
+
+    if (command === 'exportjoinedplayers') {
+        if (message.member.roles.find("name", "Admin")
+            || mesage.author.id === '157938886784319489'
+        ) {
+            var exportJoinedPlayers = require('./tournament/exportJoinedPlayers');
+            exportJoinedPlayers.exportJoinedPlayers(message, args);
+        }
+
+        return;
+    }
+
+    if (command === 'showteams') {
+        if (message.member.roles.find("name", "Admin")
+            || mesage.author.id === '157938886784319489'
+        ) {
+            var showTeams = require('./tournament/showTeams');
+            showTeams.showTeams(message, args);
+        }
+
+        return;
+    }
+
+    if (command === 'addteam') {
+        if (message.member.roles.find("name", "Admin")
+            || mesage.author.id === '157938886784319489'
+        ) {
+            var addTeam = require('./tournament/addTeam');
+            addTeam.addTeam(message, args);
+        }
+
+        return;
+    }
+
+    if (command === 'addDetails') {
+
+    }
+
+    if (command === 'showDetails') {
+
     }
 
 });

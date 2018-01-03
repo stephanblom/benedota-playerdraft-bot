@@ -5,13 +5,16 @@ exports.sendHelp = function (message, args) {
                 message.channel.send(`!help <command (optional)> | Displays the help command.`);
                 return;
             case 'register':
-                message.channel.send(`!register <mmr> <position> <position (optional)> <position (optional)> | Registers you to the bot`);
+                message.channel.send(`!register <mmr> <position> | Registers you to the bot`);
                 return;
             case 'playerlist':
                 message.channel.send(`!playerlist | Shows the people joining the next tournament`);
                 return;
             case 'join':
-                message.channel.send(`!join <tournamentID> | Joins the next tournament`);
+                message.channel.send(`!join (!jointournament) | Joins the next tournament`);
+                return;
+            case 'leave':
+                message.channel.send(`!leave (!leavetournament) | Leaves the next tournament`);
                 return;
         }
     }
@@ -19,9 +22,10 @@ exports.sendHelp = function (message, args) {
     message.channel.send(
         `Available commands:
         - !help <command (optional)> | Displays this command.
-        - !register <mmr> <position> <position (optional)> <position (optional)> | Registers you to the bot
+        - !register <mmr> <position> <preferred captain (Yes/No) /> | Registers you to the bot
         - !playerlist | Shows the people joining the next tournament
-        - !join <tournamentID>| Joins the next tournament`
+        - !join | Joins the next tournament
+        - !leave | Leaves the next tournament`
     );
 
     return;
