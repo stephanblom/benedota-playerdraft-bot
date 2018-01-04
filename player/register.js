@@ -73,7 +73,7 @@ exports.register = function (message, args) {
             ${mmr}, 
             '${position}', 
             '${captain}',
-            (SELECT joined FROM player WHERE playerID = '${message.author.id}')}
+            (SELECT joined FROM player WHERE playerID = '${message.author.id}')
         )
     `;
 
