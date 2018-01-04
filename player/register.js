@@ -29,7 +29,7 @@ exports.register = function (message, args) {
         return;
     }
 
-    if (position.toLowerCase() !== 'any' && isNaN(position) && (position < 1 || position > 5)) {
+    if ((position.toLowerCase() !== 'any' && isNaN(position)) || (position < 1 || position > 5)) {
         message.channel.send(
             `Registering ${message.author} failed, wrong position given. 
             Ex. command: *!register <mmr> <position> <preferred captain>*`
