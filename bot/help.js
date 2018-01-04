@@ -5,7 +5,8 @@ exports.sendHelp = function (message, args) {
                 message.channel.send(`!help <command (optional)> | Displays the help command.`);
                 return;
             case 'register':
-                message.channel.send(`!register <mmr> <position> | Registers you to the bot`);
+            case 'update':
+                message.channel.send(`!register <mmr> <position> <preferred captain (Ja/Nee)> | Registers you to the bot`);
                 return;
             case 'playerlist':
                 message.channel.send(`!playerlist | Shows the people joining the next tournament`);
@@ -22,7 +23,7 @@ exports.sendHelp = function (message, args) {
     message.channel.send(
         `Available commands:
         - !help <command (optional)> | Displays this command.
-        - !register <mmr> <position> <preferred captain (Yes/No) /> | Registers you to the bot
+        - !register (or !update) <mmr> <position> <preferred captain (Yes/No) /> | Registers/Updates you to the bot
         - !playerlist | Shows the people joining the next tournament
         - !join | Joins the next tournament
         - !leave | Leaves the next tournament`
