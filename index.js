@@ -15,8 +15,8 @@ client.on('ready', () => {
         playerID TEXT NOT NULL PRIMARY KEY, 
         playername TEXT NOT NULL,
         mmr INTEGER NOT NULL,
-        position TEXT NOT NULL,
-        captain TEXT NOT NULL,
+        preferred_position TEXT NOT NULL,
+        preferred_captain TEXT NOT NULL,
         joined INTEGER NOT NULL DEFAULT 0
     )`);
 
@@ -28,7 +28,7 @@ client.on('ready', () => {
 
     db.run(`CREATE TABLE IF NOT EXISTS team_player (
         team_ID INTEGER NOT NULL,
-        player_name INTEGER NOT NULL,
+        player_name TEXT NOT NULL,
         position INTEGER NOT NULL,
         PRIMARY KEY (team_ID, player_name)
     )`);
@@ -38,7 +38,7 @@ client.on('ready', () => {
         ` ${client.guilds.size} guilds.`
     );
 
-    client.user.setGame(`BeNeDota PlayerDraft`);
+    client.user.setGame(`BeNeDota PlayerDraft`);4
 });
 
 client.on("guildCreate", guild => {
@@ -108,12 +108,12 @@ client.on('message', async message =>
         return;
     }
 
-    if (command === 'exportjoinedplayers') {
+    if (command === 'exportjoinedplayers' || command === 'exportplayers') {
         if (message.member.roles.find("name", "Admin")
             || mesage.author.id === '157938886784319489'
         ) {
-            var exportJoinedPlayers = require('./tournament/exportJoinedPlayers');
-            exportJoinedPlayers.exportJoinedPlayers(message, args);
+            var exportPlayers = require('./tournament/exportPlayers');
+            exportPlayers.exportPlayers(message, args);
         }
 
         return;
@@ -139,14 +139,6 @@ client.on('message', async message =>
         }
 
         return;
-    }
-
-    if (command === 'addDetails') {
-
-    }
-
-    if (command === 'showDetails') {
-
     }
 
 });

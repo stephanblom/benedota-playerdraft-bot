@@ -1,14 +1,22 @@
 const sqlite3 = require('sqlite3').verbose();
 
 exports.register = function (message, args) {
+    if (args.length < 3) {
+        message.channel.send(
+            `Registering ${message.author} failed, not enough parameters given. 
+            Ex. command: *!register <mmr> <position> <preferred captain>*`
+        );
+        return;
+    }
+
     mmr = args[0];
     position = args[1];
-    captain = args[2].toLowerCase();
+    captain = args[2];
 
     if (!mmr) {
         message.channel.send(
             `Registering ${message.author} failed, no mmr given. 
-            Ex. command: *!register <mmr> <position>*`
+            Ex. command: *!register <mmr> <position> <preferred captain>*`
         );
         return;
     }
@@ -16,7 +24,15 @@ exports.register = function (message, args) {
     if (!position) {
         message.channel.send(
             `Registering ${message.author} failed, no position given. 
-            Ex. command: *!register <mmr> <position>*`
+            Ex. command: *!register <mmr> <position> <preferred captain>*`
+        );
+        return;
+    }
+
+    if (position.toLowerCase() !== 'any' && isNaN(position)) {
+        message.channel.send(
+            `Registering ${message.author} failed, wrong position given. 
+            Ex. command: *!register <mmr> <position> <preferred captain>*`
         );
         return;
     }
@@ -28,7 +44,7 @@ exports.register = function (message, args) {
         );
         return;
     } else {
-        switch (captain) {
+        switch (captain.toLowerCase()) {
             case "1":
             case "ja":
             case "true":
@@ -50,21 +66,18 @@ exports.register = function (message, args) {
         }
     });
 
-    database.serialize(function () {
-        var sql = `INSERT OR REPLACE INTO player (playerID, playername, mmr, position, captain)
-            VALUES ('${message.author.id}', '${message.author.username}', ${mmr}, '${position}', '${captain}')
-        `;
+    var sql = `INSERT OR REPLACE INTO player (playerID, playername, mmr, preferred_position, preferred_captain)
+        VALUES ('${message.author.id}', '${message.author.username}', ${mmr}, '${position}', '${captain}')
+    `;
 
-        database.run(sql, [], function (err, allRows) {
-            if (err) {
-                console.error(err.toString());
-                message.channel.send(`Registering or updating player failed, an error occurred.`);
-                return;
-            }
-
-            message.channel.send(`${message.author} registered or updated. `);
-            database.close();
+    database.run(sql, [], function (err, allRows) {
+        if (err) {
+            console.error(err.toString());
+            message.channel.send(`Registering or updating player failed, an error occurred.`);
             return;
-        });
+        }
+
+        message.channel.send(`${message.author} registered or updated. `);
+        database.close();
     });
 }
