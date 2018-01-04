@@ -66,8 +66,15 @@ exports.register = function (message, args) {
         }
     });
 
-    var sql = `INSERT OR REPLACE INTO player (playerID, playername, mmr, preferred_position, preferred_captain)
-        VALUES ('${message.author.id}', '${message.author.username}', ${mmr}, '${position}', '${captain}')
+    var sql = `INSERT OR REPLACE INTO player (playerID, playername, mmr, preferred_position, preferred_captain, joined)
+        VALUES (
+            '${message.author.id}', 
+            '${message.author.username}', 
+            ${mmr}, 
+            '${position}', 
+            '${captain}',
+            (SELECT joined FROM player WHERE playerID = '${message.author.id}'}
+        )
     `;
 
     database.run(sql, [], function (err, allRows) {

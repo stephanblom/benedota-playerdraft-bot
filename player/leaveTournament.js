@@ -18,7 +18,7 @@ exports.leaveTournament = function (message, args) {
         }
 
         if (this.changes == 0) {
-            message.channel.send(`${message.author}, I couldn't join you, have you joined before, or are you not *!registered*?`);
+            message.channel.send(`${message.author}, I couldn't leave you, have you joined before, or are you not *!registered*?`);
             database.close();
             return;
         } else {
