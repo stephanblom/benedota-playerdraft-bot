@@ -1,13 +1,20 @@
-const sqlite3 = require('sqlite3').verbose();
+exports.leaveTournament = function (message, args, connection) {
+    var sql = `UPDATE player SET joined = 0 WHERE playerID = ${message.author.id} AND joined = 1`;
 
-exports.leaveTournament = function (message, args) {
-    var database = new sqlite3.Database('./db/playerdraft.db', (err) => {
-        if (err) {
-            console.error(err.message);
+    connection.query(sql, (error, results) => {
+        if (error) {
+            console.error(error.toString());
+            throw error;
+        }
+
+        if (this.changes == 0) {
+            message.channel.send(`${message.author}, I couldn't leave you, have you joined before, or are you not *!registered*?`);
+            return;
+        } else {
+            message.channel.send(`${message.author}, you have now left the BeNeDota Playerdraft.`);
+            return;
         }
     });
-
-    var sql = `UPDATE player SET joined = 0 WHERE playerID = ${message.author.id} AND joined = 1`;
 
     database.run(sql, [], function (err, row) {
         if (err) {

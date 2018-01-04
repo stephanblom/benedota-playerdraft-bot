@@ -1,6 +1,4 @@
-const sqlite3 = require('sqlite3').verbose();
-
-exports.register = function (message, args) {
+exports.register = function (message, args, connection) {
     if (args.length < 3) {
         message.channel.send(
             `Registering ${message.author} failed, not enough parameters given. 
@@ -10,8 +8,8 @@ exports.register = function (message, args) {
     }
 
     mmr = args[0];
-    position = args[1];
-    captain = args[2];
+    preferred_position = args[1];
+    preferred_captain = args[2];
 
     if (!mmr) {
         message.channel.send(
@@ -21,7 +19,7 @@ exports.register = function (message, args) {
         return;
     }
 
-    if (!position) {
+    if (!preferred_position) {
         message.channel.send(
             `Registering ${message.author} failed, no position given. 
             Ex. command: *!register <mmr> <position> <preferred captain>*`
@@ -29,7 +27,7 @@ exports.register = function (message, args) {
         return;
     }
 
-    if ((position.toLowerCase() !== 'any' && isNaN(position)) || (position < 1 || position > 5)) {
+    if ((preferred_position.toLowerCase() !== 'any' && isNaN(preferred_position)) || (preferred_position < 1 || preferred_position > 5)) {
         message.channel.send(
             `Registering ${message.author} failed, wrong position given. 
             Ex. command: *!register <mmr> <position> <preferred captain>*`
@@ -37,54 +35,49 @@ exports.register = function (message, args) {
         return;
     }
 
-    if (!captain) {
+    if (!preferred_captain) {
         message.channel.send(
             `Registering ${message.author} failed, no preferred captain given. 
             Ex. command: *!register <mmr> <position> <preferred captain (1/Ja/Yes/True of 0/Nee/No/False)>*`
         );
         return;
     } else {
-        switch (captain.toLowerCase()) {
+        switch (preferred_captain.toLowerCase()) {
             case "1":
             case "ja":
             case "true":
             case "yes":
-                captain = 'True';
+                preferred_captain = 1;
                 break;
             case "0":
             case "nee":
             case "false":
             case "no":
-                captain = 'False';
+                preferred_captain = 0;
                 break;
         }
     }
 
-    var database = new sqlite3.Database('./db/playerdraft.db', (err) => {
-        if (err) {
-            console.error(err.message);
-        }
-    });
-
-    var sql = `INSERT OR REPLACE INTO player (playerID, playername, mmr, preferred_position, preferred_captain, joined)
+    var sql = `INSERT INTO player (playerID, playername, mmr, preferred_position, preferred_captain)
         VALUES (
             '${message.author.id}', 
             '${message.author.username}', 
             ${mmr}, 
-            '${position}', 
-            '${captain}',
-            (SELECT joined FROM player WHERE playerID = '${message.author.id}')
+            '${preferred_position}', 
+            '${preferred_captain}'
         )
+        ON DUPLICATE KEY UPDATE
+            mmr = ${mmr},
+            preferred_position = ${preferred_position},
+            preferred_captain = ${preferred_captain}
     `;
 
-    database.run(sql, [], function (err, allRows) {
-        if (err) {
-            console.error(err.toString());
-            message.channel.send(`Registering or updating player failed, an error occurred.`);
-            return;
+    connection.query(sql, (error, results) => {
+        if (error) {
+            console.error(error.toString());
+            throw error;
         }
 
         message.channel.send(`${message.author} registered or updated. `);
-        database.close();
     });
 }

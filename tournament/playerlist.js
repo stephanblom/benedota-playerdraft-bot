@@ -1,37 +1,27 @@
-const sqlite3 = require('sqlite3').verbose();
-
-exports.getPlayerlist = function (message, args) {
-    var database = new sqlite3.Database('./db/playerdraft.db', (err) => {
-        if (err) {
-            console.error(err.message);
-        }
-    });
-
+exports.getPlayerlist = function (message, args, connection) {
     var sql = `SELECT * FROM player WHERE joined = 1`;
-    database.all(sql, [], function (err, allRows) {
-        if (err) {
-            console.error(err.toString());
+    connection.query(sql, (error, results) => {
+        if (error) {
+            console.error(error.toString());
             message.channel.send(`Getting players failed, an error occurred.`);
             database.close();
             return;
         }
 
-        if (!allRows || !allRows.length) {
+        if (!results || !results.length) {
             message.channel.send(`No players joined yet.`);
             database.close();
             return;
         }
 
-        addPlayersToEmbed(message, allRows);
-
-        database.close();
-        return allRows;
+        addPlayersToList(message, results);
+        return;
     });
 
     return;
 }
 
-addPlayersToEmbed = function(message, allrows) {
+addPlayersToList = function(message, allrows) {
     var description = '';
     var i = 1;
     allrows.forEach(function (player) {
