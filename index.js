@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 const DiscordClient = new Discord.Client();
 
 const mysql = require('mysql');
-const connection = mysql.createConnection({
+const connection = mysql.createConnection(process.env.CLEARDB_DATABASE_URL || {
     host: process.env.CLEARDB_DATABASE_URL || 'localhost',
     user: process.env.CLEARDB_DATABASE_USER || 'playerdraft',
     password: process.env.CLEARDB_DATABASE_PASS || config.password,
