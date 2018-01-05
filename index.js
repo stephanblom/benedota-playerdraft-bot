@@ -169,6 +169,28 @@ DiscordClient.on('message', async message =>
         return;
     }
 
+    if (command === 'registerplayer') {
+        if (message.member.roles.find("name", "Admin")
+            || mesage.author.id === '157938886784319489'
+        ) {
+            var registerPlayer = require('./player/registerPlayer');
+            registerPlayer.registerPlayer(message, args, pool);
+        }
+
+        return;
+    }
+
+    if (command === 'joinplayer') {
+        if (message.member.roles.find("name", "Admin")
+            || mesage.author.id === '157938886784319489'
+        ) {
+            var joinPlayer = require('./player/joinPlayer');
+            joinPlayer.joinPlayer(message, args, pool);
+        }
+
+        return;
+    }
+
 });
 
 DiscordClient.login(config.token);
