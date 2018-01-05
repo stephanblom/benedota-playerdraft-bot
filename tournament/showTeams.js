@@ -40,13 +40,11 @@ exportTeams = function(message, connection, players) {
             if (error) {
                 console.error(error.toString());
                 message.channel.send(`Getting players failed, an error occurred.`);
-                database.close();
                 return;
             }
 
             if (!results || !results.length) {
                 message.channel.send(`No teams.`);
-                database.close();
                 return;
             }
 

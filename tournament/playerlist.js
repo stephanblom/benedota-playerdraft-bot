@@ -7,13 +7,11 @@ exports.getPlayerlist = function (message, args, pool) {
             if (error) {
                 console.error(error.toString());
                 message.channel.send(`Getting players failed, an error occurred.`);
-                database.close();
                 return;
             }
 
             if (!results || !results.length) {
                 message.channel.send(`No players joined yet.`);
-                database.close();
                 return;
             }
 
