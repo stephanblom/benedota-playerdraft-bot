@@ -1,21 +1,25 @@
-exports.getPlayerlist = function (message, args, connection) {
+exports.getPlayerlist = function (message, args, pool) {
     var sql = `SELECT * FROM player WHERE joined = 1`;
-    connection.query(sql, (error, results) => {
-        if (error) {
-            console.error(error.toString());
-            message.channel.send(`Getting players failed, an error occurred.`);
-            database.close();
-            return;
-        }
+    pool.getConnection(function(error, connection) {
+        connection.query(sql, function (error, results) {
+            connection.release();
 
-        if (!results || !results.length) {
-            message.channel.send(`No players joined yet.`);
-            database.close();
-            return;
-        }
+            if (error) {
+                console.error(error.toString());
+                message.channel.send(`Getting players failed, an error occurred.`);
+                database.close();
+                return;
+            }
 
-        addPlayersToList(message, results);
-        return;
+            if (!results || !results.length) {
+                message.channel.send(`No players joined yet.`);
+                database.close();
+                return;
+            }
+
+            addPlayersToList(message, results);
+            return;
+        });
     });
 
     return;

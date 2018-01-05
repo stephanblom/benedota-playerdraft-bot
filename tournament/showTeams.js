@@ -1,27 +1,31 @@
 const Discord = require('discord.js');
 
-exports.showTeams = function (message, args, connection) {
+exports.showTeams = function (message, args, pool) {
     var sql = `SELECT * 
         FROM team_player 
         LEFT JOIN team ON team.ID = team_player.team_ID 
         LEFT JOIN player ON player.playername = team_player.player_name
         WHERE player.playerID IS NOT NULL`;
 
-    connection.query(sql, (error, results) => {
-        if (error) {
-            console.error(error.toString());
-            message.channel.send(`Getting players failed, an error occurred.`);
+    pool.getConnection(function(error, connection) {
+        connection.query(sql, function(error, results) {
+            connection.release();
+
+            if (error) {
+                console.error(error.toString());
+                message.channel.send(`Getting players failed, an error occurred.`);
+                return;
+            }
+
+            if (!results || !results.length) {
+                message.channel.send(`No players are in a team yet.`);
+                return;
+            }
+
+            exportTeams(message, pool, results);
+
             return;
-        }
-
-        if (!results || !results.length) {
-            message.channel.send(`No players are in a team yet.`);
-            return;
-        }
-
-        exportTeams(message, connection, results);
-
-        return;
+        });
     });
 
     return;
@@ -30,23 +34,26 @@ exports.showTeams = function (message, args, connection) {
 exportTeams = function(message, connection, players) {
     var sql = `SELECT * FROM team`;
 
-    connection.query(sql, (error, results) => {
-        if (error) {
-            console.error(error.toString());
-            message.channel.send(`Getting players failed, an error occurred.`);
-            database.close();
+    pool.getConnection(function(error, connection) {
+        connection.query(sql, function(error, results) {
+            connection.release();
+            if (error) {
+                console.error(error.toString());
+                message.channel.send(`Getting players failed, an error occurred.`);
+                database.close();
+                return;
+            }
+
+            if (!results || !results.length) {
+                message.channel.send(`No teams.`);
+                database.close();
+                return;
+            }
+
+            showPlayers(message, players, results);
+
             return;
-        }
-
-        if (!results || !results.length) {
-            message.channel.send(`No teams.`);
-            database.close();
-            return;
-        }
-
-        showPlayers(message, players, results);
-
-        return;
+        });
     });
 
     return;

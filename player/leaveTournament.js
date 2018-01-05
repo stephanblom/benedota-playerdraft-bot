@@ -1,40 +1,24 @@
-exports.leaveTournament = function (message, args, connection) {
+exports.leaveTournament = function (message, args, pool) {
     var sql = `UPDATE player SET joined = 0 WHERE playerID = ${message.author.id} AND joined = 1`;
 
-    connection.query(sql, (error, results) => {
-        if (error) {
-            console.error(error.toString());
-            throw error;
-        }
+    pool.getConnection(function(error, connection) {
+        connection.query(sql, function(error, results) {
+            connection.release();
 
-        if (this.changes == 0) {
-            message.channel.send(`${message.author}, I couldn't leave you, have you joined before, or are you not *!registered*?`);
-            return;
-        } else {
-            message.channel.send(`${message.author}, you have now left the BeNeDota Playerdraft.`);
-            return;
-        }
-    });
+            if (error) {
+                console.error(error.toString());
+                throw error;
+            }
 
-    database.run(sql, [], function (err, row) {
-        if (err) {
-            console.error(err.toString());
-            message.channel.send(`Couldn't leave, an error occurred.`);
-            database.close();
-            return;
-        }
-
-        if (this.changes == 0) {
-            message.channel.send(`${message.author}, I couldn't leave you, have you joined before, or are you not *!registered*?`);
-            database.close();
-            return;
-        } else {
-            message.channel.send(`${message.author}, you have now left the BeNeDota Playerdraft.`);
-            database.close();
-            return;
-        }
+            if (this.changes == 0) {
+                message.channel.send(`${message.author}, I couldn't leave you, have you joined before, or are you not *!registered*?`);
+                return;
+            } else {
+                message.channel.send(`${message.author}, you have now left the BeNeDota Playerdraft.`);
+                return;
+            }
+        });
     });
 
     return;
-
 }

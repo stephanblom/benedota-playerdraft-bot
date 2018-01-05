@@ -1,19 +1,22 @@
-exports.exportTeams = function (message, args, connection) {
+exports.exportTeams = function (message, args, pool) {
     var sql = `SELECT * FROM player WHERE joined = 1`;
-    connection.query(sql, (error, results) => {
-        if (error) {
-            console.error(err.toString());
-            message.channel.send(`Getting players failed, an error occurred.`);
-            return;
-        }
+    pool.getConnection(function(error, connection) {
+        connection.query(sql, function(error, results) {
+            connection.release();
+            if (error) {
+                console.error(err.toString());
+                message.channel.send(`Getting players failed, an error occurred.`);
+                return;
+            }
 
-        if (!results || !results.length) {
-            message.channel.send(`No players joined yet.`);
-            return;
-        }
+            if (!results || !results.length) {
+                message.channel.send(`No players joined yet.`);
+                return;
+            }
 
-        exportTeams(message, results);
+            exportTeams(message, results);
 
+        });
     });
 
     return;

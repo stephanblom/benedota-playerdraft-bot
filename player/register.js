@@ -1,4 +1,4 @@
-exports.register = function (message, args, connection) {
+exports.register = function (message, args, pool) {
     if (args.length < 3) {
         message.channel.send(
             `Registering ${message.author} failed, not enough parameters given. 
@@ -72,12 +72,16 @@ exports.register = function (message, args, connection) {
             preferred_captain = ${preferred_captain}
     `;
 
-    connection.query(sql, (error, results) => {
-        if (error) {
-            console.error(error.toString());
-            throw error;
-        }
+    pool.getConnection(function(error, connection) {
+        connection.query(sql, function(error, results) {
+            connection.release();
 
-        message.channel.send(`${message.author} registered or updated. `);
+            if (error) {
+                console.error(error.toString());
+                throw error;
+            }
+
+            message.channel.send(`${message.author} registered or updated. `);
+        });
     });
 }

@@ -1,4 +1,4 @@
-exports.addTeam = function (message, args, connection) {
+exports.addTeam = function (message, args, pool) {
     if (args.length < 4) {
         message.channel.send(
             `Adding team failed, not enough arguments. 
@@ -18,15 +18,20 @@ exports.addTeam = function (message, args, connection) {
             captain = '${captain}',
             avg_mmr = '${avg_mmr}'
     `;
-    connection.query(sql, (error, results) => {
-        if (error) {
-            console.error(error.toString());
-            message.channel.send(`Registering or updating team failed, an error occurred.`);
-            return;
-        }
 
-        addPlayers(message, connection, team_ID, team_players);
-        return;
+    pool.getConnection(function(error, connection) {
+        connection.query(sql, function(error, results) {
+            connection.release();
+
+            if (error) {
+                console.error(error.toString());
+                message.channel.send(`Registering or updating team failed, an error occurred.`);
+                return;
+            }
+
+            addPlayers(message, pool, team_ID, team_players);
+            return;
+        });
     });
 
     return;
@@ -44,15 +49,19 @@ function addPlayers(message, connection, team_ID, players)
     sql = sql.replace(/,\s*$/, "");
     sql += 'ON DUPLICATE KEY UPDATE player_name = VALUES(player_name), position = VALUES(position)'
 
-    connection.query(sql, (error, results) => {
-        if (error) {
-            console.error(error.toString());
-            message.channel.send(`Registering or updating team failed, an error occurred.`);
-            return;
-        }
+    pool.getConnection(function(error, connection) {
+        connection.query(sql, function(error, results) {
+            connection.release();
 
-        message.channel.send(`Team ${team_ID} registered or updated. `);
-        return;
+            if (error) {
+                console.error(error.toString());
+                message.channel.send(`Registering or updating team failed, an error occurred.`);
+                return;
+            }
+
+            message.channel.send(`Team ${team_ID} registered or updated. `);
+            return;
+        });
     });
 
     return;
