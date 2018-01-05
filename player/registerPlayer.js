@@ -12,11 +12,12 @@ exports.registerPlayer = function (message, args, pool) {
     preferred_position = args[2];
     preferred_captain = args[3];
 
-    if (!mmr) {
+    if (!mmr || isNaN(mmr) || (mmr < 1 || mmr >= 10000)) {
         message.channel.send(
-            `Registering failed, no mmr given. 
+            `Registering ${message.author} failed, invalid mmr given. 
             Ex. command: *!register <mmr> <position> <preferred captain>*`
         );
+
         return;
     }
 
@@ -56,6 +57,12 @@ exports.registerPlayer = function (message, args, pool) {
             case "no":
                 preferred_captain = 0;
                 break;
+            default:
+                message.channel.send(
+                    `Registering ${message.author} failed, invalid preferred captain given. 
+                    Ex. command: *!register <mmr> <position> <preferred captain (1/Ja/Yes/True of 0/Nee/No/False)>*`
+                );
+                return;
         }
     }
 
@@ -71,8 +78,8 @@ exports.registerPlayer = function (message, args, pool) {
         )
         ON DUPLICATE KEY UPDATE
             mmr = ${mmr},
-            preferred_position = ${preferred_position},
-            preferred_captain = ${preferred_captain}
+            preferred_position = '${preferred_position}',
+            preferred_captain = '${preferred_captain}'
     `;
 
     pool.getConnection(function(error, connection) {

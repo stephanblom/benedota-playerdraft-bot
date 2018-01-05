@@ -7,7 +7,7 @@ exports.register = function (message, args, pool) {
         return;
     }
 
-    mmr = parseInt(args[0]);
+    mmr = args[0];
     preferred_position = args[1];
     preferred_captain = args[2];
 
