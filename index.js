@@ -138,7 +138,7 @@ DiscordClient.on('message', async message =>
 
     if (command === 'exportjoinedplayers' || command === 'exportplayers') {
         if (message.member.roles.find("name", "Admin")
-            || mesage.author.id === '157938886784319489'
+            || message.author.id === '157938886784319489'
         ) {
             var exportPlayers = require('./tournament/exportPlayers');
             exportTeams.exportTeams(message, args, pool);
@@ -151,7 +151,7 @@ DiscordClient.on('message', async message =>
 
     if (command === 'showteams') {
         if (message.member.roles.find("name", "Admin")
-            || mesage.author.id === '157938886784319489'
+            || message.author.id === '157938886784319489'
         ) {
             var showTeams = require('./tournament/showTeams');
             showTeams.showTeams(message, args, pool);
@@ -164,7 +164,7 @@ DiscordClient.on('message', async message =>
 
     if (command === 'addteam') {
         if (message.member.roles.find("name", "Admin")
-            || mesage.author.id === '157938886784319489'
+            || message.author.id === '157938886784319489'
         ) {
             var addTeam = require('./tournament/addTeam');
             addTeam.addTeam(message, args, pool);
@@ -177,7 +177,7 @@ DiscordClient.on('message', async message =>
 
     if (command === 'registerplayer') {
         if (message.member.roles.find("name", "Admin")
-            || mesage.author.id === '157938886784319489'
+            || message.author.id === '157938886784319489'
         ) {
             var registerPlayer = require('./player/registerPlayer');
             registerPlayer.registerPlayer(message, args, pool);
@@ -190,7 +190,7 @@ DiscordClient.on('message', async message =>
 
     if (command === 'joinplayer') {
         if (message.member.roles.find("name", "Admin")
-            || mesage.author.id === '157938886784319489'
+            || message.author.id === '157938886784319489'
         ) {
             var joinPlayer = require('./player/joinPlayer');
             joinPlayer.joinPlayer(message, args, pool);
