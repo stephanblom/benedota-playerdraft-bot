@@ -142,6 +142,8 @@ DiscordClient.on('message', async message =>
         ) {
             var exportPlayers = require('./tournament/exportPlayers');
             exportTeams.exportTeams(message, args, pool);
+        } else {
+            message.channel.send("Not allowed.");
         }
 
         return;
@@ -153,6 +155,8 @@ DiscordClient.on('message', async message =>
         ) {
             var showTeams = require('./tournament/showTeams');
             showTeams.showTeams(message, args, pool);
+        } else {
+            message.channel.send("You! Shall not! Pass!");
         }
 
         return;
@@ -164,6 +168,8 @@ DiscordClient.on('message', async message =>
         ) {
             var addTeam = require('./tournament/addTeam');
             addTeam.addTeam(message, args, pool);
+        } else {
+            message.channel.send("No.");
         }
 
         return;
@@ -175,6 +181,8 @@ DiscordClient.on('message', async message =>
         ) {
             var registerPlayer = require('./player/registerPlayer');
             registerPlayer.registerPlayer(message, args, pool);
+        } else {
+            message.channel.send("Nope. ");
         }
 
         return;
@@ -186,6 +194,8 @@ DiscordClient.on('message', async message =>
         ) {
             var joinPlayer = require('./player/joinPlayer');
             joinPlayer.joinPlayer(message, args, pool);
+        } else {
+            message.channel.send("Nope. ");
         }
 
         return;
