@@ -11,7 +11,7 @@ exports.register = function (message, args, pool) {
     preferred_position = args[1];
     preferred_captain = args[2];
 
-    if (!mmr || isNaN(mmr) || (mmr < 1 || mmr >= 10000)) {
+    if (!mmr || isNaN(mmr) || !parseInt(mmr) || (mmr < 1 || mmr >= 10000)) {
         message.channel.send(
             `Registering ${message.author} failed, invalid mmr given. 
             Ex. command: *!register <mmr> <position> <preferred captain>*`
@@ -69,7 +69,7 @@ exports.register = function (message, args, pool) {
         VALUES (
             '${message.author.id}', 
             '${message.author.username}', 
-            ${mmr}, 
+            ${parseInt(mmr)}, 
             '${preferred_position}', 
             '${preferred_captain}'
         )
@@ -88,7 +88,7 @@ exports.register = function (message, args, pool) {
                 throw error;
             }
 
-            message.channel.send(`${message.author} registered or updated. `);
+            message.channel.send(`${message.author} registered or updated.`);
         });
     });
 }

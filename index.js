@@ -17,7 +17,7 @@ DiscordClient.on('ready', function() {
             playerID VARCHAR(255) NOT NULL PRIMARY KEY, 
             playername VARCHAR(255) NOT NULL,
             mmr INTEGER NOT NULL,
-            preferred_position VARCHAR(2) NOT NULL,
+            preferred_position VARCHAR(3) NOT NULL,
             preferred_captain TINYINT(1) NOT NULL,
             joined TINYINT(1) NOT NULL DEFAULT 0
         )`, function (error, results, fields) {
