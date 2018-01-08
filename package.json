@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^11.2.1",
-    "mysql": "^2.15.0"
+    "mysql": "^2.15.0",
+    "newrelic": "^2.5.0"
   }
 }
