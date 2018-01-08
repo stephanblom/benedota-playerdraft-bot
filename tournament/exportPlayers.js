@@ -1,4 +1,4 @@
-exports.exportTeams = function (message, args, pool) {
+exports.exportPlayers = function (message, args, pool) {
     var sql = `SELECT * FROM player WHERE joined = 1`;
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {
@@ -14,7 +14,7 @@ exports.exportTeams = function (message, args, pool) {
                 return;
             }
 
-            exportTeams(message, results);
+            showPlayers(message, results);
 
         });
     });
@@ -22,7 +22,7 @@ exports.exportTeams = function (message, args, pool) {
     return;
 }
 
-exportTeams = function(message, allrows) {
+showPlayers = function(message, allrows) {
     var description = '';
     var i = 1;
     allrows.forEach(function (player) {

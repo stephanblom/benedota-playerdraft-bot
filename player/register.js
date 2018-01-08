@@ -28,7 +28,16 @@ exports.register = function (message, args, pool) {
         return;
     }
 
-    if ((preferred_position.toLowerCase() !== 'any' && isNaN(preferred_position)) || (preferred_position < 1 || preferred_position > 5)) {
+    if (preferred_position.toLowerCase() === 'any') {
+        preferred_position = 'Any';
+    } else if (!isNaN(preferred_position)) {
+        preferred_position = parseInt(preferred_position);
+    }
+
+    if (
+        (typeof preferred_position === 'number' && (preferred_position < 1 || preferred_position > 5))
+        || (typeof preferred_position === 'string' && preferred_position !== 'Any')
+    ) {
         message.channel.send(
             `Registering ${message.author} failed, wrong position given. 
             Ex. command: *!register <mmr> <position> <preferred captain>*`

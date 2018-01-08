@@ -141,7 +141,7 @@ DiscordClient.on('message', async message =>
             || message.author.id === '157938886784319489'
         ) {
             var exportPlayers = require('./tournament/exportPlayers');
-            exportTeams.exportTeams(message, args, pool);
+            exportPlayers.exportPlayers(message, args, pool);
         } else {
             message.channel.send("Not allowed.");
         }
