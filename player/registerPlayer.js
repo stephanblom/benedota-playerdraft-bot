@@ -8,7 +8,7 @@ exports.registerPlayer = function (message, args, pool) {
     }
 
     userId = args[0]
-    mmr = args[1];
+    mmr = parseInt(args[1]);
     preferred_position = args[2];
     preferred_captain = args[3];
 

@@ -7,7 +7,7 @@ exports.register = function (message, args, pool) {
         return;
     }
 
-    mmr = args[0];
+    mmr = parseInt(args[0]);
     preferred_position = args[1];
     preferred_captain = args[2];
 
@@ -78,7 +78,7 @@ exports.register = function (message, args, pool) {
         VALUES (
             '${message.author.id}', 
             '${message.author.username}', 
-            ${parseInt(mmr)}, 
+            ${mmr}, 
             '${preferred_position}', 
             '${preferred_captain}'
         )
