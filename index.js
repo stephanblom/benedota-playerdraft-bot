@@ -1,4 +1,4 @@
-require('newrelic');
+const newrelic = require('newrelic');
 
 const config = require("./config.json");
 
@@ -111,29 +111,55 @@ DiscordClient.on('message', async message =>
     }
 
     if (command === "playerlist") {
-        var playerlist = require('./tournament/playerlist');
-        playerlist.getPlayerlist(message, args, pool);
+        newrelic.startBackgroundTransaction('register', [], function () {
+            newrelic.getTransaction();
+
+            var playerlist = require('./tournament/playerlist');
+            playerlist.getPlayerlist(message, args, pool);
+
+            newrelic.endTransaction();
+            return;
+        });
 
         return;
     };
 
     if (command === 'register' || command === 'update') {
-        var registerPlayer = require('./player/register');
-        registerPlayer.register(message, args, pool);
+        newrelic.startBackgroundTransaction('register', [], function () {
+            newrelic.getTransaction();
+
+            var registerPlayer = require('./player/register');
+            registerPlayer.register(message, args, pool);
+
+            newrelic.endTransaction();
+            return;
+        });
 
         return;
     }
 
     if (command === 'join' || command === 'jointournament') {
-        var joinTournament = require('./player/joinTournament');
-        joinTournament.joinTournament(message, args, pool);
+        newrelic.startBackgroundTransaction('join', [], function () {
+            newrelic.getTransaction();
+            var joinTournament = require('./player/joinTournament');
+            joinTournament.joinTournament(message, args, pool);
+
+            newrelic.endTransaction();
+            return;
+        });
 
         return;
     }
 
     if (command === 'leave' || command === 'leavetournament') {
-        var leaveTournament = require('./player/leaveTournament');
-        leaveTournament.leaveTournament(message, args, pool);
+        newrelic.startBackgroundTransaction('leave', [], function () {
+            newrelic.getTransaction();
+            var leaveTournament = require('./player/leaveTournament');
+            leaveTournament.leaveTournament(message, args, pool);
+
+            newrelic.endTransaction();
+            return;
+        });
 
         return;
     }
@@ -142,10 +168,18 @@ DiscordClient.on('message', async message =>
         if (message.member.roles.find("name", "Admin")
             || message.author.id === '157938886784319489'
         ) {
-            var exportPlayers = require('./tournament/exportPlayers');
-            exportPlayers.exportPlayers(message, args, pool);
+            newrelic.startBackgroundTransaction('exportjoinedplayers', [], function () {
+                newrelic.getTransaction();
+
+                var exportPlayers = require('./tournament/exportPlayers');
+                exportPlayers.exportPlayers(message, args, pool);
+
+                newrelic.endTransaction();
+                return;
+            });
         } else {
             message.channel.send("Not allowed.");
+            return;
         }
 
         return;
@@ -155,8 +189,15 @@ DiscordClient.on('message', async message =>
         if (message.member.roles.find("name", "Admin")
             || message.author.id === '157938886784319489'
         ) {
-            var showTeams = require('./tournament/showTeams');
-            showTeams.showTeams(message, args, pool);
+            newrelic.startBackgroundTransaction('showteams', [], function () {
+                newrelic.getTransaction();
+
+                var showTeams = require('./tournament/showTeams');
+                showTeams.showTeams(message, args, pool);
+
+                newrelic.endTransaction();
+                return;
+            });
         } else {
             message.channel.send("You! Shall not! Pass!");
         }
@@ -168,8 +209,15 @@ DiscordClient.on('message', async message =>
         if (message.member.roles.find("name", "Admin")
             || message.author.id === '157938886784319489'
         ) {
-            var addTeam = require('./tournament/addTeam');
-            addTeam.addTeam(message, args, pool);
+            newrelic.startBackgroundTransaction('addteam', [], function () {
+                newrelic.getTransaction();
+
+                var addTeam = require('./tournament/addTeam');
+                addTeam.addTeam(message, args, pool);
+
+                newrelic.endTransaction();
+                return;
+            });
         } else {
             message.channel.send("No.");
         }
@@ -181,8 +229,15 @@ DiscordClient.on('message', async message =>
         if (message.member.roles.find("name", "Admin")
             || message.author.id === '157938886784319489'
         ) {
-            var registerPlayer = require('./player/registerPlayer');
-            registerPlayer.registerPlayer(message, args, pool);
+            newrelic.startBackgroundTransaction('registerplayer', [], function () {
+                newrelic.getTransaction();
+
+                var registerPlayer = require('./player/registerPlayer');
+                registerPlayer.registerPlayer(message, args, pool);
+
+                newrelic.endTransaction();
+                return;
+            });
         } else {
             message.channel.send("Nope. ");
         }
@@ -194,8 +249,15 @@ DiscordClient.on('message', async message =>
         if (message.member.roles.find("name", "Admin")
             || message.author.id === '157938886784319489'
         ) {
-            var joinPlayer = require('./player/joinPlayer');
-            joinPlayer.joinPlayer(message, args, pool);
+            newrelic.startBackgroundTransaction('joinplayer', [], function () {
+                newrelic.getTransaction();
+
+                var joinPlayer = require('./player/joinPlayer');
+                joinPlayer.joinPlayer(message, args, pool);
+
+                newrelic.endTransaction();
+                return;
+            });
         } else {
             message.channel.send("Nope. ");
         }
