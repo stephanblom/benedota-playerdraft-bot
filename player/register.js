@@ -97,7 +97,9 @@ exports.register = function (message, args, pool) {
                 throw error;
             }
 
-            message.channel.send(`${message.author} registered or updated.`);
+            message.channel.send(`${message.author} is registered or updated `
+                + `*(MMR: ${mmr}, Prefers position: ${preferred_position}, `
+                + `Prefers captain: ${preferred_captain ? 'Yes' : 'No'})*.`);
         });
     });
 }

@@ -100,7 +100,9 @@ exports.registerPlayer = function (message, args, pool) {
                 throw error;
             }
 
-            message.channel.send(`Player is registered or updated. `);
+            message.channel.send(`Player is registered or updated *(MMR: ${mmr}, `
+            + `Prefers position: ${preferred_position}, `
+            + `Prefers captain: ${preferred_captain}).*`);
         });
     });
 }
