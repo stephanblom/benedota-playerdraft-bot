@@ -37,7 +37,7 @@ exports.addTeam = function (message, args, pool) {
     return;
 }
 
-function addPlayers(message, connection, team_ID, players)
+function addPlayers(message, pool, team_ID, players)
 {
     var playerList = players.split(';');
     var sql = `INSERT INTO team_player (team_ID, player_name, position) VALUES`;

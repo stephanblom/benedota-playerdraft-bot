@@ -31,7 +31,7 @@ exports.showTeams = function (message, args, pool) {
     return;
 }
 
-exportTeams = function(message, connection, players) {
+exportTeams = function(message, pool, players) {
     var sql = `SELECT * FROM team`;
 
     pool.getConnection(function(error, connection) {

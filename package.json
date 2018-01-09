@@ -11,7 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^11.2.1",
+    "fast-csv": "^2.4.1",
     "mysql": "^2.15.0",
-    "newrelic": "^2.5.0"
+    "newrelic": "^2.5.0",
+    "python-shell": "^0.4.0"
   }
 }

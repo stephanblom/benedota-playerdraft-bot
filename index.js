@@ -265,6 +265,45 @@ DiscordClient.on('message', async message =>
         return;
     }
 
+    if (command === 'createteams') {
+        if (message.member.roles.find("name", "Admin")
+            || message.author.id === '157938886784319489'
+        ) {
+            newrelic.startBackgroundTransaction('createTeams', [], function () {
+                newrelic.getTransaction();
+
+                var createTeams = require('./tournament/createTeams');
+                createTeams.createTeams(message, args, pool);
+
+                newrelic.endTransaction();
+                return;
+            });
+        } else {
+            message.channel.send("Nope. ");
+        }
+
+        return;
+    }
+
+    if (command === 'importteams') {
+        if (message.member.roles.find("name", "Admin")
+            || message.author.id === '157938886784319489'
+        ) {
+            newrelic.startBackgroundTransaction('importTeams', [], function () {
+                newrelic.getTransaction();
+
+                var importTeams = require('./tournament/importTeams');
+                importTeams.importTeams(message, args, pool);
+
+                newrelic.endTransaction();
+                return;
+            });
+        } else {
+            message.channel.send("Nope. ");
+        }
+
+        return;
+    }
 });
 
 DiscordClient.login(config.token);
