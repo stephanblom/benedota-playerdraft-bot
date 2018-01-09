@@ -1,16 +1,17 @@
 const newrelic = require('newrelic');
 
-const config = require("./config.json");
+const config = require('config');
+// const config = require("./config.json");
 
 const Discord = require('discord.js');
 const DiscordClient = new Discord.Client();
 
 const mysql = require('mysql');
 const pool = mysql.createPool(process.env.CLEARDB_DATABASE_URL || {
-    host: process.env.CLEARDB_DATABASE_URL || 'localhost',
-    user: process.env.CLEARDB_DATABASE_USER || 'playerdraft',
-    password: process.env.CLEARDB_DATABASE_PASS || config.password,
-    database: process.env.CLEARDB_DATABASE_NAME || 'playerdraft'
+    host: process.env.CLEARDB_DATABASE_URL || config.get('database.host'),
+    user: process.env.CLEARDB_DATABASE_USER || config.get('database.user'),
+    password: process.env.CLEARDB_DATABASE_PASS || config.get('database.password'),
+    database: process.env.CLEARDB_DATABASE_NAME || config.get('database.database'),
 });
 
 DiscordClient.on('ready', function() {
@@ -81,7 +82,7 @@ DiscordClient.on("guildDelete", guild => {
 
 DiscordClient.on('message', async message =>
 {
-    if (!message.content.startsWith(config.prefix)) {
+    if (!message.content.startsWith(config.get('prefix'))) {
         return;
     }
 
@@ -93,7 +94,7 @@ DiscordClient.on('message', async message =>
         return;
     }
 
-    const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+    const args = message.content.slice(config.get('prefix').length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
     if (command === "ping") {
@@ -306,4 +307,4 @@ DiscordClient.on('message', async message =>
     }
 });
 
-DiscordClient.login(config.token);
+DiscordClient.login(config.get('token'));

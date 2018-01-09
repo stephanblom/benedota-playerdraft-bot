@@ -1,0 +1,10 @@
+{
+  "token"  : "NDAwMDMxOTA2OTQ4OTcyNTQ0.DTVumQ.FTCnIBkA09QQyKz3UbTrzWTVNZM",
+  "prefix" : "?",
+  "database" : {
+    "host" : "localhost",
+    "user" : "playerdraft",
+    "password" : "P06QM3QfaJQQAqlH",
+    "database" : "playerdraft"
+  }
+}
