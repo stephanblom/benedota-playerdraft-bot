@@ -2,7 +2,7 @@ exports.exportPlayers = function (message, args, pool) {
 
     exportType = args[0] ? args[0] : 'message';
 
-    var sql = `SELECT * FROM player WHERE joined = 1`;
+    var sql = `SELECT * FROM player WHERE joined IS NOT NULL ORDER BY joined ASC`;
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {
             connection.release();
@@ -56,7 +56,9 @@ exportToCsv = function(message, allrows) {
         if (error) {
             return console.log(error);
         }
+
     });
 
+    message.channel.send(`Players have been exported to CSV.`);
     return;
 }

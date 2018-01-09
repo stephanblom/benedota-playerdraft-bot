@@ -16,6 +16,8 @@ exports.createTeams = function (message, args, pool) {
             message.channel.send(`Please submit a (valid) playerlist file`);
         }
 
+        message.channel.send(`Dota TeamMaker has run.`);
+
         return;
     });
 

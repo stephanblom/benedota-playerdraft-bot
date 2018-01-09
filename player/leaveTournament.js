@@ -1,5 +1,5 @@
 exports.leaveTournament = function (message, args, pool) {
-    var sql = `UPDATE player SET joined = 0 WHERE playerID = ${message.author.id} AND joined = 1`;
+    var sql = `UPDATE player SET joined = NULL WHERE playerID = '${message.author.id}' AND joined IS NOT NULL`;
 
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {
@@ -7,7 +7,6 @@ exports.leaveTournament = function (message, args, pool) {
 
             if (error) {
                 console.error(error.toString());
-                throw error;
             }
 
             if (this.changes == 0) {

@@ -7,6 +7,21 @@ exports.importTeams = function (message, args, pool) {
     var args = [];
     var i = 1;
 
+    sql = `TRUNCATE TABLE team_player;`
+    pool.getConnection(function(error, connection) {
+        connection.query(sql, function(error, results) {
+            connection.release();
+
+            if (error) {
+                console.error(error.toString());
+                message.channel.send(`Getting players failed, an error occurred.`);
+                return;
+            }
+
+            return;
+        });
+    });
+
     var stream = fs.createReadStream("./export/outfile.csv");
     csv
         .fromStream(stream, options)
@@ -34,9 +49,7 @@ exports.importTeams = function (message, args, pool) {
             pool: pool,
             message: message
         }))
-        .on("end", function() {
-            console.log("done");
-        });
+        .on("end", function() {});
 
     return;
 }

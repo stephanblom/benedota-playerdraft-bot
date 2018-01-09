@@ -58,12 +58,24 @@ exportTeams = function(message, pool, players) {
 }
 
 showPlayers = function(message, players, teams) {
+    var colors = [
+        '#ff0000',
+        '#00ff00',
+        '#0000ff',
+        '#ffff00',
+        '#00ffff',
+        '#ff00ff',
+        '#ffffff',
+        '#000000'
+    ];
+    var i = 0;
+
     teams.forEach(function (team) {
         var embed = new Discord.RichEmbed()
-            .setColor('#c50003')
+            .setColor(colors[i])
             .setTimestamp();
 
-        embed.setDescription(`The captain is ${team['preferred_captain']} and the average MMR is ${team['avg_mmr']}`)
+        embed.setDescription(`The captain is ${team['captain']} and the average MMR is ${team['avg_mmr']}`)
             .setTitle(`Team ${team['ID']}`)
             .setFooter(`BeNeDota Kayzr Player Draft Team ${team['ID']}`);
 
@@ -71,12 +83,13 @@ showPlayers = function(message, players, teams) {
             if (player['team_ID'] == team['ID']) {
                 embed.addField(
                     `${player['position']}. ${player['playername']}`,
-                    `Preferred role: ${player['preferred_position']}, Preferred captain: ${player['preferred_captain'] === 'True' ? 'Yes' : 'No'}`
+                    `Preferred role: ${player['preferred_position']}, Preferred captain: ${player['preferred_captain'] == 1 ? 'Yes' : 'No'}`
                 );
             }
         });
 
         message.channel.send({embed});
+        i++;
     });
 
 }

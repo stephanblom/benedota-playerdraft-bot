@@ -1,6 +1,6 @@
-exports.joinPlayer = function (message, args, pool) {
+exports.leavePlayer = function (message, args, pool) {
     var user = message.mentions.members.first().user;
-    var sql = `UPDATE player SET joined = NOW() WHERE playerID = ${user.id} AND joined IS NULL`;
+    var sql = `UPDATE player SET joined = NULL WHERE playerID = ${user.id} AND joined IS NOT NULL`;
 
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {

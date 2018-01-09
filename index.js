@@ -266,6 +266,26 @@ DiscordClient.on('message', async message =>
         return;
     }
 
+    if (command === 'leavePlayer') {
+        if (message.member.roles.find("name", "Admin")
+            || message.author.id === '157938886784319489'
+        ) {
+            newrelic.startBackgroundTransaction('joinplayer', [], function () {
+                newrelic.getTransaction();
+
+                var leavePlayer = require('./player/leavePlayer');
+                leavePlayer.leavePlayer(message, args, pool);
+
+                newrelic.endTransaction();
+                return;
+            });
+        } else {
+            message.channel.send("Nope. ");
+        }
+
+        return;
+    }
+
     if (command === 'createteams') {
         if (message.member.roles.find("name", "Admin")
             || message.author.id === '157938886784319489'
