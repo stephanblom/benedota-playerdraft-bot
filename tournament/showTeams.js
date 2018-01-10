@@ -110,8 +110,8 @@ showPlayers = function(message, players, teams) {
     teams.forEach(function (team) {
         var embed = new Discord.RichEmbed()
             .setColor('#' + colors[i])
-            .attachFile(`./images/dota2${colors[i]}.jpg`)
-            .setThumbnail(`attachment://dota2${colors[i]}.jpg`)
+            .attachFile(`./images/dota2${colors[i]}.png`)
+            .setThumbnail(`attachment://dota2${colors[i]}.png`)
             .setTimestamp();
 
         embed.setDescription(`The captain is ${team['captain']} and the average MMR is ${team['avg_mmr']}`)
