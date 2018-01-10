@@ -22,7 +22,7 @@ DiscordClient.on('ready', function() {
             mmr INTEGER NOT NULL,
             preferred_position VARCHAR(3) NOT NULL,
             preferred_captain TINYINT(1) NOT NULL,
-            joined TINYINT(1) NOT NULL DEFAULT 0
+            joined datetime DEFAULT NULL
         )`, function (error, results, fields) {
             connection.release();
 

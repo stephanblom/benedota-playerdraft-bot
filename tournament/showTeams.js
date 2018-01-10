@@ -48,13 +48,50 @@ exportTeams = function(message, pool, players) {
                 return;
             }
 
-            showPlayers(message, players, results);
+            showTeamInfo(message, pool, players, results);
 
             return;
         });
     });
 
     return;
+}
+
+showTeamInfo = function(message, pool, players, teams)
+{
+    var fs = require('fs');
+    var csv = require('fast-csv');
+    var options = {
+        ignoreEmpty: true
+    }
+    var args = [];
+    var i = 1;
+
+    var embed = new Discord.RichEmbed()
+        .setTitle('BeNeDota Player Draft Teams')
+        .setFooter(`BeNeDota Kayzr Player Draft Team Info`)
+        .setThumbnail('https://benedota.com/thumbs/assets/images/kerst_benedota_crop-225x250.png')
+        .setTimestamp();
+
+    var description = '';
+
+    var stream = fs.createReadStream("./export/outfile.csv");
+    csv
+        .fromStream(stream, options)
+        .on("data", function(data) {
+            if (data[0].startsWith('There is')) {
+                description += data[0].toString() + '\r\n';
+            } else if (data[0].includes('People are playing')) {
+                description += data[0].toString();
+            } else if (data[0].startsWith('1:')) {
+                stream.close();
+            }
+        })
+        .on("end", function() {
+            embed.setDescription(description);
+            message.channel.send({embed});
+            showPlayers(message, players, teams);
+        });
 }
 
 showPlayers = function(message, players, teams) {
@@ -72,7 +109,9 @@ showPlayers = function(message, players, teams) {
 
     teams.forEach(function (team) {
         var embed = new Discord.RichEmbed()
-            .setColor(colors[i])
+            .setColor('#' + colors[i])
+            .attachFile(`./images/dota2${colors[i]}.jpg`)
+            .setThumbnail(`attachment://dota2${colors[i]}.jpg`)
             .setTimestamp();
 
         embed.setDescription(`The captain is ${team['captain']} and the average MMR is ${team['avg_mmr']}`)
