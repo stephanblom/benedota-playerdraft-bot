@@ -96,14 +96,14 @@ showTeamInfo = function(message, pool, players, teams)
 
 showPlayers = function(message, players, teams) {
     var colors = [
-        '#ff0000',
-        '#00ff00',
-        '#0000ff',
-        '#ffff00',
-        '#00ffff',
-        '#ff00ff',
-        '#ffffff',
-        '#000000'
+        'ff0000',
+        '00ff00',
+        '0000ff',
+        'ffff00',
+        '00ffff',
+        'ff00ff',
+        'ffffff',
+        '000000'
     ];
     var i = 0;
 
