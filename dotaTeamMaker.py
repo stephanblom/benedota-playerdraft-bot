@@ -235,7 +235,7 @@ def write_away(teamlist, max_spread, role_frac, teamless_player_list):
     :param max_spread:
     :param role_frac:
     """
-    with open('./tmp/outfile.csv', mode='w+') as outfile:
+    with open('./export/outfile.csv', mode='w+') as outfile:
         writer = csv.writer(outfile, delimiter=';')
         writer.writerow(['There is a maximum spread of ' + str(
             max_spread) + ' on the team MMR\'rs'])
