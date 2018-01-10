@@ -17,6 +17,9 @@ exports.exportPlayers = function (message, args, pool) {
                 return;
             }
 
+            leftover_players_amount = results.length % 5;
+            results = results.splice(0, results.length - leftover_players_amount);
+
             if (exportType == 'csv') {
                 exportToCsv(message, results);
             } else {
