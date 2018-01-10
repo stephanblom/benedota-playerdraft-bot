@@ -22,7 +22,7 @@ exports.importTeams = function (message, args, pool) {
         });
     });
 
-    var stream = fs.createReadStream("./export/outfile.csv");
+    var stream = fs.createReadStream("./tmp/outfile.csv");
     csv
         .fromStream(stream, options)
         .on("data", function(data) {
