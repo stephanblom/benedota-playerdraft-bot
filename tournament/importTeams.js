@@ -28,12 +28,16 @@ exports.importTeams = function (message, args, pool) {
         .fromStream(stream, options)
         .on("data", function(data) {
             console.log(data);
-            if (data[0].startsWith('1:')) {
+            if (data[0].startsWith('Captain:')) {
                 var team_ID = i;
                 var team_info = data[0].split(';');
-                var captain_info = team_info.pop().split(':');
+                var captain_info = team_info.shift().split(':');
                 var avg_mmr_info = team_info.pop().split(':');
                 var team_players = team_info.join(';');
+
+                console.log(captain_info);
+                console.log(avg_mmr_info);
+                console.log(team_players);
 
                 if (avg_mmr_info.length > 0
                     && captain_info.length > 0) {
