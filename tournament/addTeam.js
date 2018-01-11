@@ -20,6 +20,9 @@ exports.addTeam = function (message, args, pool) {
     `;
 
     pool.getConnection(function(error, connection) {
+        if (error) {
+            console.error(error.toString());
+        }
         connection.query(sql, function(error, results) {
             connection.release();
 
