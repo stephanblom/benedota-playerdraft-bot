@@ -5,7 +5,8 @@ exports.showTeams = function (message, args, pool) {
         FROM team_player 
         LEFT JOIN team ON team.ID = team_player.team_ID 
         LEFT JOIN player ON player.playername = team_player.player_name
-        WHERE player.playerID IS NOT NULL`;
+        WHERE player.playerID IS NOT NULL
+        ORDER BY team_player.team_ID ASC`;
 
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {
@@ -32,7 +33,7 @@ exports.showTeams = function (message, args, pool) {
 }
 
 exportTeams = function(message, pool, players) {
-    var sql = `SELECT * FROM team`;
+    var sql = `SELECT * FROM team ORDER BY ID`;
 
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {
@@ -83,13 +84,14 @@ showTeamInfo = function(message, pool, players, teams)
                 description += data[0].toString() + '\r\n';
             } else if (data[0].includes('People are playing')) {
                 description += data[0].toString();
-            } else if (data[0].startsWith('1:')) {
+            } else if (data[0].startsWith('1:') || data[0].startsWith('Captain:')) {
                 stream.close();
             }
         })
         .on("end", function() {
             embed.setDescription(description);
             message.channel.send({embed});
+
             showPlayers(message, players, teams);
         });
 }
@@ -114,7 +116,7 @@ showPlayers = function(message, players, teams) {
             .setThumbnail(`attachment://dota2${colors[i]}.png`)
             .setTimestamp();
 
-        embed.setDescription(`The captain is ${team['captain']} and the average MMR is ${team['avg_mmr']}`)
+        embed.setDescription(`The captain is ${team['captain']} and the average MMR is ${team['avg_mmr']}.`)
             .setTitle(`Team ${team['ID']}`)
             .setFooter(`BeNeDota Kayzr Player Draft Team ${team['ID']}`);
 
