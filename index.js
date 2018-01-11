@@ -10,7 +10,9 @@ const Discord = require('discord.js');
 const DiscordClient = new Discord.Client();
 
 const mysql = require('mysql');
-const pool = mysql.createPool(process.env.CLEARDB_DATABASE_URL || {
+const pool = mysql.createPool({
+    connectionLimit: 10,
+    waitForConnections: true,
     host: process.env.CLEARDB_DATABASE_URL || config.get('database.host'),
     user: process.env.CLEARDB_DATABASE_USER || config.get('database.user'),
     password: process.env.CLEARDB_DATABASE_PASS || config.get('database.password'),
