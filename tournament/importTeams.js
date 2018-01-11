@@ -19,7 +19,6 @@ exports.importTeams = function (message, args, pool) {
             }
 
             console.log('Table team_player is truncated.');
-            return;
         });
     });
 
