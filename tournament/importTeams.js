@@ -18,14 +18,17 @@ exports.importTeams = function (message, args, pool) {
                 return;
             }
 
+            console.log('Table team_player is truncated.');
             return;
         });
     });
 
+    console.log('Start reading CSV.');
     var stream = fs.createReadStream("./export/outfile.csv");
     csv
         .fromStream(stream, options)
         .on("data", function(data) {
+            console.log(data);
             if (data[0].startsWith('1:')) {
                 var team_ID = i;
                 var team_info = data[0].split(';');

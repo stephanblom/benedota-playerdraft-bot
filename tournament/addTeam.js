@@ -18,6 +18,7 @@ exports.addTeam = function (message, args, pool) {
             captain = '${captain}',
             avg_mmr = '${avg_mmr}'
     `;
+    console.log(sql);
 
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {
@@ -48,6 +49,7 @@ function addPlayers(message, pool, team_ID, players)
 
     sql = sql.replace(/,\s*$/, "");
     sql += 'ON DUPLICATE KEY UPDATE player_name = VALUES(player_name), position = VALUES(position)'
+    console.log(sql);
 
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {
@@ -59,6 +61,7 @@ function addPlayers(message, pool, team_ID, players)
                 return;
             }
 
+            console.log(`Team ${team_ID} registered or updated. `)
             message.channel.send(`Team ${team_ID} registered or updated. `);
             return;
         });
