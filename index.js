@@ -19,6 +19,8 @@ const pool = mysql.createPool({
     database: process.env.CLEARDB_DATABASE_NAME || config.get('database.database'),
 });
 
+console.log(pool);
+
 DiscordClient.on('ready', function() {
     pool.getConnection(function(error, connection) {
         connection.query(`CREATE TABLE IF NOT EXISTS player (
