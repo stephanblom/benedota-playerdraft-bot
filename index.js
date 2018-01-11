@@ -10,16 +10,12 @@ const Discord = require('discord.js');
 const DiscordClient = new Discord.Client();
 
 const mysql = require('mysql');
-const pool = mysql.createPool({
-    connectionLimit: 10,
-    waitForConnections: true,
+const pool = mysql.createPool(process.env.CLEARDB_DATABASE_URL || {
     host: process.env.CLEARDB_DATABASE_URL || config.get('database.host'),
     user: process.env.CLEARDB_DATABASE_USER || config.get('database.user'),
     password: process.env.CLEARDB_DATABASE_PASS || config.get('database.password'),
     database: process.env.CLEARDB_DATABASE_NAME || config.get('database.database'),
 });
-
-console.log(pool);
 
 DiscordClient.on('ready', function() {
     pool.getConnection(function(error, connection) {
@@ -365,7 +361,6 @@ DiscordClient.on('message', async message =>
 
         return;
     }
-
 });
 
 DiscordClient.login(config.get('token'));
