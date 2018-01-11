@@ -1,5 +1,7 @@
 exports.addTeam = function (message, args, pool) {
+    console.log('Start of addTeam');
     if (args.length < 4) {
+        console.log('Error: not enough arguments');
         message.channel.send(
             `Adding team failed, not enough arguments. 
             Ex. command: *!addteam <number> <players from csv> <captain> <avg mmr>*`
