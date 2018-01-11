@@ -1,7 +1,10 @@
 const newrelic = require('newrelic');
-
 const config = require('config');
-// const config = require("./config.json");
+
+const Logger = require('le_node');
+const logger = new Logger({
+    token: process.env.LOGENTRIES_TOKEN || config.get('logentries_token')
+});
 
 const Discord = require('discord.js');
 const DiscordClient = new Discord.Client();
@@ -27,8 +30,13 @@ DiscordClient.on('ready', function() {
             connection.release();
 
             if (error) {
+                logger.err(error.toString());
                 console.error(error.toString());
                 throw error;
+            }
+
+            if (results.length > 0 ) {
+                logger.info("Database 'player' created.");
             }
         });
     });
@@ -42,8 +50,13 @@ DiscordClient.on('ready', function() {
             connection.release();
 
             if (error) {
+                logger.err(error.toString());
                 console.error(error.toString());
                 throw error;
+            }
+
+            if (result.length > 0 ) {
+                logger.info("Database 'team' created.");
             }
         });
     });
@@ -58,8 +71,13 @@ DiscordClient.on('ready', function() {
             connection.release();
 
             if (error) {
+                logger.err(error.toString());
                 console.error(error.toString());
                 throw error;
+            }
+
+            if (result.length > 0 ) {
+                logger.info("Database 'team_player' created.");
             }
         });
     });
@@ -68,6 +86,10 @@ DiscordClient.on('ready', function() {
         `Bot has started, with ${DiscordClient.users.size} users, in ${DiscordClient.channels.size} channels of` +
         ` ${DiscordClient.guilds.size} guilds.`
     );
+    logger.info(
+        `Bot has started, with ${DiscordClient.users.size} users, in ${DiscordClient.channels.size} channels of` +
+        ` ${DiscordClient.guilds.size} guilds.`
+    )
 
     DiscordClient.user.setGame(`BeNeDota PlayerDraft`);
 });
@@ -97,10 +119,18 @@ DiscordClient.on('message', async message =>
     const args = message.content.slice(config.get('prefix').length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
+    logger.debug('Received message: ' + command + ' with the arguments: ' + args.join(', '));
+
     if (command === "ping") {
-        const m = await
-        message.channel.send("Ping?");
-        m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(DiscordClient.ping)}ms`);
+        if (message.member.roles.find("name", "Admin")
+            || message.author.id === '157938886784319489'
+        ) {
+            const m = await
+            message.channel.send("Ping?");
+            m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(DiscordClient.ping)}ms`);
+
+            return;
+        }
 
         return;
     }
@@ -131,6 +161,8 @@ DiscordClient.on('message', async message =>
 
             var registerPlayer = require('./player/register');
             registerPlayer.register(message, args, pool);
+
+            logger.info(`Player ${message.author.username} registered. `);
 
             newrelic.endTransaction();
             return;

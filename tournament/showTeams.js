@@ -6,7 +6,7 @@ exports.showTeams = function (message, args, pool) {
         LEFT JOIN team ON team.ID = team_player.team_ID 
         LEFT JOIN player ON player.playername = team_player.player_name
         WHERE player.playerID IS NOT NULL
-        ORDER BY team_player.team_ID ASC`;
+        ORDER BY team_player.team_ID, team_player.position ASC`;
 
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {
@@ -50,7 +50,6 @@ exportTeams = function(message, pool, players) {
             }
 
             showTeamInfo(message, pool, players, results);
-
             return;
         });
     });
@@ -96,7 +95,7 @@ showTeamInfo = function(message, pool, players, teams)
         });
 }
 
-showPlayers = function(message, players, teams) {
+showPlayers = function (message, players, teams) {
     var colors = [
         'ff0000',
         '00ff00',
