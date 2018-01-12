@@ -312,7 +312,7 @@ def write_away(teamlist, max_spread, role_frac, teamless_player_list):
     that includes the teamlist, max mmr spread and the fraction of players
     playing their preffered role.
     """
-    with open('./export/outfile.csv', mode='w+') as outfile:
+    with open('Outfile.csv', mode='w+') as outfile:
         writer = csv.writer(outfile, delimiter=';')
         writer.writerow(['There is a maximum spread of ' + str(
             max_spread) + ' on the team MMR\'rs'])
