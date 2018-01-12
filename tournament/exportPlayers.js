@@ -21,7 +21,7 @@ exports.exportPlayers = function (message, args, pool) {
             results = results.splice(0, results.length - leftover_players_amount);
 
             if (exportType == 'csv') {
-                exportToCsv(message, results);
+                exportToCsv(message, args, pool, results);
             } else {
                 showPlayers(message, results);
             }
@@ -44,7 +44,7 @@ showPlayers = function(message, allrows) {
     message.channel.send("```Player_Name;Solo_MMR;Preffered_Role;Preffered_Captain;Active\n" + description + '```');
 }
 
-exportToCsv = function(message, allrows) {
+exportToCsv = function(message, args, pool, allrows) {
     var description = 'Player_Name;Solo_MMR;Preffered_Role;Preffered_Captain;Active\n';
     var i = 1;
     allrows.forEach(function (player) {
@@ -53,15 +53,21 @@ exportToCsv = function(message, allrows) {
     });
 
     var fs = require('fs');
-    var filepath = '/tmp/players.csv';
+    var filepath = './export/players.csv';
 
     fs.writeFileSync(filepath, description, { flag: 'w' }, function(error) {
         if (error) {
-            return console.log(error);
+            console.error(error);
+            return;
         }
 
+        return;
     });
 
     message.channel.send(`Players have been exported to CSV.`);
+
+    var createTeams = require('./createTeams');
+    createTeams.createTeams(message, args, pool);
+
     return;
 }

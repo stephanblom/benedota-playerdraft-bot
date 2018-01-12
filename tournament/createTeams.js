@@ -18,6 +18,9 @@ exports.createTeams = function (message, args, pool) {
 
         message.channel.send(`Dota TeamMaker has run.`);
 
+        var importTeams = require('./importTeams');
+        importTeams.importTeams(message, args, pool);
+
         return;
     });
 
