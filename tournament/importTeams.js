@@ -1,4 +1,5 @@
 exports.importTeams = function (message, args, pool) {
+    console.log('Importing teams');
     sql = `TRUNCATE TABLE team_player;`
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {
@@ -11,6 +12,7 @@ exports.importTeams = function (message, args, pool) {
             }
         });
 
+        console.log('Importing done');
         readCsv(message, args, pool);
     });
 
@@ -30,6 +32,7 @@ readCsv = function (message, args, pool)
     csv
         .fromStream(stream, options)
         .on("data", function(data) {
+            console.log('Reading csv...');
             if (data[0].startsWith('Captain:')) {
                 var team_ID = i;
                 var team_info = data[0].split(';');
@@ -71,7 +74,9 @@ readCsv = function (message, args, pool)
             pool: pool,
             message: message
         }))
-        .on("end", function() {});
+        .on("end", function() {
+            message.channel.send('End of reading teams');
+        });
 
     return;
 }

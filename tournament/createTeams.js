@@ -1,4 +1,5 @@
 exports.createTeams = function (message, args, pool) {
+    console.log('Creating teams');
     var PythonShell = require('python-shell');
 
     var options = {
@@ -16,6 +17,7 @@ exports.createTeams = function (message, args, pool) {
             message.channel.send(`Please submit a (valid) playerlist file`);
         }
 
+        console.log('Dota teammaker has run');
         message.channel.send(`Dota TeamMaker has run.`);
 
         var importTeams = require('./importTeams');
