@@ -55,19 +55,19 @@ exportToCsv = function(message, args, pool, allrows) {
     var fs = require('fs');
     var filepath = '/tmp/players.csv';
 
-    fs.writeFileSync(filepath, description, { flag: 'w' }, function(error) {
+    fs.writeFile(filepath, description, { flag: 'w' }, function(error) {
         if (error) {
             console.error(error);
             return;
         }
 
+        message.channel.send(`Players have been exported to CSV.`);
+
+        var createTeams = require('./createTeams');
+        createTeams.createTeams(message, args, pool);
+
         return;
     });
-
-    message.channel.send(`Players have been exported to CSV.`);
-
-    var createTeams = require('./createTeams');
-    createTeams.createTeams(message, args, pool);
 
     return;
 }

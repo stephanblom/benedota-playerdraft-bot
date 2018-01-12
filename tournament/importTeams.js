@@ -1,12 +1,4 @@
 exports.importTeams = function (message, args, pool) {
-    var fs = require('fs');
-    var csv = require('fast-csv');
-    var options = {
-        ignoreEmpty: true
-    }
-    var args = [];
-    var i = 1;
-
     sql = `TRUNCATE TABLE team_player;`
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {
@@ -18,7 +10,21 @@ exports.importTeams = function (message, args, pool) {
                 return;
             }
         });
+
+        readCsv(message, args, pool);
     });
+
+    return;
+}
+
+readCsv = function (message, args, pool)
+{
+    var fs = require('fs');
+    var csv = require('fast-csv');
+    var options = {
+        ignoreEmpty: true
+    }
+    var i = 1;
 
     var stream = fs.createReadStream("/tmp/outfile.csv");
     csv
