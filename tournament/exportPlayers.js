@@ -53,7 +53,7 @@ exportToCsv = function(message, allrows) {
     });
 
     var fs = require('fs');
-    var filepath = './export/players.csv';
+    var filepath = '/tmp/players.csv';
 
     fs.writeFileSync(filepath, description, { flag: 'w' }, function(error) {
         if (error) {
