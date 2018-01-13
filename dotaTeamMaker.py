@@ -386,3 +386,4 @@ except:
     print('Correct commandline input is:')
     print('python <name of DotaTeamMaker> <Input data>')
     print(sys.argv[1])
+    print(sys.exc_info())
