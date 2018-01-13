@@ -1,20 +1,6 @@
 exports.createTeams = function (message, args, pool) {
     var fs = require('fs');
-    var csv = require('fast-csv');
-
     fs.exists('/tmp/players.csv', function() {
-        fs.createReadStream('/tmp/players.csv')
-            .pipe(csv())
-            .on('data', function(data) {
-                console.log(data);
-            }).on('end', function (data) {
-
-            });
-
-        var options = {
-            ignoreEmpty: true
-        }
-
         console.log('/tmp/players.csv exists.');
 
         var PythonShell = require('python-shell');
