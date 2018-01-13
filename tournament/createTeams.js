@@ -7,6 +7,10 @@ exports.createTeams = function (message, args, pool) {
         args: ['/tmp/players.csv']
     };
 
+    fs.exists('/tmp/players.csv', function() {
+        console.log('file exists');
+    });
+
     PythonShell.run('dotaTeamMaker.py', options, function (error, results) {
         if (error) {
             console.error(error.toString());
