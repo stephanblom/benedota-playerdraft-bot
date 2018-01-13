@@ -41,7 +41,7 @@ def create_player_dicts(playerfile):
     player_mmr_list = list()
     teamless_player_list = list()
     # Datastructures that will be used.
-    with open('/tmp/players.csv') as infile:
+    with open(playerfile) as infile:
         reader = csv.reader(infile, delimiter=';')
         for line in reader:
             if line[4] == 'True':
@@ -312,7 +312,7 @@ def write_away(teamlist, max_spread, role_frac, teamless_player_list):
     that includes the teamlist, max mmr spread and the fraction of players
     playing their preffered role.
     """
-    with open('/tmp/outfile.csv', mode='w+') as outfile:
+    with open('Outfile.csv', mode='w+') as outfile:
         writer = csv.writer(outfile, delimiter=';')
         writer.writerow(['There is a maximum spread of ' + str(
             max_spread) + ' on the team MMR\'rs'])
@@ -380,5 +380,3 @@ except:
     print('\nInput error')
     print('Correct commandline input is:')
     print('python <name of DotaTeamMaker> <Input data>')
-    print(sys.argv[1])
-    print(sys.exc_info())

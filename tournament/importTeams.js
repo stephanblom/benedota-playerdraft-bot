@@ -11,13 +11,31 @@ exports.importTeams = function (message, args, pool) {
             }
         });
 
-        readCsv(message, args, pool);
+        truncateTeams(message, args, pool);
     });
 
     return;
 }
 
-readCsv = function (message, args, pool)
+truncateTeams = function(message, args, pool)
+{
+    sql = `TRUNCATE TABLE team;`
+    pool.getConnection(function(error, connection) {
+        connection.query(sql, function(error, results) {
+            connection.release();
+
+            if (error) {
+                console.error(error.toString());
+                message.channel.send(`Truncating team table failed, an error occurred.`);
+                return;
+            }
+        });
+
+        readCsv(message, args, pool);
+    });
+}
+
+readCsv = function(message, args, pool)
 {
     var fs = require('fs');
     var csv = require('fast-csv');
