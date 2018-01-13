@@ -51,7 +51,6 @@ exportToCsv = function(message, args, pool, allrows) {
         description += `${player['playername']};${player['mmr']};${player['preferred_position']};${player['preferred_captain'] ? 'True' : 'False'};True\n`;
         i++;
     });
-    console.log('Exporting players...');
 
     var fs = require('fs');
     var filepath = '/tmp/players.csv';
@@ -62,7 +61,6 @@ exportToCsv = function(message, args, pool, allrows) {
             return;
         }
 
-        console.log('exported...');
         message.channel.send(`Players have been exported to CSV.`);
 
         var createTeams = require('./createTeams');

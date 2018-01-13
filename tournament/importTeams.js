@@ -1,5 +1,4 @@
 exports.importTeams = function (message, args, pool) {
-    console.log('Importing teams');
     sql = `TRUNCATE TABLE team_player;`
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {
@@ -12,7 +11,6 @@ exports.importTeams = function (message, args, pool) {
             }
         });
 
-        console.log('Importing done');
         readCsv(message, args, pool);
     });
 
