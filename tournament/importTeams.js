@@ -32,7 +32,6 @@ readCsv = function (message, args, pool)
     csv
         .fromStream(stream, options)
         .on("data", function(data) {
-            console.log('Reading csv...');
             if (data[0].startsWith('Captain:')) {
                 var team_ID = i;
                 var team_info = data[0].split(';');
