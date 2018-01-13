@@ -316,8 +316,10 @@ def write_away(teamlist, max_spread, role_frac, teamless_player_list):
         writer = csv.writer(outfile, delimiter=';')
         writer.writerow(['There is a maximum spread of ' + str(
             max_spread) + ' on the team MMR\'rs'])
+        print('There is a maximum spread of ' + str(max_spread) + ' on the team MMR\'rs')
         writer.writerow(
             [role_frac + ' People are playing their preffered roles'])
+        print(role_frac + ' People are playing their prefferred roles')
         i = 0
         for team in teamlist:
             i += 1
@@ -326,8 +328,11 @@ def write_away(teamlist, max_spread, role_frac, teamless_player_list):
             for key in team.keys():
                 writelist.append(str(key) + ':' + str(team[key]))
             writer.writerow(writelist)
+            print(writelist)
         writer.writerow(['Players without a team:'])
+        print('Players without a team')
         writer.writerow(teamless_player_list)
+        print(teamless_player_list)
 
 
 def __main__(playerfile):

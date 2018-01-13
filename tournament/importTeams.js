@@ -1,4 +1,4 @@
-exports.importTeams = function (message, args, pool) {
+exports.importTeams = function (message, args, pool, results) {
     console.log('Importing teams');
     sql = `TRUNCATE TABLE team_player;`
     pool.getConnection(function(error, connection) {
@@ -13,13 +13,13 @@ exports.importTeams = function (message, args, pool) {
         });
 
         console.log('Importing done');
-        readCsv(message, args, pool);
+        readCsv(message, args, pool, results);
     });
 
     return;
 }
 
-readCsv = function (message, args, pool)
+readCsv = function (message, args, pool, results)
 {
     var fs = require('fs');
     var csv = require('fast-csv');
@@ -28,55 +28,33 @@ readCsv = function (message, args, pool)
     }
     var i = 1;
 
-    var stream = fs.createReadStream("./export/outfile.csv");
-    csv
-        .fromStream(stream, options)
-        .on("data", function(data) {
-            console.log('Reading csv...');
-            if (data[0].startsWith('Captain:')) {
-                var team_ID = i;
-                var team_info = data[0].split(';');
-                var captain_info = team_info.shift().split(':');
-                var avg_mmr_info = team_info.pop().split(':');
-                var team_players = team_info.join(';');
+    results.forEach(function(row) {
+        data = row.replace(/\'/g, "")
+            .replace('[', '')
+            .replace(']', '')
+            .replace('\r', '');
 
-                if (avg_mmr_info.length > 0
-                    && captain_info.length > 0) {
-                    args[0] = team_ID;
-                    args[1] = team_players;
-                    args[2] = avg_mmr_info[1];
-                    args[3] = captain_info[1];
+        if (data.startsWith('1:')) {
+            team_info = data.split(', ');
 
-                    var addTeam = require('./addTeam');
-                    addTeam.addTeam(this.message, args, this.pool);
-                }
-                i++;
-            } else if (data[0].startsWith('1:')) {
-                var team_ID = i;
-                var team_info = data[0].split(';');
-                var captain_info = team_info.pop().split(':');
-                var avg_mmr_info = team_info.pop().split(':');
-                var team_players = team_info.join(';');
+            var team_ID = i;
+            var captain_info = team_info.pop().split(':');
+            var avg_mmr_info = team_info.pop().split(':');
+            var team_players = team_info.join(';');
 
-                if (avg_mmr_info.length > 0
-                    && captain_info.length > 0) {
-                    args[0] = team_ID;
-                    args[1] = team_players;
-                    args[2] = avg_mmr_info[1];
-                    args[3] = captain_info[1];
+            if (avg_mmr_info.length > 0
+                && captain_info.length > 0) {
+                args[0] = team_ID;
+                args[1] = team_players;
+                args[2] = avg_mmr_info[1];
+                args[3] = captain_info[1];
 
-                    var addTeam = require('./addTeam');
-                    addTeam.addTeam(this.message, args, this.pool);
-                }
-                i++;
+                var addTeam = require('./addTeam');
+                addTeam.addTeam(message, args, pool);
             }
-        }.bind({
-            pool: pool,
-            message: message
-        }))
-        .on("end", function() {
-            message.channel.send('End of reading teams');
-        });
+            i++;
+        }
+    });
 
     return;
 }
