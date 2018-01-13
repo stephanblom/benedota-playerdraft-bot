@@ -54,7 +54,7 @@ exportToCsv = function(message, args, pool, allrows) {
     console.log('Exporting players...');
 
     var fs = require('fs');
-    var filepath = './export/players.csv';
+    var filepath = '/tmp/players.csv';
 
     fs.writeFile(filepath, description, { flag: 'w' }, function(error) {
         if (error) {

@@ -382,6 +382,6 @@ try:
     else:
         __main__(sys.argv[1])
 except:
-    print('\nInput error')
+    print('Input error')
     print('Correct commandline input is:')
     print('python <name of DotaTeamMaker> <Input data>')
