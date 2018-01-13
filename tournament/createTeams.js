@@ -15,8 +15,6 @@ exports.createTeams = function (message, args, pool) {
                 return;
             }
 
-            console.log(results);
-
             if (results && results[0] === 'Please submit a (valid) playerlist file.\r') {
                 message.channel.send(`Please submit a (valid) playerlist file`);
             }

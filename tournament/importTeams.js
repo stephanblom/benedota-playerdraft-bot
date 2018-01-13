@@ -28,7 +28,7 @@ readCsv = function (message, args, pool)
     }
     var i = 1;
 
-    var stream = fs.createReadStream("./export/outfile.csv");
+    var stream = fs.createReadStream("/tmp/outfile.csv");
     csv
         .fromStream(stream, options)
         .on("data", function(data) {
