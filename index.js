@@ -17,7 +17,6 @@ const pool = mysql.createPool(process.env.CLEARDB_DATABASE_URL || {
     database: process.env.CLEARDB_DATABASE_NAME || config.get('database.database'),
 });
 
-
 DiscordClient.on('ready', function() {
     pool.getConnection(function(error, connection) {
         connection.query(`CREATE TABLE IF NOT EXISTS player (
@@ -157,7 +156,6 @@ DiscordClient.on('message', async message =>
             return;
         });
 
-        return;
     };
 
     if (command === 'register' || command === 'update') {
@@ -173,7 +171,6 @@ DiscordClient.on('message', async message =>
             return;
         });
 
-        return;
     }
 
     if (command === 'join' || command === 'jointournament') {
@@ -360,8 +357,13 @@ DiscordClient.on('message', async message =>
             message.channel.send("Nope. ");
         }
 
-        return;
     }
+
+    message.channel.fetchMessages({limit: 100})
+        .then(messages => {
+            message.channel.bulkDelete(messages);
+        });
+
 });
 
 DiscordClient.login(config.get('token'));
