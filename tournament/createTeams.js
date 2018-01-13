@@ -7,6 +7,7 @@ exports.createTeams = function (message, args, pool) {
         args: ['/tmp/players.csv']
     };
 
+    var fs = require('fs');
     fs.exists('/tmp/players.csv', function() {
         console.log('file exists');
     });
