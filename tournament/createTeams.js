@@ -7,7 +7,7 @@ exports.createTeams = function (message, args, pool) {
 
         var options = {
             mode: 'text',
-            args: ['versioninfo', '/tmp/players.csv']
+            args: ['/tmp/players.csv']
         };
         PythonShell.run('dotaTeamMaker.py', options, function (error, results) {
             if (error) {

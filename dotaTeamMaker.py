@@ -381,7 +381,9 @@ try:
         print('Last updated on 12/01/2018')
     else:
         __main__(sys.argv[1])
-except:
+ except Exception, err:
+    print(Exception)
+    print(err)
     print('Input error')
     print('Correct commandline input is:')
     print('python <name of DotaTeamMaker> <Input data>')
