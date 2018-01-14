@@ -353,4 +353,4 @@ elif len(sys.argv) == 3:
         print('python <name of DotaTeamMaker> <Input data> <Optional: '
               'Outfile name>')
     except:
-        raise
+        raisesd

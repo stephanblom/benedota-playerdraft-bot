@@ -1,3 +1,10 @@
+const config = require('config');
+
+const Logger = require('le_node');
+const logger = new Logger({
+    token: process.env.LOGENTRIES_TOKEN || config.get('logentries_token')
+});
+
 exports.addTeam = function (message, args, pool) {
     if (args.length < 4) {
         message.channel.send(
@@ -9,8 +16,15 @@ exports.addTeam = function (message, args, pool) {
 
     var team_ID = args[0];
     var team_players = args[1];
-    var avg_mmr = args[2];
-    var captain = args[3];
+    var captain = args[2];
+    var avg_mmr = args[3];
+
+    logger.debug(
+        'TeamID: ' + team_ID,
+        'Team players: ' + team_players,
+        'Avg mmr: ' + avg_mmr,
+        'Captain: ' + captain
+    );
 
     var sql = `INSERT INTO team (ID, captain, avg_mmr)
         VALUES ('${team_ID}', '${captain}', '${avg_mmr}')
