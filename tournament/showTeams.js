@@ -131,7 +131,8 @@ showPlayers = function (message, players, teams) {
             }
         });
 
-        message.channel.send({embed});
+        var config = require('config');
+        message.guild.channels.get(config.get('showteamsChannel')).send('Testmessage');
         i++;
     });
 
