@@ -1,3 +1,6 @@
+const Discord = require('discord.js');
+const DiscordClient = new Discord.Client();
+
 exports.registerPlayer = function (message, args, pool) {
     if (args.length < 3) {
         message.channel.send(
@@ -75,7 +78,9 @@ exports.registerPlayer = function (message, args, pool) {
         }
     }
 
-    var user = message.mentions.members.first().user;
+    var members = message.guild.members.array();
+    var guildMember = members.find(function(object) { return object.user.username == 'Keepertj_'; });
+    var user = guildMember.user;
 
     var sql = `INSERT INTO player (playerID, playername, mmr, preferred_position, preferred_captain)
         VALUES (
@@ -100,7 +105,7 @@ exports.registerPlayer = function (message, args, pool) {
                 throw error;
             }
 
-            message.channel.send(`Player is registered or updated *(MMR: ${mmr}, `
+            message.channel.send(`${user} is registered or updated *(MMR: ${mmr}, `
             + `Prefers position: ${preferred_position}, `
             + `Prefers captain: ${preferred_captain}).*`);
         });
