@@ -351,9 +351,14 @@ DiscordClient.on('message', async message =>
 
     message.channel.fetchMessages({limit: 100})
         .then(messages => {
-            message.channel.bulkDelete(messages);
+            setTimeout(bulkDeleteChat, 60000, message, messages);
         });
 
 });
 
 DiscordClient.login(config.get('token'));
+
+function bulkDeleteChat(message, messages)
+{
+    message.channel.bulkDelete(messages);
+}
