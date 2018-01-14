@@ -107,7 +107,7 @@ exports.registerPlayer = function (message, args, pool) {
 
             message.channel.send(`${user} is registered or updated *(MMR: ${mmr}, `
             + `Prefers position: ${preferred_position}, `
-            + `Prefers captain: ${preferred_captain}).*`);
+            + `Prefers captain: ${preferred_captain ? 'Yes' : 'No'}).*`);
         });
     });
 }
