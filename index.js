@@ -183,7 +183,6 @@ DiscordClient.on('message', async message =>
             return;
         });
 
-        return;
     }
 
     if (command === 'leave' || command === 'leavetournament') {
@@ -256,8 +255,6 @@ DiscordClient.on('message', async message =>
         } else {
             message.channel.send("No.");
         }
-
-        return;
     }
 
     if (command === 'registerplayer') {
@@ -277,7 +274,6 @@ DiscordClient.on('message', async message =>
             message.channel.send("Nope. ");
         }
 
-        return;
     }
 
     if (command === 'joinplayer') {
@@ -297,7 +293,6 @@ DiscordClient.on('message', async message =>
             message.channel.send("Nope. ");
         }
 
-        return;
     }
 
     if (command === 'leavePlayer') {
@@ -316,8 +311,6 @@ DiscordClient.on('message', async message =>
         } else {
             message.channel.send("Nope. ");
         }
-
-        return;
     }
 
     if (command === 'createteams') {
@@ -336,8 +329,6 @@ DiscordClient.on('message', async message =>
         } else {
             message.channel.send("Nope. ");
         }
-
-        return;
     }
 
     if (command === 'importteams') {
