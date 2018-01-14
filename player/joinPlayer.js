@@ -1,5 +1,8 @@
 exports.joinPlayer = function (message, args, pool) {
-    var user = message.mentions.members.first().user;
+    var members = message.guild.members.array();
+    var guildMember = members.find(function(object) { return object.user.username == userId; });
+    var user = guildMember.user;
+
     var sql = `UPDATE player SET joined = NOW() WHERE playerID = ${user.id} AND joined IS NULL`;
 
     pool.getConnection(function(error, connection) {

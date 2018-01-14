@@ -298,7 +298,7 @@ DiscordClient.on('message', async message =>
         if (message.member.roles.find("name", "Admin")
             || message.author.id === '157938886784319489'
         ) {
-            newrelic.startBackgroundTransaction('joinplayer', [], function () {
+            newrelic.startBackgroundTransaction('leavePlayer', [], function () {
                 newrelic.getTransaction();
 
                 var leavePlayer = require('./player/leavePlayer');
