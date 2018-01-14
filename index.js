@@ -216,7 +216,6 @@ DiscordClient.on('message', async message =>
             return;
         }
 
-        return;
     }
 
     if (command === 'showteams') {

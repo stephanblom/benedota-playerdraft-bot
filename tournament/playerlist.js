@@ -1,5 +1,8 @@
 exports.getPlayerlist = function (message, args, pool) {
-    var sql = `SELECT * FROM player WHERE joined = 1`;
+    var sql = `SELECT * 
+        FROM player 
+        WHERE joined IS NOT NULL
+        AND joined != '0000-00-00 00:00:00'`;
     pool.getConnection(function(error, connection) {
         connection.query(sql, function (error, results) {
             connection.release();
