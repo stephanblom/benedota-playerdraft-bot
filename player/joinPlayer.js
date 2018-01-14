@@ -4,7 +4,7 @@ exports.joinPlayer = function (message, args, pool) {
     var guildMember = members.find(function(object) { return object.user.username == userId; });
     var user = guildMember.user;
 
-    var sql = `UPDATE player SET joined = NOW() WHERE playerID = ${user.id} AND joined IS NULL`;
+    var sql = `UPDATE player SET joined = NOW() WHERE playerID = '${user.id}' AND joined IS NULL`;
 
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {
@@ -19,7 +19,7 @@ exports.joinPlayer = function (message, args, pool) {
                 message.channel.send(`I couldn't join the player, did the player already join or are you not *!registered*?`);
                 return;
             } else {
-                message.channel.send(`The player has now joined the BeNeDota Playerdraft!`);
+                message.channel.send(`${user} has now joined the BeNeDota Playerdraft!`);
                 return;
             }
         });

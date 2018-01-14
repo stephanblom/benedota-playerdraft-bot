@@ -1,3 +1,4 @@
+const config = require('config');
 const Discord = require('discord.js');
 
 exports.showTeams = function (message, args, pool) {
@@ -23,7 +24,7 @@ exports.showTeams = function (message, args, pool) {
                 return;
             }
 
-            exportTeams(message, pool, results);
+            exportTeams(message, args, pool, results);
 
             return;
         });
@@ -32,7 +33,7 @@ exports.showTeams = function (message, args, pool) {
     return;
 }
 
-exportTeams = function(message, pool, players) {
+exportTeams = function(message, args, pool, players) {
     var sql = `SELECT * FROM team ORDER BY ID`;
 
     pool.getConnection(function(error, connection) {
@@ -49,7 +50,7 @@ exportTeams = function(message, pool, players) {
                 return;
             }
 
-            showTeamInfo(message, pool, players, results);
+            showTeamInfo(message, args, pool, players, results);
             return;
         });
     });
@@ -57,14 +58,13 @@ exportTeams = function(message, pool, players) {
     return;
 }
 
-showTeamInfo = function(message, pool, players, teams)
+showTeamInfo = function(message, args, pool, players, teams)
 {
     var fs = require('fs');
     var csv = require('fast-csv');
     var options = {
         ignoreEmpty: true
     }
-    var args = [];
     var i = 1;
 
     var embed = new Discord.RichEmbed()
@@ -89,13 +89,20 @@ showTeamInfo = function(message, pool, players, teams)
         })
         .on("end", function() {
             embed.setDescription(description);
-            message.channel.send({embed});
 
-            showPlayers(message, players, teams);
-        });
+            if (args[0] == 'live') {
+                message.guild.channels.get(config.get('showteamsChannel')).send({embed});
+            } else {
+                message.channel.send({embed})
+            }
+
+            showPlayers(message, this.args, players, teams);
+        }.bind({
+            args: args
+        }));
 }
 
-showPlayers = function (message, players, teams) {
+showPlayers = function (message, args, players, teams) {
     var colors = [
         '3375ff',
         '66ffbf',
@@ -131,8 +138,11 @@ showPlayers = function (message, players, teams) {
             }
         });
 
-        var config = require('config');
-        message.guild.channels.get(config.get('showteamsChannel')).send('Testmessage');
+        if (args[0] == 'live') {
+            message.guild.channels.get(config.get('showteamsChannel')).send({embed});
+        } else {
+            message.channel.send({embed})
+        }
         i++;
     });
 
