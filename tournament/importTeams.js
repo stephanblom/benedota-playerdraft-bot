@@ -69,8 +69,8 @@ readCsv = function(message, args, pool)
             } else if (data[0].startsWith('1:')) {
                 var team_ID = i;
                 var team_info = data[0].split(';');
-                var avg_mmr_info = team_info.pop().split(':');
                 var captain_info = team_info.pop().split(':');
+                var avg_mmr_info = team_info.pop().split(':');
                 var team_players = team_info.join(';');
 
                 if (avg_mmr_info.length > 0
