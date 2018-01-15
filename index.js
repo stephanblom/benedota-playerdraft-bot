@@ -142,7 +142,6 @@ DiscordClient.on('message', async message =>
     if (command === "help") {
         var help = require('./bot/help');
         help.sendHelp(message, args);
-        return;
     }
 
     if (command === "playerlist") {
