@@ -1,5 +1,16 @@
 exports.leavePlayer = function (message, args, pool) {
-    var user = message.mentions.members.first().user;
+    var userId = args[0];
+    var members = message.guild.members.array();
+    var guildMember = members.find(function(object) { return object.user.username == userId; });
+    if (guildMember && guildMember.user) {
+        var user = guildMember.user;
+    } else {
+        message.channel.send(
+            `Joining ${userId} failed, user not found.`
+        );
+        return;
+    }
+
     var sql = `UPDATE player SET joined = NULL WHERE playerID = ${user.id} AND joined IS NOT NULL`;
 
     pool.getConnection(function(error, connection) {

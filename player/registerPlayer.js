@@ -80,7 +80,14 @@ exports.registerPlayer = function (message, args, pool) {
 
     var members = message.guild.members.array();
     var guildMember = members.find(function(object) { return object.user.username == userId; });
-    var user = guildMember.user;
+    if (guildMember && guildMember.user) {
+        var user = guildMember.user;
+    } else {
+        message.channel.send(
+            `Registering ${userId} failed, user not found.`
+        );
+        return;
+    }
 
     var sql = `INSERT INTO player (playerID, playername, mmr, preferred_position, preferred_captain)
         VALUES (
