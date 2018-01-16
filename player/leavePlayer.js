@@ -1,7 +1,7 @@
 exports.leavePlayer = function (message, args, pool) {
     var userId = args[0].replace(/['"]+/g, '');
     var members = message.guild.members.array();
-    var guildMember = members.find(function(object) { return object.user.username == userId; });
+    var guildMember = members.find(function(object) { return object.user.username == `userId`; });
     if (guildMember && guildMember.user) {
         var user = guildMember.user;
     } else {
@@ -11,7 +11,7 @@ exports.leavePlayer = function (message, args, pool) {
         return;
     }
 
-    var sql = `UPDATE player SET joined = NULL WHERE playerID = ${user.id} AND joined IS NOT NULL`;
+    var sql = `UPDATE player SET joined = NULL WHERE playerID = '${user.id}' AND joined IS NOT NULL`;
 
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {
@@ -23,10 +23,10 @@ exports.leavePlayer = function (message, args, pool) {
             }
 
             if (results.affectedRows === 0) {
-                message.channel.send(`I couldn't join the player, did the player already join or are you not *!registered*?`);
+                message.channel.send(`I couldn't join ${user.username}, did the player already join or are you not *!registered*?`);
                 return;
             } else {
-                message.channel.send(`The player has now joined the BeNeDota Playerdraft!`);
+                message.channel.send(`${user.username} has now joined the BeNeDota Playerdraft!`);
                 return;
             }
         });
