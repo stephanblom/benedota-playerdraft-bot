@@ -1,5 +1,5 @@
 exports.joinPlayer = function (message, args, pool) {
-    var userId = args[0].split('_').join(' ');
+    var userId = args[0].replace(/['"]+/g, '');
     var members = message.guild.members.array();
     var guildMember = members.find(function(object) { return object.user.username == userId; });
     if (guildMember && guildMember.user) {
