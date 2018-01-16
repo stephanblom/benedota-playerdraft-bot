@@ -1,5 +1,5 @@
 exports.leavePlayer = function (message, args, pool) {
-    var userId = args[0].split(';').join(' ');
+    var userId = args[0].split('_').join(' ');
     var members = message.guild.members.array();
     var guildMember = members.find(function(object) { return object.user.username == userId; });
     if (guildMember && guildMember.user) {
