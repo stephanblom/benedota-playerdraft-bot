@@ -70,7 +70,7 @@ showTeamInfo = function(message, args, pool, players, teams)
     var embed = new Discord.RichEmbed()
         .setTitle('BeNeDota Player Draft Teams')
         .setFooter(`BeNeDota Kayzr Player Draft Team Info`)
-        .setThumbnail('https://benedota.com/thumbs/assets/images/kerst_benedota_crop-225x250.png')
+        .setThumbnail('https://benedota.com/thumbs/assets/images/benedota_transp_crop-217x250.png')
         .setTimestamp();
 
     var description = '';

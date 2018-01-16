@@ -6,7 +6,7 @@ exports.leavePlayer = function (message, args, pool) {
         var user = guildMember.user;
     } else {
         message.channel.send(
-            `Joining ${userId} failed, user not found.`
+            `Leaving ${userId} failed, user not found.`
         );
         return;
     }
