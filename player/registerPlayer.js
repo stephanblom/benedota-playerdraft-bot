@@ -79,7 +79,7 @@ exports.registerPlayer = function (message, args, pool) {
     }
 
     var members = message.guild.members.array();
-    var guildMember = members.find(function(object) { return object.user.username == `userId`; });
+    var guildMember = members.find(function(object) { console.log(object.user.username); return object.user.username == `${userId}`; });
     if (guildMember && guildMember.user) {
         var user = guildMember.user;
     } else {
