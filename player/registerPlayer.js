@@ -10,7 +10,7 @@ exports.registerPlayer = function (message, args, pool) {
         return;
     }
 
-    var userId = args[0].split('_').join(' ');
+    var userId = args[0].replace(/['"]+/g, '');
     var mmr = parseInt(args[1]);
     var preferred_position = args[2];
     var preferred_captain = args[3];
