@@ -78,21 +78,9 @@ exports.registerPlayer = function (message, args, pool) {
         }
     }
 
-    var members = message.guild.members.array();
-    var guildMember = members.find(function(object) { console.log(object.user.username); return object.user.username == `${userId}`; });
-    if (guildMember && guildMember.user) {
-        var user = guildMember.user;
-    } else {
-        message.channel.send(
-            `Registering ${userId} failed, user not found.`
-        );
-        return;
-    }
-
-    var sql = `INSERT INTO player (playerID, playername, mmr, preferred_position, preferred_captain)
-        VALUES (
-            '${user.id}', 
-            '${user.username}', 
+    var sql = `INSERT INTO player (playername, mmr, preferred_position, preferred_captain)
+        VALUES ( 
+            '${userId}', 
             ${mmr}, 
             '${preferred_position}', 
             '${preferred_captain}'
@@ -112,7 +100,7 @@ exports.registerPlayer = function (message, args, pool) {
                 throw error;
             }
 
-            message.channel.send(`${user} is registered or updated *(MMR: ${mmr}, `
+            message.channel.send(`${userId} is registered or updated *(MMR: ${mmr}, `
             + `Prefers position: ${preferred_position}, `
             + `Prefers captain: ${preferred_captain ? 'Yes' : 'No'}).*`);
         });
