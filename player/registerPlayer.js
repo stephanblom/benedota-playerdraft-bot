@@ -10,10 +10,10 @@ exports.registerPlayer = function (message, args, pool) {
         return;
     }
 
-    userId = args[0]
-    mmr = parseInt(args[1]);
-    preferred_position = args[2];
-    preferred_captain = args[3];
+    var userId = args[0].split(';').join(' ');
+    var mmr = parseInt(args[1]);
+    var preferred_position = args[2];
+    var preferred_captain = args[3];
 
     if (!mmr || isNaN(mmr) || (mmr < 1 || mmr >= 10000)) {
         message.channel.send(
