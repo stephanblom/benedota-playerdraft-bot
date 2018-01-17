@@ -353,12 +353,23 @@ DiscordClient.on('message', async message =>
 
     if (command === 'find') {
         var userId = args[0].replace(/['"]+/g, '');
-        var userCollection = DiscordClient.users;
-        var user = userCollection.find('username', userId);
-        if (user && user.id) {
-            message.channel.send(`Found ${user}`);
+
+        var members = message.guild.members
+        var guildMember = members.find(function(element) {
+            console.log(element.user.username);
+            return element.user.username == userId || element.nickname == userId;
+        });
+
+        if (guildMember && guildMember.user) {
+            message.channel.send(`Found ${guildMember.user} in GuildMembers.`);
         } else {
-            message.channel.send(`Did not find ${userId}`);
+            var userCollection = DiscordClient.users;
+            var user = userCollection.find('username', userId);
+            if (user && user.id) {
+                message.channel.send(`Found ${user} in Client`);
+            } else {
+                message.channel.send(`Did not find ${userId} in Client`);
+            }
         }
     }
 
