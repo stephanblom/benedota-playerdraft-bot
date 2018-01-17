@@ -351,6 +351,17 @@ DiscordClient.on('message', async message =>
 
     }
 
+    if (command === 'find') {
+        var userId = args[0].replace(/['"]+/g, '');
+        var userCollection = DiscordClient.users;
+        var user = userCollection.find('username', userId);
+        if (user && user.id) {
+            message.channel.send(`Found ${user}`);
+        } else {
+            message.channel.send(`Did not find ${userId}`);
+        }
+    }
+
     message.channel.fetchMessages({limit: 100})
         .then(messages => {
             setTimeout(bulkDeleteChat, 60000, message, messages);
