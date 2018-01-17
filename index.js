@@ -356,7 +356,6 @@ DiscordClient.on('message', async message =>
 
         var members = message.guild.members
         var guildMember = members.find(function(element) {
-            console.log(element.user.username);
             return element.user.username == userId || element.nickname == userId;
         });
 
