@@ -34,5 +34,5 @@ addPlayersToList = function(message, allrows) {
         i++;
     });
 
-    message.channel.send("Players: \n" + description);
+    message.channel.send(`${allrows.length} players: \n` + description);
 }
