@@ -261,6 +261,7 @@ DiscordClient.on('message', async message =>
     if (command === 'registerplayer') {
         if (message.member.roles.find("name", "Admin")
             || message.author.id === '157938886784319489'
+            || message.author.id === '147763248781983754'
         ) {
             newrelic.startBackgroundTransaction('registerplayer', [], function () {
                 newrelic.getTransaction();
@@ -280,6 +281,7 @@ DiscordClient.on('message', async message =>
     if (command === 'joinplayer') {
         if (message.member.roles.find("name", "Admin")
             || message.author.id === '157938886784319489'
+            || message.author.id === '147763248781983754'
         ) {
             newrelic.startBackgroundTransaction('joinplayer', [], function () {
                 newrelic.getTransaction();
@@ -299,6 +301,7 @@ DiscordClient.on('message', async message =>
     if (command === 'leaveplayer') {
         if (message.member.roles.find("name", "Admin")
             || message.author.id === '157938886784319489'
+            || message.author.id === '147763248781983754'
         ) {
             newrelic.startBackgroundTransaction('leavePlayer', [], function () {
                 newrelic.getTransaction();
