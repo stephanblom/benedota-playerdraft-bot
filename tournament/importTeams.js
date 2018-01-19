@@ -90,7 +90,7 @@ readCsv = function(message, args, pool)
             message: message
         }))
         .on("end", function() {
-
+            message.channel.send(`Importing ${i - 1} teams.`);
         });
 
     return;
