@@ -6,7 +6,7 @@ exports.showTeams = function (message, args, pool) {
         FROM team_player 
         LEFT JOIN team ON team.ID = team_player.team_ID 
         LEFT JOIN player ON player.playername = team_player.player_name
-        WHERE player.playerID IS NOT NULL
+        WHERE player.playername IS NOT NULL
         ORDER BY team_player.team_ID, team_player.position ASC`;
 
     pool.getConnection(function(error, connection) {
