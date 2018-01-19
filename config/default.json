@@ -8,5 +8,6 @@
     "database" : "playerdraft"
   },
   "logentries_token" : "323b4d34-5cef-475b-8849-a0ebfd27df41",
-  "showteamsChannel" : "402164450917875714"
+  "showteamsChannel" : "402164450917875714",
+  "onlyDeleteMessagesInChannel": "398467124865138688"
 }

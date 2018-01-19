@@ -102,7 +102,7 @@ showTeamInfo = function(message, args, pool, players, teams)
         }));
 }
 
-showPlayers = function (message, args, players, teams) {
+showPlayers = async function (message, args, players, teams) {
     var colors = [
         '3375ff',
         '66ffbf',
@@ -138,12 +138,17 @@ showPlayers = function (message, args, players, teams) {
             }
         });
 
-        if (args[0] == 'live') {
-            message.guild.channels.get(config.get('showteamsChannel')).send({embed});
-        } else {
-            message.channel.send({embed})
-        }
+        sendEmbed(message, args, embed);
         i++;
     });
 
+}
+
+sendEmbed = function(message, args, embed)
+{
+    if (args[0] == 'live') {
+        message.guild.channels.get(config.get('showteamsChannel')).send({embed});
+    } else {
+        message.channel.send({embed})
+    }
 }

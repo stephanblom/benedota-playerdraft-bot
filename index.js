@@ -197,7 +197,6 @@ DiscordClient.on('message', async message =>
             return;
         });
 
-        return;
     }
 
     if (command === 'exportjoinedplayers' || command === 'exportplayers') {
@@ -377,11 +376,13 @@ DiscordClient.on('message', async message =>
         }
     }
 
-    if (command != 'showteams') {
-    message.channel.fetchMessages({limit: 100})
-        .then(messages => {
-            setTimeout(bulkDeleteChat, 60000, message, messages);
-        });
+    if (
+        message.channel.id == config.get('onlyDeleteMessagesInChannel')
+    ) {
+        message.channel.fetchMessages({limit: 100})
+            .then(messages => {
+                setTimeout(bulkDeleteChat, 60000, message, messages);
+            });
     }
 
 
