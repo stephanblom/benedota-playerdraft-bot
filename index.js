@@ -377,10 +377,13 @@ DiscordClient.on('message', async message =>
         }
     }
 
+    if (command != 'showteams') {
     message.channel.fetchMessages({limit: 100})
         .then(messages => {
             setTimeout(bulkDeleteChat, 60000, message, messages);
         });
+    }
+
 
 });
 
