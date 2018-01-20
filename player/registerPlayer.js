@@ -10,14 +10,23 @@ exports.registerPlayer = function (message, args, pool) {
         return;
     }
 
-    var userId = args[0].replace(/['"]+/g, '');
+    var user = message.mentions.users.first();
     var mmr = parseInt(args[1]);
     var preferred_position = args[2];
     var preferred_captain = args[3];
 
+    if (!user) {
+        message.channel.send(
+            `Registering failed, invalid mmr given. 
+            Ex. command: *!register <mmr> <position> <preferred captain>*`
+        );
+
+        return;
+    }
+
     if (!mmr || isNaN(mmr) || (mmr < 1 || mmr >= 10000)) {
         message.channel.send(
-            `Registering ${message.author} failed, invalid mmr given. 
+            `Registering failed, invalid mmr given. 
             Ex. command: *!register <mmr> <position> <preferred captain>*`
         );
 
@@ -71,21 +80,23 @@ exports.registerPlayer = function (message, args, pool) {
                 break;
             default:
                 message.channel.send(
-                    `Registering ${message.author} failed, invalid preferred captain given. 
+                    `Registering failed, invalid preferred captain given. 
                     Ex. command: *!register <mmr> <position> <preferred captain (1/Ja/Yes/True of 0/Nee/No/False)>*`
                 );
                 return;
         }
     }
 
-    var sql = `INSERT INTO player (playername, mmr, preferred_position, preferred_captain)
+    var sql = `INSERT INTO player (playerID, playername, mmr, preferred_position, preferred_captain)
         VALUES ( 
-            '${userId}', 
+            '${user.id}',
+            '${user.username}', 
             ${mmr}, 
             '${preferred_position}', 
             '${preferred_captain}'
         )
         ON DUPLICATE KEY UPDATE
+            playername = '${user.username}',
             mmr = ${mmr},
             preferred_position = '${preferred_position}',
             preferred_captain = '${preferred_captain}'
@@ -100,7 +111,7 @@ exports.registerPlayer = function (message, args, pool) {
                 throw error;
             }
 
-            message.channel.send(`${userId} is registered or updated *(MMR: ${mmr}, `
+            message.channel.send(`${user} is registered or updated *(MMR: ${mmr}, `
             + `Prefers position: ${preferred_position}, `
             + `Prefers captain: ${preferred_captain ? 'Yes' : 'No'}).*`);
         });

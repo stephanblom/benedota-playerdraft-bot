@@ -74,8 +74,9 @@ exports.register = function (message, args, pool) {
         }
     }
 
-    var sql = `INSERT INTO player (playername, mmr, preferred_position, preferred_captain)
+    var sql = `INSERT INTO player (playerID, playername, mmr, preferred_position, preferred_captain)
         VALUES ( 
+            ${message.author.id},
             '${message.author.username}', 
             ${mmr}, 
             '${preferred_position}', 
