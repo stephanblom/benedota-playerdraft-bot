@@ -10,7 +10,7 @@ exports.playerstatus = function (message, args, pool) {
                 throw error;
             }
 
-            if (results.affectedRows === 0) {
+            if (results.length == 0) {
                 message.channel.send(`I couldn't find you, are you not *!registered*?`);
                 return;
             } else {
@@ -21,7 +21,7 @@ exports.playerstatus = function (message, args, pool) {
                         - MMR: ${player.mmr}
                         - Preferred position: ${player.preferred_position},
                         - Preferred captain: ${player.preferred_captain ? 'Yes' : 'No'},
-                        - In next tournament: ${player.joined ? 'Yes' : 'No (maybe you\'d like to _!join_?'}
+                        - In next tournament: ${player.joined ? 'Yes' : 'No (maybe you\'d like to `!join` ?'}
                     `);
                     return;
                 });
