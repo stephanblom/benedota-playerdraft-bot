@@ -23,7 +23,7 @@ exports.otherPlayerstatus = function (message, args, pool) {
                         - MMR: ${player.mmr}
                         - Preferred position: ${player.preferred_position},
                         - Preferred captain: ${player.preferred_captain ? 'Yes' : 'No'},
-                        - In next tournament: ${player.joined ? 'Yes' : 'No (maybe you\'d like to !join?'}
+                        - In next tournament: ${player.joined ? 'Yes' : 'No (maybe you\'d like to `!join` ?)'}
                     `);
                     return;
                 });
