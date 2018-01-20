@@ -10,6 +10,8 @@ exports.registerPlayer = function (message, args, pool) {
         return;
     }
 
+    var exampleCommand = `Ex. command: *!register <mention> <mmr> <position> <preferred captain>*`;
+
     var user = message.mentions.users.first();
     var mmr = parseInt(args[1]);
     var preferred_position = args[2];
@@ -17,8 +19,8 @@ exports.registerPlayer = function (message, args, pool) {
 
     if (!user) {
         message.channel.send(
-            `Registering failed, invalid mmr given. 
-            Ex. command: *!register <mmr> <position> <preferred captain>*`
+            `Registering failed, no user given. `
+            + exampleCommand
         );
 
         return;
@@ -26,8 +28,8 @@ exports.registerPlayer = function (message, args, pool) {
 
     if (!mmr || isNaN(mmr) || (mmr < 1 || mmr >= 10000)) {
         message.channel.send(
-            `Registering failed, invalid mmr given. 
-            Ex. command: *!register <mmr> <position> <preferred captain>*`
+            `Registering failed, invalid mmr given.`
+            + exampleCommand
         );
 
         return;
@@ -35,8 +37,8 @@ exports.registerPlayer = function (message, args, pool) {
 
     if (!preferred_position) {
         message.channel.send(
-            `Registering failed, no position given. 
-            Ex. command: *!register <mmr> <position> <preferred captain>*`
+            `Registering failed, no position given.`
+            + exampleCommand
         );
         return;
     }
@@ -52,16 +54,16 @@ exports.registerPlayer = function (message, args, pool) {
         || (typeof preferred_position === 'string' && preferred_position !== 'Any')
     ) {
         message.channel.send(
-            `Registering failed, wrong position given. 
-            Ex. command: *!register <mmr> <position> <preferred captain>*`
+            `Registering failed, wrong position given. `
+            + exampleCommand
         );
         return;
     }
 
     if (!preferred_captain) {
         message.channel.send(
-            `Registering failed, no preferred captain given. 
-            Ex. command: *!register <mmr> <position> <preferred captain (1/Ja/Yes/True of 0/Nee/No/False)>*`
+            `Registering failed, no preferred captain given. `
+            + exampleCommand
         );
         return;
     } else {
@@ -80,8 +82,8 @@ exports.registerPlayer = function (message, args, pool) {
                 break;
             default:
                 message.channel.send(
-                    `Registering failed, invalid preferred captain given. 
-                    Ex. command: *!register <mmr> <position> <preferred captain (1/Ja/Yes/True of 0/Nee/No/False)>*`
+                    `Registering failed, invalid preferred captain given. `
+                    + exampleCommand
                 );
                 return;
         }

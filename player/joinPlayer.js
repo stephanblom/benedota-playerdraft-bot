@@ -1,5 +1,13 @@
 exports.joinPlayer = function (message, args, pool) {
     var user = message.mentions.users.first();
+
+    if (!user) {
+        message.channel.send(
+            `No user given to join. `
+        );
+    }
+
+
     var sql = `UPDATE player SET joined = NOW() WHERE playerID = '${user.id}' AND joined IS NULL`;
 
     pool.getConnection(function(error, connection) {
