@@ -12,7 +12,7 @@ exports.otherPlayerstatus = function (message, args, pool) {
             }
 
             if (results.length == 0) {
-                message.channel.send(`I couldn't find ${user.username}, are is he *!registered*?`);
+                message.channel.send(`I couldn't find ${user.username}, is he *!registered*?`);
                 return;
             } else {
                 results.forEach(function (player) {
