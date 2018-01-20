@@ -10,15 +10,26 @@ exports.registerPlayer = function (message, args, pool) {
         return;
     }
 
-    var userId = args[0].replace(/['"]+/g, '');
+    var exampleCommand = `Ex. command: *!register <mention> <mmr> <position> <preferred captain>*`;
+
+    var user = message.mentions.users.first();
     var mmr = parseInt(args[1]);
     var preferred_position = args[2];
     var preferred_captain = args[3];
 
+    if (!user) {
+        message.channel.send(
+            `Registering failed, no user given. `
+            + exampleCommand
+        );
+
+        return;
+    }
+
     if (!mmr || isNaN(mmr) || (mmr < 1 || mmr >= 10000)) {
         message.channel.send(
-            `Registering ${message.author} failed, invalid mmr given. 
-            Ex. command: *!register <mmr> <position> <preferred captain>*`
+            `Registering failed, invalid mmr given.`
+            + exampleCommand
         );
 
         return;
@@ -26,8 +37,8 @@ exports.registerPlayer = function (message, args, pool) {
 
     if (!preferred_position) {
         message.channel.send(
-            `Registering failed, no position given. 
-            Ex. command: *!register <mmr> <position> <preferred captain>*`
+            `Registering failed, no position given.`
+            + exampleCommand
         );
         return;
     }
@@ -43,16 +54,16 @@ exports.registerPlayer = function (message, args, pool) {
         || (typeof preferred_position === 'string' && preferred_position !== 'Any')
     ) {
         message.channel.send(
-            `Registering failed, wrong position given. 
-            Ex. command: *!register <mmr> <position> <preferred captain>*`
+            `Registering failed, wrong position given. `
+            + exampleCommand
         );
         return;
     }
 
     if (!preferred_captain) {
         message.channel.send(
-            `Registering failed, no preferred captain given. 
-            Ex. command: *!register <mmr> <position> <preferred captain (1/Ja/Yes/True of 0/Nee/No/False)>*`
+            `Registering failed, no preferred captain given. `
+            + exampleCommand
         );
         return;
     } else {
@@ -71,21 +82,23 @@ exports.registerPlayer = function (message, args, pool) {
                 break;
             default:
                 message.channel.send(
-                    `Registering ${message.author} failed, invalid preferred captain given. 
-                    Ex. command: *!register <mmr> <position> <preferred captain (1/Ja/Yes/True of 0/Nee/No/False)>*`
+                    `Registering failed, invalid preferred captain given. `
+                    + exampleCommand
                 );
                 return;
         }
     }
 
-    var sql = `INSERT INTO player (playername, mmr, preferred_position, preferred_captain)
+    var sql = `INSERT INTO player (playerID, playername, mmr, preferred_position, preferred_captain)
         VALUES ( 
-            '${userId}', 
+            '${user.id}',
+            '${user.username}', 
             ${mmr}, 
             '${preferred_position}', 
             '${preferred_captain}'
         )
         ON DUPLICATE KEY UPDATE
+            playername = '${user.username}',
             mmr = ${mmr},
             preferred_position = '${preferred_position}',
             preferred_captain = '${preferred_captain}'
@@ -100,7 +113,7 @@ exports.registerPlayer = function (message, args, pool) {
                 throw error;
             }
 
-            message.channel.send(`${userId} is registered or updated *(MMR: ${mmr}, `
+            message.channel.send(`${user} is registered or updated *(MMR: ${mmr}, `
             + `Prefers position: ${preferred_position}, `
             + `Prefers captain: ${preferred_captain ? 'Yes' : 'No'}).*`);
         });

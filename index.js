@@ -20,7 +20,8 @@ const pool = mysql.createPool(process.env.CLEARDB_DATABASE_URL || {
 DiscordClient.on('ready', function() {
     pool.getConnection(function(error, connection) {
         connection.query(`CREATE TABLE IF NOT EXISTS player (
-            playername VARCHAR(255) NOT NULL PRIMARY KEY,
+            playerID BIGINT(255) NOT NULL PRIMARY KEY,
+            playername VARCHAR(255) NOT NULL,
             mmr INTEGER NOT NULL,
             preferred_position VARCHAR(3) NOT NULL,
             preferred_captain TINYINT(1) NOT NULL,
@@ -355,7 +356,6 @@ DiscordClient.on('message', async message =>
 
     if (command === 'find') {
         var userId = args[0].replace(/['"]+/g, '');
-        var i = 0;
         var members = message.guild.members;
         var guildMember = members.find(function(element) {
             return element.user.username == userId || element.nickname == userId;
