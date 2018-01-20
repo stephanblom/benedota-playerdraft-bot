@@ -354,6 +354,26 @@ DiscordClient.on('message', async message =>
 
     }
 
+    if (command === 'status') {
+        newrelic.startBackgroundTransaction('status', [], function () {
+            newrelic.getTransaction();
+
+            if ((message.member.roles.find("name", "Admin")
+                || message.author.id === '157938886784319489')
+                && message.mentions.users.first()
+            ) {
+                var otherPlayerstatus = require('./player/otherPlayerstatus');
+                otherPlayerstatus.otherPlayerstatus(message, args, pool);
+            } else {
+                var playerstatus = require('./player/playerstatus');
+                playerstatus.playerstatus(message, args, pool);
+            }
+
+            newrelic.endTransaction();
+            return;
+        });
+    }
+
     if (command === 'find') {
         var userId = args[0].replace(/['"]+/g, '');
         var members = message.guild.members;
