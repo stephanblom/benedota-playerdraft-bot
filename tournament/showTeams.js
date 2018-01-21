@@ -91,7 +91,7 @@ showTeamInfo = function(message, args, pool, players, teams)
             embed.setDescription(description);
 
             if (args[0] == 'live') {
-                message.guild.channels.get(config.get('showteamsChannel')).send({embed});
+                message.guild.channels.get(process.env.showteamsChannel).send({embed});
             } else {
                 message.channel.send({embed})
             }
@@ -147,7 +147,7 @@ showPlayers = async function (message, args, players, teams) {
 sendEmbed = function(message, args, embed)
 {
     if (args[0] == 'live') {
-        message.guild.channels.get(config.get('showteamsChannel')).send({embed});
+        message.guild.channels.get(process.env.showteamsChannel).send({embed});
     } else {
         message.channel.send({embed})
     }

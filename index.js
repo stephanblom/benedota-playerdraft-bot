@@ -1,5 +1,4 @@
 const newrelic = require('newrelic');
-const config = require('config');
 
 const Logger = require('le_node');
 const logger = new Logger({
@@ -104,7 +103,7 @@ DiscordClient.on("guildDelete", guild => {
 
 DiscordClient.on('message', async message =>
 {
-    if (!message.content.startsWith(config.get('prefix'))) {
+    if (!message.content.startsWith(process.env.prefix)) {
         return;
     }
 
@@ -116,7 +115,7 @@ DiscordClient.on('message', async message =>
         return;
     }
 
-    const args = message.content.slice(config.get('prefix').length).trim().match(/(?:[^\s"]+|"[^"]*")+/g);
+    const args = message.content.slice(process.env.prefix.length).trim().match(/(?:[^\s"]+|"[^"]*")+/g);
     const command = args.shift().toLowerCase();
 
     if (!command) {
@@ -397,7 +396,7 @@ DiscordClient.on('message', async message =>
     }
 
     if (
-        message.channel.id == config.get('onlyDeleteMessagesInChannel')
+        message.channel.id == process.env.onlyDeleteMessagesInChannel
     ) {
         message.channel.fetchMessages({limit: 100})
             .then(messages => {
