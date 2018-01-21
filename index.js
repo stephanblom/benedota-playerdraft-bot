@@ -3,7 +3,7 @@ const config = require('config');
 
 const Logger = require('le_node');
 const logger = new Logger({
-    token: process.env.LOGENTRIES_TOKEN || config.get('logentries_token')
+    token: process.env.LOGENTRIES_TOKEN
 });
 
 const Discord = require('discord.js');
@@ -11,10 +11,10 @@ const DiscordClient = new Discord.Client();
 
 const mysql = require('mysql');
 const pool = mysql.createPool(process.env.CLEARDB_DATABASE_URL || {
-    host: process.env.CLEARDB_DATABASE_URL || config.get('database.host'),
-    user: process.env.CLEARDB_DATABASE_USER || config.get('database.user'),
-    password: process.env.CLEARDB_DATABASE_PASS || config.get('database.password'),
-    database: process.env.CLEARDB_DATABASE_NAME || config.get('database.database'),
+    host: process.env.CLEARDB_DATABASE_HOST,
+    user: process.env.CLEARDB_DATABASE_USER,
+    password: process.env.CLEARDB_DATABASE_PASS,
+    database: process.env.CLEARDB_DATABASE_NAME,
 });
 
 DiscordClient.on('ready', function() {
@@ -408,7 +408,7 @@ DiscordClient.on('message', async message =>
 
 });
 
-DiscordClient.login(config.get('token'));
+DiscordClient.login(process.env.DISCORD_TOKEN);
 
 function bulkDeleteChat(message, messages)
 {

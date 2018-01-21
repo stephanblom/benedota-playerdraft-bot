@@ -2,7 +2,7 @@ const config = require('config');
 
 const Logger = require('le_node');
 const logger = new Logger({
-    token: process.env.LOGENTRIES_TOKEN || config.get('logentries_token')
+    token: process.env.LOGENTRIES_TOKEN
 });
 
 exports.addTeam = function (message, args, pool) {
