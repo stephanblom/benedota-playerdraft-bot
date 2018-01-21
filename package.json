@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "config": "^1.29.1",
     "discord.js": "^11.2.1",
     "fast-csv": "^2.4.1",
     "le_node": "^1.7.1",
