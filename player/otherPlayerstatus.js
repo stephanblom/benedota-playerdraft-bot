@@ -16,7 +16,6 @@ exports.otherPlayerstatus = function (message, args, pool) {
                 return;
             } else {
                 results.forEach(function (player) {
-                    console.log(player);
                     message.channel.send(`
                         This is the info, ${user}: 
                         - Username: ${player.playername}
