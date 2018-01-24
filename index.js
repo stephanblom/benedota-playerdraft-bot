@@ -103,7 +103,7 @@ DiscordClient.on("guildDelete", guild => {
 
 DiscordClient.on('message', async message =>
 {
-    if (!message.content.startsWith(process.env.prefix)) {
+    if (!message.content.startsWith(process.env.botprefix)) {
         return;
     }
 
@@ -115,7 +115,7 @@ DiscordClient.on('message', async message =>
         return;
     }
 
-    const args = message.content.slice(process.env.prefix.length).trim().match(/(?:[^\s"]+|"[^"]*")+/g);
+    const args = message.content.slice(process.env.botprefix.length).trim().match(/(?:[^\s"]+|"[^"]*")+/g);
     const command = args.shift().toLowerCase();
 
     if (!command) {
