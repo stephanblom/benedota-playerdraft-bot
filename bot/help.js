@@ -1,49 +1,67 @@
+const Discord = require('discord.js');
+
 exports.sendHelp = function (message, args) {
-    if (args[0]) {
-        switch (args[0].toLowerCase()) {
-            case 'help':
-                message.channel.send(`!help <command (optional)> | Displays the help command.`);
-                return;
-            case 'register':
-            case 'update':
-                message.channel.send(`!register <mmr> <position> <preferred captain (Ja/Nee)> | Registers you to the bot`);
-                return;
-            case 'playerlist':
-                message.channel.send(`!playerlist | Shows the people joining the next tournament`);
-                return;
-            case 'join':
-                message.channel.send(`!join (!jointournament) | Joins the next tournament`);
-                return;
-            case 'leave':
-                message.channel.send(`!leave (!leavetournament) | Leaves the next tournament`);
-                return;
-        }
+    var helpCommands = {
+        '!register (or !update) <mmr> <position (1,2,3,4,5,Any)> <preferred captain (Yes/No)>': `Registers you to the bot, or updates your data, for example:
+                \`!register 2700 5 Nee\`,
+                \`!register 6543 1 Yes\`,
+                \`!register 9001 Any Ja\``,
+        '!playerlist': `Shows the people that have \`!join\` ed the next tournament`,
+        '!join': `Enters you in the next tournament`,
+        '!leave': `Remove your entry for the next tournament`,
+        '!status': `Shows the info you are currently registered with.`
     }
 
-    message.channel.send(
-        `Available commands:
-        - !help <command (optional)> | Displays this command.
-        - !register (or !update) <mmr> <position (1,2,3,4,5,Any)> <preferred captain (Yes/No) /> | Registers/Updates you to the bot
-        - !playerlist | Shows the people joining the next tournament
-        - !join | Joins the next tournament
-        - !leave | Leaves the next tournament`
-    );
+    var embed = new Discord.RichEmbed()
+        .setColor('#a52b16')
+        .attachFile(`./images/dota2.png`)
+        .setThumbnail(`attachment://dota2.png`)
+        .setTimestamp()
+        .setTitle(`Available commands`)
+        .setDescription(`These are the currently available commands to use`)
+        .setFooter(`BeNeDota Kayzr Player Draft Help`);
 
-    if (message.member.roles.find("name", "Admin")
-        || message.author.id === '157938886784319489'
+    for (var key in helpCommands) {
+        embed.addField(key, helpCommands[key]);
+    }
+    message.channel.send({embed});
+
+    if ((message.member.roles.find("name", "Admin")
+        || message.author.id === '157938886784319489')
+        && args[0] == 'admin'
     ) {
-        message.channel.send(
-            `Available Admin commands:
-            - !registerPlayer <username (exact)> <mmr> <position> <preferred captain> | Registers/Updates the username to the bot
-            - !joinPlayer <username (exact)> <mmr> <position> <preferred captain> | Joins the username to the next tournament
-            - !leavePlayer <username (exact)> <mmr> <position> <preferred captain> | Leaves the username from the next tournament
-            - !exportplayers (or: !exportjoinedplayers) <'csv' (optional)>
-                - This shows the joined players if started without 'csv' in csv format in chat.
-                - This starts the process of creating the teams if 'csv' parameter has been given. Caution with this!
-            - !showteams <'live' (optional)>
-                - This shows the teams created during \`!exportplayers csv\` in this chat. 
-                - When used with 'live' parameter, this will show the teams in the Kayzr channel.`
+        var embed = new Discord.RichEmbed()
+            .setColor('#a52b16')
+            .attachFile(`./images/dota2.png`)
+            .setThumbnail(`attachment://dota2.png`)
+            .setTimestamp()
+            .setTitle(`Extra commands for the Admins`)
+            .setDescription(`These are the currently available commands to use`)
+            .setFooter(`BeNeDota Kayzr Player Draft Help`);
+
+        embed.addField(
+            '!registerPlayer <username (mention)> <mmr> <position> <preferred captain>',
+            'Registers/Updates the user to the bot'
         );
+        embed.addField(
+            '!joinPlayer <username (mention)> <mmr> <position> <preferred captain>',
+            'Joins the user to the next tournament'
+        );
+        embed.addField(
+            '!leavePlayer <username (mention)> <mmr> <position> <preferred captain>',
+            'Removes the entry of the user for the next tournament'
+        );
+        embed.addField(
+            '!exportplayers (or: !exportjoinedplayers) <\'csv\' (optional)>',
+            `- This shows the joined players if started without 'csv' in csv format in chat. `
+             + `This starts the process of creating the teams if 'csv' parameter has been given. Caution with this!`
+        );
+        embed.addField(
+            '!showteams <live (optional)>',
+            `This shows the teams created during \`!exportplayers csv\` in this chat. `
+             + `When used with 'live' parameter, this will show the teams in the Kayzr channel.`
+        )
+        message.channel.send({embed});
     }
 
     return;

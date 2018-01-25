@@ -1,4 +1,3 @@
-const config = require('config');
 const Discord = require('discord.js');
 
 exports.showTeams = function (message, args, pool) {
