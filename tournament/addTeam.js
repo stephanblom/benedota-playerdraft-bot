@@ -1,5 +1,3 @@
-const config = require('config');
-
 const Logger = require('le_node');
 const logger = new Logger({
     token: process.env.LOGENTRIES_TOKEN
