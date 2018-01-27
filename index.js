@@ -373,28 +373,6 @@ DiscordClient.on('message', async message =>
         });
     }
 
-    if (command === 'find') {
-        var userId = args[0].replace(/['"]+/g, '');
-        var members = message.guild.members;
-        var guildMember = members.find(function(element) {
-            return element.user.username == userId || element.nickname == userId;
-        });
-
-        if (guildMember && guildMember.user) {
-            message.channel.send(`Found ${guildMember.user} in GuildMembers.`);
-        } else {
-            var userCollection = DiscordClient.users;
-            var user = userCollection.find(function(element) {
-                return element.username == userId;
-            });
-            if (user && user.id) {
-                message.channel.send(`Found ${user} in Client`);
-            } else {
-                message.channel.send(`Did not find ${userId} in Client`);
-            }
-        }
-    }
-
     if (
         message.channel.id == process.env.onlyDeleteMessagesInChannel
     ) {
