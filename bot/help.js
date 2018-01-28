@@ -2,7 +2,8 @@ const Discord = require('discord.js');
 
 exports.sendHelp = function (message, args) {
     var helpCommands = {
-        '!register (or !update) <mmr> <position (1,2,3,4,5,Any)> <preferred captain (Yes/No)>': `Registers you to the bot, or updates your data, for example:
+        '!register (or !update) <mmr> <preferred captain (Yes/No)> <position (1,2,3,4,5,Any)> <position (optional)> ...'
+            : `Registers you to the bot, or updates your data, for example:
                 \`!register 2700 Nee 5 4\`,
                 \`!register 6543 Yes 1 2\`,
                 \`!register 9001 Ja Any\``,
