@@ -19,7 +19,7 @@ exports.playerstatus = function (message, args, pool) {
                         This is the info, ${message.author}: 
                         - Username: ${player.playername}
                         - MMR: ${player.mmr}
-                        - Preferred position: ${player.preferred_position},
+                        - Preferred position: ${player.preferred_positions},
                         - Preferred captain: ${player.preferred_captain ? 'Yes' : 'No'},
                         - In next tournament: ${player.joined ? 'Yes' : 'No (maybe you\'d like to `!join` ?)'}
                     `);
