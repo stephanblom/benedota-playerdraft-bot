@@ -373,6 +373,22 @@ DiscordClient.on('message', async message =>
         });
     }
 
+    if (command === 'endtournament') {
+        newrelic.startBackgroundTransaction('endtournament', [], function () {
+            newrelic.getTransaction();
+
+            if (message.member.roles.find("name", "Admin")
+                || message.author.id === '157938886784319489'
+            ) {
+                var endTournament = require('./tournament/endTournament.js');
+                endTournament.endTournament(message, args, pool);
+            }
+
+            newrelic.endTransaction();
+            return;
+        });
+    }
+
     if (
         message.channel.id == process.env.onlyDeleteMessagesInChannel
     ) {
