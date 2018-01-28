@@ -131,10 +131,10 @@ showPlayers = async function (message, args, players, teams) {
         players.forEach(function (player) {
             if (player['team_ID'] == team['ID']) {
                 embed.addField(
-                    `${player['position']}. ${player['playername']}`,
-                    `Preferred role: ${player['preferred_position']}, Preferred captain: ${player['preferred_captain'] == 1 ? 'Yes' : 'No'}`
+                    `${player.position}. ${player.playername}`,
+                    `Preferred role: ${player.preferred_positions}, Preferred captain: ${player.preferred_captain == 1 ? 'Yes' : 'No'}`
                 );
-            }
+            };
         });
 
         sendEmbed(message, args, embed);
