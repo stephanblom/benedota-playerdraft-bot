@@ -55,8 +55,11 @@ exports.register = function (message, args, pool) {
         }
     }
 
+    var invalid_position = false;
     preferred_positions.forEach(function (preferred_position) {
-        if (isNaN(preferred_position)
+        if (preferred_position.toLowerCase() === 'any') {
+            preferred_positions = 'Any';
+        } else if (isNaN(preferred_position)
             || preferred_position < 1
             || preferred_position > 5) {
             invalid_position = preferred_position;
@@ -65,13 +68,15 @@ exports.register = function (message, args, pool) {
 
     if (invalid_position) {
         message.channel.send(
-            `Registering ${message.author} failed, invalid preferred position given. 
+            `Registering ${message.author} failed, invalid preferred position given (${invalid_position}). 
             Ex. command: *!register <mmr> <preferred captain> <position> <position (optional) ...>*`
         );
         return;
     }
 
-    preferred_positions = preferred_positions.join(',');
+    if (Array.isArray(preferred_positions)) {
+        preferred_positions = preferred_positions.join(',');
+    }
 
     var sql = `INSERT INTO player (playerID, playername, mmr, preferred_positions, preferred_captain)
         VALUES ( 
