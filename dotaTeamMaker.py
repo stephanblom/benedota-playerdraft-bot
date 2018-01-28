@@ -17,49 +17,59 @@
     If not, see https://www.gnu.org/licenses/gpl.html.
 """
 
-
 import csv
 import sys
 from os.path import isfile
+
+POSSIBLE_ROLES = [1, 2, 3, 4, 5]
 
 
 class Player(object):
     # Didn't put in getters and setters because I'm not sure yet
     # Where I want to go with this program.
     players_off_role = 0
-    weights = {1: 1.3, 2: 1.3, 3: 1, 4: 0.8, 5: 0.8}
+    weights = {1: 1.25, 2: 1.25, 3: 1, 4: 0.75, 5: 0.75}
 
-    def __init__(self, name, mmr, role, captain_pref):
+    def __init__(self, name, mmr, captain_pref, roles):
         self.name = name
+
         try:
             self.real_mmr = int(mmr)
         except:
             sys.exit('MMR has to be a number. Not ' + mmr)
+
         self.mmr = None
-        if not role == 'Any' and 5 >= int(role) >= 1:
-             self.role_preference = int(role)
-        elif role == 'Any':
-            self.role_preference = 'Any'
-        else:
-            sys.exit('Role has to be a number between 1 and 4 or \'Any\'.')
+
+        role_list = list()
+        for role in roles:
+            if role == 'Any' or int(role) in POSSIBLE_ROLES:
+                if role == 'Any':
+                    role_list.append('Any')
+                else:
+                    role_list.append(int(role))
+            else:
+                sys.exit('Role has to be a number between 1 and 5 or '
+                         '\'Any\'. Not ' + str(role))
+        self.role_preference = role_list
         self.role = None
-        if captain_pref == 'True' or captain_pref == 'False' or captain_pref \
-                is True or captain_pref is False:
+
+        if captain_pref == 'True' or captain_pref == 'False':
             if captain_pref == 'True':
                 captain_pref = True
             elif captain_pref == 'False':
                 captain_pref = False
         else:
-            sys.exit('The active field has to be True or '
+            sys.exit('The captain field has to be True or '
                      'False. Not ' + str(captain_pref))
         self.captain_preference = captain_pref
+
         self.active_captain = False
 
     def __str__(self):
         return '%s: MMR = %s, role_pref = %s, role = %s, captainpref = %s, ' \
                'captainstatus = %s' % (self.name, self.real_mmr,
-                self.role_preference, self.role,self.captain_preference,
-                self.active_captain)
+        self.role_preference, self.role, self.captain_preference,
+        self.active_captain)
 
     def calc_mmr(self):
         self.mmr = self.real_mmr * self.weights[self.role]
@@ -74,7 +84,7 @@ class Team(object):
         self.playercount = 0
         self.captain = None
         self.team = {1: None, 2: None, 3: None, 4: None, 5: None, 'Captain':
-                     None, 'Avg': 0, 'Playercount': 0}
+            None, 'Avg': 0, 'Playercount': 0}
 
     def __str__(self):
         return str(self.team)
@@ -111,9 +121,7 @@ def create_players(playerfile):
     with open(playerfile) as infile:
         reader = csv.reader(infile, delimiter=';')
         for line in reader:
-            if line[4] == 'True':
-                # Checks if the player is on 'Active'.
-                players.append(Player(line[0], line[1], line[2], line[3]))
+            players.append(Player(line[0], line[1], line[2], line[3:]))
     team_amount = len(players) // 5
     players = sorted(players, key=lambda x: x.real_mmr, reverse=True)
     teamless_players = players[team_amount * 5:]
@@ -149,73 +157,59 @@ def create_teams(team_amount):
 
 def distribute_roles(players, captains, team_amount):
     role_amounts = list()
+    everyone = list()
+    for player in players:
+        everyone.append(player)
+    for captain in captains:
+        everyone.append(captain)
+    everyone.sort(key=lambda x: x.real_mmr)
     # This will be used to check how many players of each role there are.
     for i in range(6):
         role_amounts.append(0)
     # 6 entries so that the role matches the index in the list.
     # This is just QOL.
-    for role in [5, 4]:
-        for captain in sorted(captains, key=lambda x: x.real_mmr):
-            if captain.role_preference == 'Any':
-                continue
-            if captain.role_preference == role and role_amounts[role]\
-                    < team_amount:
-                captain.role = role
-                role_amounts[role] += 1
-                captain.calc_mmr()
-    for role in [5, 4]:
-        for player in sorted(players, key=lambda x: x.real_mmr):
-            if player.role_preference == 'Any':
-                continue
-            if player.role_preference == role and role_amounts[role]\
-                    < team_amount:
-                player.role = role
-                role_amounts[role] += 1
-                player.calc_mmr()
-    for captain in captains:
-        # Captains will get priority for their role assignment.
-        if captain.role is None:
-            if captain.role_preference == 'Any':
-                continue
-            else:
-                if role_amounts[captain.role_preference] < team_amount:
-                    captain.role = captain.role_preference
-                    role_amounts[captain.role_preference] += 1
-                    captain.calc_mmr()
-                    # If the role the captain wants is avalable he will
-                    # receieve it and the role_amounts will be updated.
-                else:
-                    Player.players_off_role += 1
+    for proposed_role in [5, 4]:
+        for person in everyone:
+            for role in person.role_preference:
+                if role == 'Any':
                     continue
-                    # If the role the capatin wants is taken, he will
-                    # Get one assigned later with the 'Any' play/capt
-    for player in players:
-        # Same but then for the players.
-        if player.role is None:
-            if player.role_preference != 'Any':
-                if role_amounts[player.role_preference] < team_amount:
-                    player.role = player.role_preference
-                    role_amounts[player.role_preference] += 1
-                    player.calc_mmr()
+                if role == proposed_role and role_amounts[proposed_role] \
+                        < team_amount and person.role == None:
+                    person.role = proposed_role
+                    role_amounts[proposed_role] += 1
+                    person.calc_mmr()
+                    break
+    for person in everyone:
+        if person.role is None:
+            for role in person.role_preference:
+                if role == 'Any':
+                    break
                 else:
-                    Player.players_off_role += 1
-                    continue
+                    if role_amounts[role] < team_amount:
+                        person.role = role
+                        role_amounts[role] += 1
+                        person.calc_mmr()
+                        break
+                        # If the role the person wants is avalable he will
+                        # receieve it and the role_amounts will be updated.
+        if person.role is None and 'Any' not in person.role_preference:
+            Player.players_off_role += 1
+            # If the role the capatin wants is taken, he will
+            # Get one assigned later with the 'Any' play/capt
     # These next 2 loops distribute the remaining free roles amongst the
     # captains and players. Priorty: High->Low MMR,Position 1 -> Position 5
-    everyone = list()
-    for player in players:
-        everyone.append(player)
-    for captain in captains:
-        everyone.append(captain)	
-    everyone.sort(key= lambda x: x.real_mmr, reverse= True)
+    everyone.sort(key=lambda x: x.real_mmr, reverse=True)
     for person in everyone:
-        if person.role_preference == 'Any' or person.role == None:
-            for role in enumerate(role_amounts):
-                if role[0] == 0:
+        if person.role is None:
+            for role_and_amount in enumerate(role_amounts):
+                # role_and_amount will return tuples with first value
+                # being the role, the second value the amount of players
+                # already on that role.
+                if role_and_amount[0] == 0:
                     continue
-                elif role[1] < team_amount:
-                    role_amounts[role[0]] += 1
-                    person.role = role[0]
+                elif role_and_amount[1] < team_amount:
+                    role_amounts[role_and_amount[0]] += 1
+                    person.role = role_and_amount[0]
                     person.calc_mmr()
                     break
     players = sorted(players, key=lambda x: x.mmr, reverse=True)
@@ -229,7 +223,7 @@ def distribute_captains(captains, teams):
         teams[i].set_captain(captains[i])
 
 
-def distribute_player(players, teams, cur_round, current_index = None):
+def distribute_player(players, teams, cur_round, current_index=None):
     """
     Takes the highest MMR player yet to be distributed and tries to add them
     to the team with the lowest MMR average. (With the right amount of players
@@ -272,7 +266,9 @@ def write_away(teams, max_spread, role_frac, teamless_player_list, outfile):
     """
     with open(outfile, mode='w+') as outfile:
         writer = csv.writer(outfile, delimiter=';')
-        writer.writerow(['There is a maximum spread of %.1f on the team MMR\'rs' % max_spread])
+        writer.writerow([
+            'There is a maximum spread of %.1f on the team MMR\'rs' %
+            max_spread])
         writer.writerow(
             [role_frac + ' People are playing their preffered roles'])
         i = 0
@@ -289,7 +285,7 @@ def write_away(teams, max_spread, role_frac, teamless_player_list, outfile):
 
 def __main__(playerfile, outfile='Outfile.csv'):
     players, teamless_players, team_amount = create_players(playerfile)
-    total_players = team_amount*5
+    total_players = team_amount * 5
     players, captains = update_captain_status(players, team_amount)
     teams = create_teams(team_amount)
     players, captains = distribute_roles(players, captains, team_amount)
@@ -303,13 +299,13 @@ def __main__(playerfile, outfile='Outfile.csv'):
     for team in teams:
         del team.team['Playercount']
     maximum_spread = maximum_avg - minimum_avg
-    players_on_role_frac = str(team_amount*5 - Player.players_off_role) + \
+    players_on_role_frac = str(team_amount * 5 - Player.players_off_role) + \
                            '/' + str(total_players)
     teamless_players_out = list()
     for player in teamless_players:
         teamless_players_out.append(player.name)
     write_away(teams, maximum_spread, players_on_role_frac,
-               teamless_players_out, outfile)
+        teamless_players_out, outfile)
 
 
 if len(sys.argv) == 1:
@@ -318,8 +314,8 @@ if sys.argv[1] == 'versioninfo':
     print('\nDotaTeamMaker_LowSupp_Weighted')
     print('Current weights: ' + str(Player.weights))
     print('Written by Jonathan \'Fusion\' Driessen')
-    print('Current version: 1.1.a')
-    print('Last updated on 19/01/2018')
+    print('Current version: 1.1.c')
+    print('Last updated on 28/01/2018')
 elif len(sys.argv) == 2:
     try:
         __main__(sys.argv[1])
@@ -339,10 +335,7 @@ elif len(sys.argv) == 3:
         print('python <name of DotaTeamMaker> <Input data> <Optional: '
               'Outfile name>')
     try:
-        if isfile(sys.argv[2]):
-            __main__(sys.argv[1], sys.argv[2])
-        else:
-            __main__(sys.argv[1], sys.argv[2])
+        __main__(sys.argv[1], sys.argv[2])
     except FileNotFoundError:
         print('\nInput error')
         print('Input file doesn\'t exist')

@@ -37,18 +37,20 @@ showPlayers = function(message, allrows) {
     var description = '';
     var i = 1;
     allrows.forEach(function (player) {
-        description += `${player['playername']};${player['mmr']};${player['preferred_position']};${player['preferred_captain'] ? 'True' : 'False'};True\n`;
+        player.preferred_positions = player.preferred_positions.replace(',', ';');
+        description += `${player.playername};${player.mmr};${player.preferred_captain ? 'True' : 'False'};${player.preferred_positions}\n`;
         i++;
     });
 
-    message.channel.send("```Player_Name;Solo_MMR;Preffered_Role;Preffered_Captain;Active\n" + description + '```');
+    message.channel.send('```' + description + '```');
 }
 
 exportToCsv = function(message, args, pool, allrows) {
-    var description = 'Player_Name;Solo_MMR;Preffered_Role;Preffered_Captain;Active\n';
+    var description = '';
     var i = 1;
     allrows.forEach(function (player) {
-        description += `${player['playername']};${player['mmr']};${player['preferred_position']};${player['preferred_captain'] ? 'True' : 'False'};True\n`;
+        player.preferred_positions = player.preferred_positions.replace(',', ';');
+        description += `${player.playername};${player.mmr};${player.preferred_captain ? 'True' : 'False'};${player.preferred_positions}\n`;
         i++;
     });
 
