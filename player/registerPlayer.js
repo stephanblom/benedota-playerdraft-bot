@@ -5,12 +5,12 @@ exports.registerPlayer = function (message, args, pool) {
     if (args.length < 3) {
         message.channel.send(
             `Registering failed, not enough parameters given. 
-            Ex. command: *!register <mmr> <position> <preferred captain>*`
+            Ex. command: *!register <mmr> <preferred captain> <position> <position (optional ...)>*`
         );
         return;
     }
 
-    var exampleCommand = `Ex. command: *!register <mention> <mmr> <position> <preferred captain>*`;
+    var exampleCommand = `Ex. command: *!register <mmr> <preferred captain> <position> <position (optional ...)>*`;
 
     var user = message.mentions.users.first();
     var mmr = parseInt(args[1]);

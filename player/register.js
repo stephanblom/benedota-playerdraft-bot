@@ -2,45 +2,26 @@ exports.register = function (message, args, pool) {
     if (args.length < 3) {
         message.channel.send(
             `Registering ${message.author} failed, not enough parameters given. 
-            Ex. command: *!register <mmr> <position> <preferred captain>*`
+            Ex. command: *!register <mmr> <preferred captain> <position> <position (optional) ...>*`
         );
         return;
     }
 
-    mmr = parseInt(args[0]);
-    preferred_position = args[1];
-    preferred_captain = args[2];
+    var [mmr, preferred_captain, ...preferred_positions] = args;
 
     if (!mmr || isNaN(mmr) || !parseInt(mmr) || (mmr < 1 || mmr >= 10000)) {
         message.channel.send(
             `Registering ${message.author} failed, invalid mmr given. 
-            Ex. command: *!register <mmr> <position> <preferred captain>*`
+            Ex. command: *!register <mmr> <preferred captain> <position> <position (optional ...)>*`
         );
 
         return;
     }
 
-    if (!preferred_position) {
+    if (!preferred_positions) {
         message.channel.send(
             `Registering ${message.author} failed, no position given. 
-            Ex. command: *!register <mmr> <position> <preferred captain>*`
-        );
-        return;
-    }
-
-    if (preferred_position.toLowerCase() === 'any') {
-        preferred_position = 'Any';
-    } else if (!isNaN(preferred_position)) {
-        preferred_position = parseInt(preferred_position);
-    }
-
-    if (
-        (typeof preferred_position === 'number' && (preferred_position < 1 || preferred_position > 5))
-        || (typeof preferred_position === 'string' && preferred_position !== 'Any')
-    ) {
-        message.channel.send(
-            `Registering ${message.author} failed, wrong position given. 
-            Ex. command: *!register <mmr> <position> <preferred captain>*`
+            Ex. command: *!register <mmr> <preferred captain> <position> <position (optional) ...>*`
         );
         return;
     }
@@ -74,17 +55,35 @@ exports.register = function (message, args, pool) {
         }
     }
 
-    var sql = `INSERT INTO player (playerID, playername, mmr, preferred_position, preferred_captain)
+    preferred_positions.forEach(function (preferred_position) {
+        if (isNaN(preferred_position)
+            || preferred_position < 1
+            || preferred_position > 5) {
+            invalid_position = preferred_position;
+        }
+    });
+
+    if (invalid_position) {
+        message.channel.send(
+            `Registering ${message.author} failed, invalid preferred position given. 
+            Ex. command: *!register <mmr> <preferred captain> <position> <position (optional) ...>*`
+        );
+        return;
+    }
+
+    preferred_positions = preferred_positions.join(',');
+
+    var sql = `INSERT INTO player (playerID, playername, mmr, preferred_positions, preferred_captain)
         VALUES ( 
             ${message.author.id},
             '${message.author.username}', 
             ${mmr}, 
-            '${preferred_position}', 
+            '${preferred_positions}', 
             '${preferred_captain}'
         )
         ON DUPLICATE KEY UPDATE
             mmr = ${mmr},
-            preferred_position = '${preferred_position}',
+            preferred_positions = '${preferred_positions}',
             preferred_captain = '${preferred_captain}'
     `;
 
@@ -98,7 +97,7 @@ exports.register = function (message, args, pool) {
             }
 
             message.channel.send(`${message.author} is registered or updated `
-                + `*(MMR: ${mmr}, Prefers position: ${preferred_position}, `
+                + `*(MMR: ${mmr}, Prefers position: ${preferred_positions}, `
                 + `Prefers captain: ${preferred_captain ? 'Yes' : 'No'})*.`);
         });
     });

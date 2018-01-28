@@ -3,9 +3,9 @@ const Discord = require('discord.js');
 exports.sendHelp = function (message, args) {
     var helpCommands = {
         '!register (or !update) <mmr> <position (1,2,3,4,5,Any)> <preferred captain (Yes/No)>': `Registers you to the bot, or updates your data, for example:
-                \`!register 2700 5 Nee\`,
-                \`!register 6543 1 Yes\`,
-                \`!register 9001 Any Ja\``,
+                \`!register 2700 Nee 5 4\`,
+                \`!register 6543 Yes 1 2\`,
+                \`!register 9001 Ja Any\``,
         '!playerlist': `Shows the people that have \`!join\` ed the next tournament`,
         '!join': `Enters you in the next tournament`,
         '!leave': `Remove your entry for the next tournament`,
