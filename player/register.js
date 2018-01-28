@@ -102,7 +102,7 @@ exports.register = function (message, args, pool) {
             }
 
             message.channel.send(`${message.author} is registered or updated `
-                + `*(MMR: ${mmr}, Prefers position: ${preferred_positions}, `
+                + `*(MMR: ${mmr}, Prefers position(s): ${preferred_positions}, `
                 + `Prefers captain: ${preferred_captain ? 'Yes' : 'No'})*.`);
         });
     });
