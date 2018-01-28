@@ -14,7 +14,6 @@
     "fast-csv": "^2.4.1",
     "le_node": "^1.7.1",
     "mysql": "^2.15.0",
-    "newrelic": "^2.5.0",
     "python-shell": "^0.4.0"
   }
 }
