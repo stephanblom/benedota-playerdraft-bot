@@ -251,6 +251,15 @@ DiscordClient.on('message', async message =>
         }
     }
 
+    if (command === 'showwinningteam') {
+        if (message.member.roles.find("name", "Admin")
+            || message.author.id === '157938886784319489'
+        ) {
+            var showWinningTeam = require('./tournament/showWiningTeam.js');
+            showWinningTeam.showWinningTeam(message, args, pool);
+        }
+    }
+
     if (
         message.channel.id == process.env.onlyDeleteMessagesInChannel
     ) {
