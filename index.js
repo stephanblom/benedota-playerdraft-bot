@@ -255,7 +255,7 @@ DiscordClient.on('message', async message =>
         if (message.member.roles.find("name", "Admin")
             || message.author.id === '157938886784319489'
         ) {
-            var showWinningTeam = require('./tournament/showWiningTeam.js');
+            var showWinningTeam = require('./tournament/showWinningTeam.js');
             showWinningTeam.showWinningTeam(message, args, pool);
         }
     }

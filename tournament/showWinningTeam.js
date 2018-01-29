@@ -5,7 +5,9 @@ exports.showWinningTeam = function(message, args, pool)
     if (args.length < 1 || args.length > 3 || isNaN(args[0])) {
         message.channel.send(`Not enough arguments. I just need 1 number, of the winning team.`);
     }
+
     var winningTeam = parseInt(args[0]);
+
     var sql = `SELECT * 
         FROM team_player
         LEFT JOIN player on player.playername = team_player.player_name
@@ -64,7 +66,7 @@ exports.showWinningTeam = function(message, args, pool)
             }
 
             if (args[2] == 'reset') {
-                var endTournament = require('./tournament/endTournament.js');
+                var endTournament = require('./endTournament.js');
                 endTournament.endTournament(message, args, pool);
             }
 
