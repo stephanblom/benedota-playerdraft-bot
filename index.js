@@ -1,6 +1,6 @@
-const Logger = require('le_node');
-const logger = new Logger({
-    token: process.env.LOGENTRIES_TOKEN
+var Logger = require('le_node');
+var log = new Logger({
+    token:'6653191e-beab-425a-ab62-f588930ff53b'
 });
 
 const Discord = require('discord.js');
@@ -27,13 +27,13 @@ DiscordClient.on('ready', function() {
             connection.release();
 
             if (error) {
-                logger.err(error.toString());
+                log.err(error.toString());
                 console.error(error.toString());
                 throw error;
             }
 
             if (results.length > 0 ) {
-                logger.info("Database 'player' created.");
+                log.info("Database 'player' created.");
             }
         });
     });
@@ -47,13 +47,13 @@ DiscordClient.on('ready', function() {
             connection.release();
 
             if (error) {
-                logger.err(error.toString());
+                log.err(error.toString());
                 console.error(error.toString());
                 throw error;
             }
 
             if (result.length > 0 ) {
-                logger.info("Database 'team' created.");
+                log.info("Database 'team' created.");
             }
         });
     });
@@ -68,13 +68,13 @@ DiscordClient.on('ready', function() {
             connection.release();
 
             if (error) {
-                logger.err(error.toString());
+                log.err(error.toString());
                 console.error(error.toString());
                 throw error;
             }
 
             if (result.length > 0 ) {
-                logger.info("Database 'team_player' created.");
+                log.info("Database 'team_player' created.");
             }
         });
     });
@@ -83,7 +83,7 @@ DiscordClient.on('ready', function() {
         `Bot has started, with ${DiscordClient.users.size} users, in ${DiscordClient.channels.size} channels of` +
         ` ${DiscordClient.guilds.size} guilds.`
     );
-    logger.info(
+    log.info(
         `Bot has started, with ${DiscordClient.users.size} users, in ${DiscordClient.channels.size} channels of` +
         ` ${DiscordClient.guilds.size} guilds.`
     )
@@ -120,7 +120,7 @@ DiscordClient.on('message', async message =>
         return;
     }
 
-    logger.debug(`Received command ${command} message from ${message.author.username} with the arguments ${args.join(', ')}`);
+    log.debug(`Received command ${command} message from ${message.author.username} with the arguments ${args.join(', ')}`);
 
     if (command === "ping") {
         if (message.member.roles.find("name", "Admin")
@@ -153,19 +153,19 @@ DiscordClient.on('message', async message =>
     if (command === 'register' || command === 'update') {
         var registerPlayer = require('./player/register');
         registerPlayer.register(message, args, pool);
-        logger.info(`!register: Player ${message.author.username} registered. `);
+        log.info(`!register: Player ${message.author.username} registered. `);
     }
 
     if (command === 'join' || command === 'jointournament') {
         var joinTournament = require('./player/joinTournament');
         joinTournament.joinTournament(message, args, pool);
-        logger.info(`!join: Player ${message.author.username} joined.`);
+        log.info(`!join: Player ${message.author.username} joined.`);
     }
 
     if (command === 'leave' || command === 'leavetournament') {
         var leaveTournament = require('./player/leaveTournament');
         leaveTournament.leaveTournament(message, args, pool);
-        logger.info(`!leave: Player ${message.author.username} left.`)
+        log.info(`!leave: Player ${message.author.username} left.`)
     }
 
     if (command === 'exportjoinedplayers' || command === 'exportplayers') {
