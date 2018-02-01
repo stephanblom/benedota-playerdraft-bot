@@ -19,7 +19,7 @@ DiscordClient.on('ready', function() {
         connection.query(`CREATE TABLE IF NOT EXISTS player (
             playerID BIGINT(255) NOT NULL PRIMARY KEY,
             playername VARCHAR(255) NOT NULL,
-            kayzrname VARCHAR(255) NULL,
+            kayzrname VARCHAR(255) NOT NULL DEFAULT '',
             mmr INTEGER NOT NULL,
             preferred_position VARCHAR(3) NOT NULL,
             preferred_captain TINYINT(1) NOT NULL,

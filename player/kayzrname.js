@@ -11,7 +11,11 @@ exports.setName = function (message, args, pool) {
         return;
     }
 
-    var sql = `UPDATE player SET kayzrname = ? WHERE playerID = '${message.author.id}'`;
+    if (kayzrname === 'clear') {
+        var sql = `UPDATE player SET kayzrname = '' WHERE playerID = '${message.author.id}'`
+    } else {
+        var sql = `UPDATE player SET kayzrname = ? WHERE playerID = '${message.author.id}'`;
+    }
     pool.getConnection(function(error, connection) {
         connection.query(sql, [kayzrname], function(error, results) {
             connection.release();
@@ -21,7 +25,11 @@ exports.setName = function (message, args, pool) {
                 throw error;
             }
 
-            message.channel.send(`${message.author}, your name has been updated to ${kayzrname}!`);
+            if (kayzrname === 'clear') {
+                message.channel.send(`${message.author}, your kayzrname has been unset!`);
+            } else {
+                message.channel.send(`${message.author}, your kayzrname has been updated to ${kayzrname}!`);
+            }
             return;
         });
     });
