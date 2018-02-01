@@ -10,7 +10,8 @@ exports.sendHelp = function (message, args) {
         '!playerlist': `Shows the people that have \`!join\` ed the next tournament`,
         '!join': `Enters you in the next tournament`,
         '!leave': `Remove your entry for the next tournament`,
-        '!status': `Shows the info you are currently registered with.`
+        '!status': `Shows the info you are currently registered with.`,
+        '!kayzrname (name/clear)': `Sets or clears your Kayzr Profile name, so we can add you to the Kayzr team`
     }
 
     var embed = new Discord.RichEmbed()
