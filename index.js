@@ -1,6 +1,6 @@
 var Logger = require('le_node');
 var log = new Logger({
-    token:'6653191e-beab-425a-ab62-f588930ff53b'
+    token:process.env.LOGENTRIES_TOKEN
 });
 
 const Discord = require('discord.js');
