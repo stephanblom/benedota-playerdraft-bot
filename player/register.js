@@ -1,8 +1,10 @@
 exports.register = function (message, args, pool) {
+    var exampleCommand = `Ex. command: *!register <mmr> <preferred captain> <position> <position (optional) ...>*`;
+
     if (args.length < 3) {
         message.channel.send(
             `Registering ${message.author} failed, not enough parameters given. 
-            Ex. command: *!register <mmr> <preferred captain> <position> <position (optional) ...>*`
+            ${exampleCommand}`
         );
         return;
     }
@@ -12,7 +14,7 @@ exports.register = function (message, args, pool) {
     if (!mmr || isNaN(mmr) || !parseInt(mmr) || (mmr < 1 || mmr >= 10000)) {
         message.channel.send(
             `Registering ${message.author} failed, invalid mmr given. 
-            Ex. command: *!register <mmr> <preferred captain> <position> <position (optional ...)>*`
+            ${exampleCommand}`
         );
 
         return;
@@ -21,7 +23,7 @@ exports.register = function (message, args, pool) {
     if (!preferred_positions) {
         message.channel.send(
             `Registering ${message.author} failed, no position given. 
-            Ex. command: *!register <mmr> <preferred captain> <position> <position (optional) ...>*`
+            ${exampleCommand}`
         );
         return;
     }
@@ -29,7 +31,7 @@ exports.register = function (message, args, pool) {
     if (!preferred_captain) {
         message.channel.send(
             `Registering ${message.author} failed, no preferred captain given. 
-            Ex. command: *!register <mmr> <position> <preferred captain (1/Ja/Yes/True of 0/Nee/No/False)>*`
+            ${exampleCommand}`
         );
         return;
     } else {
@@ -49,7 +51,7 @@ exports.register = function (message, args, pool) {
             default:
                 message.channel.send(
                     `Registering ${message.author} failed, invalid preferred captain given. 
-                    Ex. command: *!register <mmr> <position> <preferred captain (1/Ja/Yes/True of 0/Nee/No/False)>*`
+                    ${exampleCommand}`
                 );
                 return;
         }
@@ -69,7 +71,7 @@ exports.register = function (message, args, pool) {
     if (invalid_position) {
         message.channel.send(
             `Registering ${message.author} failed, invalid preferred position given (${invalid_position}). 
-            Ex. command: *!register <mmr> <preferred captain> <position> <position (optional) ...>*`
+            ${exampleCommand}`
         );
         return;
     }
