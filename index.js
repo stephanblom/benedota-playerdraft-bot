@@ -120,7 +120,7 @@ DiscordClient.on('message', async message =>
         return;
     }
 
-    logger.debug('Received message: ' + command + ' with the arguments: ' + args.join(', '));
+    logger.debug(`Received command ${command} message from ${message.author.username} with the arguments ${args.join(', ')}`);
 
     if (command === "ping") {
         if (message.member.roles.find("name", "Admin")
