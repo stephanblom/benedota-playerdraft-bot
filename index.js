@@ -154,19 +154,16 @@ DiscordClient.on('message', async message =>
     if (command === 'register' || command === 'update') {
         var registerPlayer = require('./player/register');
         registerPlayer.register(message, args, pool);
-        log.info(`!register: Player ${message.author.username} registered. `);
     }
 
     if (command === 'join' || command === 'jointournament') {
         var joinTournament = require('./player/joinTournament');
         joinTournament.joinTournament(message, args, pool);
-        log.info(`!join: Player ${message.author.username} joined.`);
     }
 
     if (command === 'leave' || command === 'leavetournament') {
         var leaveTournament = require('./player/leaveTournament');
         leaveTournament.leaveTournament(message, args, pool);
-        log.info(`!leave: Player ${message.author.username} left.`)
     }
 
     if (command === 'exportjoinedplayers' || command === 'exportplayers') {
