@@ -53,7 +53,7 @@ exports.showWinningTeam = function(message, args, pool)
 
             results.forEach(function(player) {
                 embed.addField(
-                    `${player['position']}. ${player['playername']} ${player.kayzrname ? '(Kayzr: ' + kayzr.playername + ')' : ''}`,
+                    `${player['position']}. ${player['playername']} ${player.kayzrname ? '(Kayzr: ' + player.kayzrname + ')' : ''}`,
                     `Preferred role: ${player['preferred_position']}, Preferred captain: ${player['preferred_captain'] == 1 ? 'Yes' : 'No'}`
                 );
                 embed.setColor(colors[player['team_ID']]);
@@ -65,7 +65,8 @@ exports.showWinningTeam = function(message, args, pool)
                 message.channel.send({embed});
             }
 
-            if (args[2] == 'reset') {
+            if (args[1] == 'reset'
+                || args[2] == 'reset') {
                 var endTournament = require('./endTournament.js');
                 endTournament.endTournament(message, args, pool);
             }
