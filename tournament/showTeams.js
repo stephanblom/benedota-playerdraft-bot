@@ -90,7 +90,7 @@ showTeamInfo = function(message, args, pool, players, teams)
             embed.setDescription(description);
 
             if (args[0] == 'live') {
-                message.guild.channels.get(process.env.showteamsChannel).send({embed});
+                message.guild.channels.get(message.guild.channels.get(process.env.showteamsChannel).send({embed});
             } else {
                 message.channel.send({embed})
             }
