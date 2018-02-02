@@ -49,7 +49,7 @@ exportToCsv = function(message, args, pool, allrows) {
     var description = '';
     var i = 1;
     allrows.forEach(function (player) {
-        player.preferred_positions = player.preferred_positions.replace(',', ';');
+        player.preferred_positions = player.preferred_positions.replace(/,/g, ';');
         description += `${player.playername};${player.mmr};${player.preferred_captain ? 'True' : 'False'};${player.preferred_positions}\n`;
         i++;
     });
