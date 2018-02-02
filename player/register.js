@@ -77,6 +77,7 @@ exports.register = function (message, args, pool) {
     }
 
     if (Array.isArray(preferred_positions)) {
+        preferred_positions = preferred_positions.slice(0, 5);
         preferred_positions = preferred_positions.join(',');
     }
 
