@@ -53,7 +53,7 @@ exports.showWinningTeam = function(message, args, pool)
 
             results.forEach(function(player) {
                 embed.addField(
-                    `${player['position']}. ${player['playername']} ${player.kayzrname ? '(' + kayzr.playername + ')' : ''}`,
+                    `${player['position']}. ${player['playername']} ${player.kayzrname ? '(Kayzr: ' + kayzr.playername + ')' : ''}`,
                     `Preferred role: ${player['preferred_position']}, Preferred captain: ${player['preferred_captain'] == 1 ? 'Yes' : 'No'}`
                 );
                 embed.setColor(colors[player['team_ID']]);
