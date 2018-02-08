@@ -123,24 +123,6 @@ DiscordClient.on('message', async message =>
 
     log.debug(`Received command ${command} message from ${message.author.username} with the arguments ${args.join(', ')}`);
 
-    if (command === "ping") {
-        if (message.member.roles.find("name", "Admin")
-            || message.author.id === '157938886784319489'
-        ) {
-            const m = await
-            message.channel.send("Ping?");
-            m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(DiscordClient.ping)}ms`)
-                .then(msg => {
-                    msg.delete(5000);
-                    message.delete(5000);
-                });
-
-            return;
-        }
-
-        return;
-    }
-
     if (command === "help") {
         var help = require('./bot/help');
         help.sendHelp(message, args);
@@ -166,67 +148,6 @@ DiscordClient.on('message', async message =>
         leaveTournament.leaveTournament(message, args, pool);
     }
 
-    if (command === 'exportjoinedplayers' || command === 'exportplayers') {
-        if (message.member.roles.find("name", "Admin")
-            || message.author.id === '157938886784319489'
-        ) {
-            var exportPlayers = require('./tournament/exportPlayers');
-            exportPlayers.exportPlayers(message, args, pool);
-        } else {
-            message.channel.send("Not allowed.");
-        }
-    }
-
-    if (command === 'showteams') {
-        if (message.member.roles.find("name", "Admin")
-            || message.author.id === '157938886784319489'
-        ) {
-            var showTeams = require('./tournament/showTeams');
-            showTeams.showTeams(message, args, pool);
-        } else {
-            message.channel.send("You! Shall not! Pass!");
-        }
-
-        return;
-    }
-
-    if (command === 'registerplayer') {
-        if (message.member.roles.find("name", "Admin")
-            || message.author.id === '157938886784319489'
-            || message.author.id === '147763248781983754'
-        ) {
-            var registerPlayer = require('./player/registerPlayer');
-            registerPlayer.registerPlayer(message, args, pool);
-        } else {
-            message.channel.send("Nope. ");
-        }
-
-    }
-
-    if (command === 'joinplayer') {
-        if (message.member.roles.find("name", "Admin")
-            || message.author.id === '157938886784319489'
-            || message.author.id === '147763248781983754'
-        ) {
-            var joinPlayer = require('./player/joinPlayer');
-            joinPlayer.joinPlayer(message, args, pool);
-        } else {
-            message.channel.send("Nope. ");
-        }
-    }
-
-    if (command === 'leaveplayer') {
-        if (message.member.roles.find("name", "Admin")
-            || message.author.id === '157938886784319489'
-            || message.author.id === '147763248781983754'
-        ) {
-            var leavePlayer = require('./player/leavePlayer');
-            leavePlayer.leavePlayer(message, args, pool);
-        } else {
-            message.channel.send("Nope. ");
-        }
-    }
-
     if (command === 'status') {
         if ((message.member.roles.find("name", "Admin")
             || message.author.id === '157938886784319489')
@@ -240,28 +161,66 @@ DiscordClient.on('message', async message =>
         }
     }
 
-    if (command === 'endtournament') {
-        if (message.member.roles.find("name", "Admin")
-            || message.author.id === '157938886784319489'
-        ) {
+    if (command === 'kayzrname') {
+        var kayzrname = require('./player/kayzrname.js');
+        kayzrname.setName(message, args, pool);
+    }
+
+    if (
+        message.member.roles.find("name", "Admin")
+        || message.member.roles.find("name", "Staff")
+        message.author.id === '157938886784319489'
+    ) {
+        if (command === "ping") {
+            const m = await
+                message.channel.send("Ping?");
+            m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(DiscordClient.ping)}ms`)
+                .then(msg => {
+                    msg.delete(5000);
+                    message.delete(5000);
+                });
+
+            return;
+        }
+
+        if (command === 'exportjoinedplayers' || command === 'exportplayers') {
+            var exportPlayers = require('./tournament/exportPlayers');
+            exportPlayers.exportPlayers(message, args, pool);
+        }
+
+        if (command === 'showteams') {
+            var showTeams = require('./tournament/showTeams');
+            showTeams.showTeams(message, args, pool);
+
+            return;
+        }
+
+        if (command === 'registerplayer') {
+            var registerPlayer = require('./player/registerPlayer');
+            registerPlayer.registerPlayer(message, args, pool);
+        }
+
+        if (command === 'joinplayer') {
+            var joinPlayer = require('./player/joinPlayer');
+            joinPlayer.joinPlayer(message, args, pool);
+        }
+
+        if (command === 'leaveplayer') {
+            var leavePlayer = require('./player/leavePlayer');
+            leavePlayer.leavePlayer(message, args, pool);
+        }
+
+        if (command === 'endtournament') {
             var endTournament = require('./tournament/endTournament.js');
             endTournament.endTournament(message, args, pool);
         }
-    }
 
-    if (command === 'showwinningteam') {
-        if (message.member.roles.find("name", "Admin")
-            || message.author.id === '157938886784319489'
-        ) {
+        if (command === 'showwinningteam') {
             var showWinningTeam = require('./tournament/showWinningTeam.js');
             showWinningTeam.showWinningTeam(message, args, pool);
         }
     }
 
-    if (command === 'kayzrname') {
-        var kayzrname = require('./player/kayzrname.js');
-        kayzrname.setName(message, args, pool);
-    }
 
     if (
         message.channel.id == process.env.onlyDeleteMessagesInChannel
