@@ -169,7 +169,7 @@ DiscordClient.on('message', async message =>
     if (
         message.member.roles.find("name", "Admin")
         || message.member.roles.find("name", "Staff")
-        message.author.id === '157938886784319489'
+        || message.author.id === '157938886784319489'
     ) {
         if (command === "ping") {
             const m = await
