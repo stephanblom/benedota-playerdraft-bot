@@ -80,8 +80,8 @@ showTeamInfo = function(message, args, pool, players, teams)
         .on("data", function(data) {
             if (data[0].startsWith('There is')) {
                 description += data[0].toString() + '\r\n';
-            } else if (data[0].includes('People are playing')) {
-                description += data[0].toString();
+            } else if (data[0].includes('people are')) {
+                description += data[0].toString() + "\r\n";
             } else if (data[0].startsWith('1:') || data[0].startsWith('Captain:')) {
                 stream.close();
             }
@@ -90,7 +90,7 @@ showTeamInfo = function(message, args, pool, players, teams)
             embed.setDescription(description);
 
             if (args[0] == 'live') {
-                message.guild.channels.get(message.guild.channels.get(process.env.showteamsChannel).send({embed});
+                message.guild.channels.get(process.env.showteamsChannel).send({embed});
             } else {
                 message.channel.send({embed})
             }
