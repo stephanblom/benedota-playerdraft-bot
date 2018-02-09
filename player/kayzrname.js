@@ -1,10 +1,7 @@
 exports.setName = function (message, args, pool) {
-    if (args.length != 1) {
-        message.channel.send(`${message.author}, wrong amount of parameters given, only 1 (the name) is needed!`);
-        return;
-    }
-
-    var kayzrname = args[0];
+    var [...kayzrname] = args;
+    kayzrname = kayzrname.join(' ');
+    console.log(kayzrname);
 
     if (!kayzrname) {
         message.channel.send(`${message.author}, no name given!`);
@@ -16,6 +13,7 @@ exports.setName = function (message, args, pool) {
     } else {
         var sql = `UPDATE player SET kayzrname = ? WHERE playerID = '${message.author.id}'`;
     }
+
     pool.getConnection(function(error, connection) {
         connection.query(sql, [kayzrname], function(error, results) {
             connection.release();
