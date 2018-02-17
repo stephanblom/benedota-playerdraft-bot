@@ -1,6 +1,5 @@
 exports.exportPlayers = function (message, args, pool) {
-
-    exportType = args[0] ? args[0] : 'message';
+    var exportType = args[0] ? args[0] : 'message';
 
     var sql = `SELECT * FROM player WHERE joined IS NOT NULL ORDER BY joined ASC`;
     pool.getConnection(function(error, connection) {
@@ -17,7 +16,7 @@ exports.exportPlayers = function (message, args, pool) {
                 return;
             }
 
-            leftover_players_amount = results.length % 5;
+            var leftover_players_amount = results.length % 5;
             results = results.splice(0, results.length - leftover_players_amount);
 
             if (exportType == 'csv') {
@@ -33,7 +32,7 @@ exports.exportPlayers = function (message, args, pool) {
     return;
 }
 
-showPlayers = function(message, allrows) {
+var showPlayers = function(message, allrows) {
     var description = '';
     var i = 1;
     allrows.forEach(function (player) {
@@ -45,12 +44,12 @@ showPlayers = function(message, allrows) {
     message.channel.send('```' + description + '```');
 }
 
-exportToCsv = function(message, args, pool, allrows) {
+var exportToCsv = function(message, args, pool, allrows) {
     var description = '';
     var i = 1;
     allrows.forEach(function (player) {
         player.preferred_positions = player.preferred_positions.replace(/,/g, ';');
-        description += `${player.playername};${player.mmr};${player.preferred_captain ? 'True' : 'False'};${player.preferred_positions}\n`;
+        description += `${player.playerID};${player.mmr};${player.preferred_captain ? 'True' : 'False'};${player.preferred_positions}\n`;
         i++;
     });
 

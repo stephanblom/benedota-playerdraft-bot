@@ -61,10 +61,10 @@ DiscordClient.on('ready', function() {
 
     pool.getConnection(function(error, connection) {
         connection.query(`CREATE TABLE IF NOT EXISTS team_player (
-            team_ID INTEGER NOT NULL,
-            player_name VARCHAR(255) NOT NULL,
+            teamID INTEGER NOT NULL,
+            playerID VARCHAR(255) NOT NULL,
             position INTEGER NOT NULL,
-            PRIMARY KEY (team_ID, player_name)
+            PRIMARY KEY (teamID, playerID)
         )`, (error, result) => {
             connection.release();
 

@@ -1,12 +1,12 @@
 const Discord = require('discord.js');
 
 exports.showTeams = function (message, args, pool) {
-    var sql = `SELECT * 
+    var sql = `SELECT player.*, team_player.teamID, team_player.position
         FROM team_player 
-        LEFT JOIN team ON team.ID = team_player.team_ID 
-        LEFT JOIN player ON player.playername = team_player.player_name
+        LEFT JOIN team ON team.ID = team_player.teamID 
+        LEFT JOIN player ON player.playerID = team_player.playerID
         WHERE player.playername IS NOT NULL
-        ORDER BY team_player.team_ID, team_player.position ASC`;
+        ORDER BY team_player.teamID, team_player.position ASC`;
 
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {
@@ -32,7 +32,7 @@ exports.showTeams = function (message, args, pool) {
     return;
 }
 
-exportTeams = function(message, args, pool, players) {
+var exportTeams = function(message, args, pool, players) {
     var sql = `SELECT * FROM team ORDER BY ID`;
 
     pool.getConnection(function(error, connection) {
@@ -57,7 +57,7 @@ exportTeams = function(message, args, pool, players) {
     return;
 }
 
-showTeamInfo = function(message, args, pool, players, teams)
+var showTeamInfo = function(message, args, pool, players, teams)
 {
     var fs = require('fs');
     var csv = require('fast-csv');
@@ -101,7 +101,7 @@ showTeamInfo = function(message, args, pool, players, teams)
         }));
 }
 
-showPlayers = async function (message, args, players, teams) {
+var showPlayers = async function (message, args, players, teams) {
     var colors = [
         '3375ff',
         '66ffbf',
@@ -118,6 +118,10 @@ showPlayers = async function (message, args, players, teams) {
     var i = 0;
 
     teams.forEach(function (team) {
+        if (i == 9) {
+            i = 0;
+        }
+
         var embed = new Discord.RichEmbed()
             .setColor('#' + colors[i])
             .attachFile(`./images/dota2${colors[i]}.png`)
@@ -129,7 +133,7 @@ showPlayers = async function (message, args, players, teams) {
             .setFooter(`BeNeDota Kayzr Player Draft Team ${team['ID']}`);
 
         players.forEach(function (player) {
-            if (player['team_ID'] == team['ID']) {
+            if (player['teamID'] == team['ID']) {
                 embed.addField(
                     `${player.position}. ${player.playername} ${player.kayzrname ? '(Kayzr: ' + player.kayzrname + ')' : ''}`,
                     `Preferred role: ${player.preferred_positions}, Preferred captain: ${player.preferred_captain == 1 ? 'Yes' : 'No'}`
@@ -143,7 +147,7 @@ showPlayers = async function (message, args, players, teams) {
 
 }
 
-sendEmbed = function(message, args, embed)
+var sendEmbed = function(message, args, embed)
 {
     if (args[0] == 'live') {
         message.guild.channels.get(process.env.showteamsChannel).send({embed});

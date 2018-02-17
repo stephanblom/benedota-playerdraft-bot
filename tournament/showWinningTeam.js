@@ -10,8 +10,8 @@ exports.showWinningTeam = function(message, args, pool)
 
     var sql = `SELECT * 
         FROM team_player
-        LEFT JOIN player on player.playername = team_player.player_name
-        LEFT JOIN team on team.ID = team_player.team_ID
+        LEFT JOIN player on player.playername = team_player.playerID
+        LEFT JOIN team on team.ID = team_player.teamID
         WHERE team.ID = ${winningTeam}
         ORDER BY team_player.position`
 
