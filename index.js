@@ -149,9 +149,12 @@ DiscordClient.on('message', async message =>
     }
 
     if (command === 'status') {
-        if ((message.member.roles.find("name", "Admin")
-            || message.author.id === '157938886784319489')
-            && message.mentions.users.first()
+        if (message.mentions.users.first()
+            && (
+                message.member.roles.find("name", "Admin")
+                || message.member.roles.find("name", "Staff")
+                || message.author.id === '157938886784319489'
+            )
         ) {
             var otherPlayerstatus = require('./player/otherPlayerstatus');
             otherPlayerstatus.otherPlayerstatus(message, args, pool);
