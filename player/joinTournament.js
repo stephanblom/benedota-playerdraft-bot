@@ -15,6 +15,7 @@ exports.joinTournament = function (message, args, pool) {
                 return;
             } else {
                 message.channel.send(`${message.author}, you have now joined the BeNeDota Playerdraft!`);
+                message.channel.send(`The tournament check-in is open from 19:30 CET, please be on time!`);
                 return;
             }
         });
