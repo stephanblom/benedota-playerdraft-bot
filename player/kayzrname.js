@@ -8,14 +8,20 @@ exports.setName = function (message, args, pool) {
         return;
     }
 
+    var sql = '';
     if (kayzrname === 'clear') {
-        var sql = `UPDATE player SET kayzrname = '' WHERE playerID = '${message.author.id}'`
+        sql = `UPDATE player SET kayzrname = '' WHERE playerID = ?`
     } else {
-        var sql = `UPDATE player SET kayzrname = ? WHERE playerID = '${message.author.id}'`;
+        sql = `UPDATE player SET kayzrname = ? WHERE playerID = ?`;
     }
 
     pool.getConnection(function(error, connection) {
-        connection.query(sql, [kayzrname], function(error, results) {
+        connection.query({
+            sql: sql,
+            values: [
+                message.author.id
+            ]
+        }, [kayzrname], function(error, results) {
             connection.release();
 
             if (error) {
