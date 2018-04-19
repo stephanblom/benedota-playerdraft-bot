@@ -8,10 +8,15 @@ exports.leavePlayer = function (message, args, pool) {
 
         return;
     }
-    var sql = `UPDATE player SET joined = NULL WHERE playerID = '${user.id}' AND joined IS NOT NULL`;
+    var sql = `UPDATE player SET joined = NULL WHERE playerID = ? AND joined IS NOT NULL`;
 
     pool.getConnection(function(error, connection) {
-        connection.query(sql, function(error, results) {
+        connection.query({
+            sql: sql,
+            values: [
+                user.id
+            ]
+        }, function(error, results) {
             connection.release();
 
             if (error) {
