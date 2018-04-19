@@ -83,20 +83,33 @@ exports.register = function (message, args, pool) {
 
     var sql = `INSERT INTO player (playerID, playername, mmr, preferred_positions, preferred_captain)
         VALUES ( 
-            ${message.author.id},
-            '${message.author.username}', 
-            ${mmr}, 
-            '${preferred_positions}', 
-            '${preferred_captain}'
+            ?,
+            ?, 
+            ?, 
+            ?, 
+            ?
         )
         ON DUPLICATE KEY UPDATE
-            mmr = ${mmr},
-            preferred_positions = '${preferred_positions}',
-            preferred_captain = '${preferred_captain}'
+            mmr = ?,
+            preferred_positions = ?,
+            preferred_captain = ?
     `;
 
     pool.getConnection(function(error, connection) {
-        connection.query(sql, function(error, results) {
+        connection.query({
+            sql: sql,
+            values: [
+                message.author.id,
+                message.author.username,
+                mmr,
+                preferred_positions,
+                preferred_captain,
+                mmr,
+                preferred_positions,
+                preferred_captain
+            ]
+        },
+        function(error, results) {
             connection.release();
 
             if (error) {
