@@ -84,7 +84,7 @@ exports.register = function (message, args, pool) {
     var sql = `INSERT INTO player (playerID, playername, mmr, preferred_positions, preferred_captain)
         VALUES ( 
             ?,
-            ?, 
+            "?", 
             ?, 
             ?, 
             ?

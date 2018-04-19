@@ -131,7 +131,7 @@ DiscordClient.on('message', async message =>
     if (command === "playerlist") {
         var playerlist = require('./tournament/playerlist');
         playerlist.getPlayerlist(message, args, pool);
-    };
+    }
 
     if (command === 'register' || command === 'update') {
         var registerPlayer = require('./player/register');
@@ -186,9 +186,16 @@ DiscordClient.on('message', async message =>
             return;
         }
 
-        if (command === 'exportjoinedplayers' || command === 'exportplayers') {
+        if (command === 'exportjoinedplayers'
+            || command === 'exportplayers') {
             var exportPlayers = require('./tournament/exportPlayers');
             exportPlayers.exportPlayers(message, args, pool);
+        }
+
+        if (command === 'createtournament'
+            || command === 'createteams') {
+            var exportPlayers = require('./tournament/exportPlayers');
+            exportPlayers.exportPlayers(message, ['csv'], pool);
         }
 
         if (command === 'showteams') {
@@ -199,8 +206,8 @@ DiscordClient.on('message', async message =>
         }
 
         if (command === 'registerplayer') {
-            var registerPlayer = require('./player/registerPlayer');
-            registerPlayer.registerPlayer(message, args, pool);
+            var registerOtherPlayer = require('./player/registerPlayer');
+            registerOtherPlayer.registerPlayer(message, args, pool);
         }
 
         if (command === 'joinplayer') {

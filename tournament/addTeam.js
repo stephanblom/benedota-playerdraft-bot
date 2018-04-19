@@ -26,9 +26,6 @@ exports.addTeam = function (message, args, pool) {
 
     var sql = `INSERT INTO team (ID, captain, avg_mmr)
         VALUES (?, (SELECT playername FROM player WHERE playerID = ?), ?)
-        ON DUPLICATE KEY UPDATE
-            captain = '(SELECT playername FROM player WHERE playerID = ?)',
-            avg_mmr = ?
     `;
 
     pool.getConnection(function(error, connection) {
@@ -40,8 +37,6 @@ exports.addTeam = function (message, args, pool) {
             sql: sql,
             values: [
                 team_ID,
-                captain,
-                avg_mmr,
                 captain,
                 avg_mmr
             ]
@@ -68,7 +63,7 @@ function addPlayers(message, pool, team_ID, players)
     var sql = `INSERT INTO team_player (teamID, playerID, position) VALUES`;
     playerList.forEach(function (player) {
         var playerInfo = player.split(':');
-        sql += `('${connection.escape(team_ID)}', '${connection.escape(playerInfo[1])}', '${connection.escape(playerInfo[0])}'),`;
+        sql += `(${pool.escape(team_ID)}, ${pool.escape(playerInfo[1])}, ${pool.escape(playerInfo[0])}),`;
     });
 
     sql = sql.replace(/,\s*$/, "");
