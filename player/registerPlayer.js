@@ -9,8 +9,8 @@ exports.registerPlayer = function (message, args, pool) {
 
     var exampleCommand = `Ex. command: *!register <mmr> <preferred captain> <position> <position (optional ...)>*`;
 
-    var [userID, mmr, preferred_captain, ...preferred_positions] = args;
-    var user = message.mentions.users.first();
+    var [user, mmr, preferred_captain, ...preferred_positions] = args;
+    user = message.mentions.users.first();
 
     if (!user) {
         message.channel.send(
@@ -88,21 +88,34 @@ exports.registerPlayer = function (message, args, pool) {
 
     var sql = `INSERT INTO player (playerID, playername, mmr, preferred_positions, preferred_captain)
         VALUES ( 
-            '${user.id}',
-            '${user.username}', 
-            ${mmr}, 
-            '${preferred_positions}', 
-            '${preferred_captain}'
+            ?,
+            ?, 
+            ?, 
+            ?, 
+            ?
         )
         ON DUPLICATE KEY UPDATE
-            playername = '${user.username}',
-            mmr = ${mmr},
-            preferred_positions = '${preferred_positions}',
-            preferred_captain = '${preferred_captain}'
+            playername = ?,
+            mmr = ?,
+            preferred_positions = ?,
+            preferred_captain = ?
     `;
 
     pool.getConnection(function(error, connection) {
-        connection.query(sql, function(error, results) {
+        connection.query({
+            sql: sql,
+            values: [
+                user.id,
+                user.username,
+                mmr,
+                preferred_positions,
+                preferred_captain,
+                user.username,
+                mmr,
+                preferred_positions,
+                preferred_captain
+            ]
+        }, function(error, results) {
             connection.release();
 
             if (error) {
