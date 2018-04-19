@@ -1,9 +1,14 @@
 exports.otherPlayerstatus = function (message, args, pool) {
     var user = message.mentions.users.first();
-    var sql = `SELECT * FROM player WHERE playerID = '${user.id}'`;
+    var sql = `SELECT * FROM player WHERE playerID = ?`;
 
     pool.getConnection(function(error, connection) {
-        connection.query(sql, function(error, results) {
+        connection.query({
+            sql: sql,
+            values: [
+                user.id
+            ]
+        }, function(error, results) {
             connection.release();
 
             if (error) {
