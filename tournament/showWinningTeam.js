@@ -12,11 +12,16 @@ exports.showWinningTeam = function(message, args, pool)
         FROM team_player
         LEFT JOIN player on player.playername = team_player.playerID
         LEFT JOIN team on team.ID = team_player.teamID
-        WHERE team.ID = ${winningTeam}
+        WHERE team.ID = ?
         ORDER BY team_player.position`
 
     pool.getConnection(function(error, connection) {
-        connection.query(sql, function (error, results) {
+        connection.query({
+            sql: sql,
+            values: [
+                winningTeam
+            ]
+        }, function (error, results) {
             connection.release();
 
             if (error) {
