@@ -1,8 +1,13 @@
 exports.joinTournament = function (message, args, pool) {
-    var sql = `UPDATE player SET joined = NOW() WHERE playerID = '${message.author.id}' AND joined IS NULL`;
+    var sql = `UPDATE player SET joined = NOW() WHERE playerID = ? AND joined IS NULL`;
 
     pool.getConnection(function(error, connection) {
-        connection.query(sql, function(error, results) {
+        connection.query({
+            sql: sql,
+            values: [
+                message.author.id
+            ]
+        }, function(error, results) {
             connection.release();
 
             if (error) {
