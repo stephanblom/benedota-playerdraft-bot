@@ -1,7 +1,6 @@
 exports.setName = function (message, args, pool) {
     var [...kayzrname] = args;
     kayzrname = kayzrname.join(' ');
-    console.log(kayzrname);
 
     if (!kayzrname) {
         message.channel.send(`${message.author}, no name given!`);
@@ -9,19 +8,25 @@ exports.setName = function (message, args, pool) {
     }
 
     var sql = '';
+    var values = [];
     if (kayzrname === 'clear') {
-        sql = `UPDATE player SET kayzrname = '' WHERE playerID = ?`
+        sql = `UPDATE player SET kayzrname = '' WHERE playerID = ?`;
+        values = [
+            message.author.id
+        ];
     } else {
         sql = `UPDATE player SET kayzrname = ? WHERE playerID = ?`;
+        values = [
+            message.author.id,
+            kayzrname
+        ]
     }
 
     pool.getConnection(function(error, connection) {
         connection.query({
             sql: sql,
-            values: [
-                message.author.id
-            ]
-        }, [kayzrname], function(error, results) {
+            values: values
+        }, function(error, results) {
             connection.release();
 
             if (error) {
@@ -34,6 +39,7 @@ exports.setName = function (message, args, pool) {
             } else {
                 message.channel.send(`${message.author}, your kayzrname has been updated to ${kayzrname}!`);
             }
+
             return;
         });
     });
