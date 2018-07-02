@@ -172,6 +172,7 @@ DiscordClient.on('message', async message =>
     if (
         message.member.roles.find("name", "Admin")
         || message.member.roles.find("name", "Staff")
+        || message.member.roles.find("name", "Kayzr MOD/CM")
         || message.author.id === '157938886784319489'
     ) {
         if (command === "ping") {
