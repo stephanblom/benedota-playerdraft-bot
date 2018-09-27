@@ -1,6 +1,6 @@
-var Logger = require('le_node');
-var log = new Logger({
-    token:process.env.LOGENTRIES_TOKEN
+const Logger = require('le_node');
+const log = new Logger({
+    token: process.env.LOGENTRIES_TOKEN
 });
 
 const Discord = require('discord.js');
@@ -87,7 +87,7 @@ DiscordClient.on('ready', function() {
     log.info(
         `Bot has started, with ${DiscordClient.users.size} users, in ${DiscordClient.channels.size} channels of` +
         ` ${DiscordClient.guilds.size} guilds.`
-    )
+    );
 
     DiscordClient.user.setGame(`BeNeDota PlayerDraft`);
 });
@@ -102,6 +102,8 @@ DiscordClient.on("guildDelete", guild => {
 
 DiscordClient.on('message', async message =>
 {
+    let exportPlayers;
+
     if (!message.content.startsWith(process.env.botprefix)) {
         return;
     }
@@ -124,27 +126,27 @@ DiscordClient.on('message', async message =>
     log.debug(`Received command ${command} message from ${message.author.username} with the arguments ${args.join(', ')}`);
 
     if (command === "help") {
-        var help = require('./bot/help');
+        const help = require('./bot/help');
         help.sendHelp(message, args);
     }
 
     if (command === "playerlist") {
-        var playerlist = require('./tournament/playerlist');
+        const playerlist = require('./tournament/playerlist');
         playerlist.getPlayerlist(message, args, pool);
     }
 
     if (command === 'register' || command === 'update') {
-        var registerPlayer = require('./player/register');
+        const registerPlayer = require('./player/register');
         registerPlayer.register(message, args, pool);
     }
 
     if (command === 'join' || command === 'jointournament') {
-        var joinTournament = require('./player/joinTournament');
+        const joinTournament = require('./player/joinTournament');
         joinTournament.joinTournament(message, args, pool);
     }
 
     if (command === 'leave' || command === 'leavetournament') {
-        var leaveTournament = require('./player/leaveTournament');
+        const leaveTournament = require('./player/leaveTournament');
         leaveTournament.leaveTournament(message, args, pool);
     }
 
@@ -156,16 +158,16 @@ DiscordClient.on('message', async message =>
                 || message.author.id === '157938886784319489'
             )
         ) {
-            var otherPlayerstatus = require('./player/otherPlayerstatus');
+            const otherPlayerstatus = require('./player/otherPlayerstatus');
             otherPlayerstatus.otherPlayerstatus(message, args, pool);
         } else {
-            var playerstatus = require('./player/playerstatus');
+            const playerstatus = require('./player/playerstatus');
             playerstatus.playerstatus(message, args, pool);
         }
     }
 
     if (command === 'kayzrname') {
-        var kayzrname = require('./player/kayzrname.js');
+        const kayzrname = require('./player/kayzrname.js');
         kayzrname.setName(message, args, pool);
     }
 
@@ -189,45 +191,45 @@ DiscordClient.on('message', async message =>
 
         if (command === 'exportjoinedplayers'
             || command === 'exportplayers') {
-            var exportPlayers = require('./tournament/exportPlayers');
+            exportPlayers = require('./tournament/exportPlayers');
             exportPlayers.exportPlayers(message, args, pool);
         }
 
         if (command === 'createtournament'
             || command === 'createteams') {
-            var exportPlayers = require('./tournament/exportPlayers');
+            exportPlayers = require('./tournament/exportPlayers');
             exportPlayers.exportPlayers(message, ['csv'], pool);
         }
 
         if (command === 'showteams') {
-            var showTeams = require('./tournament/showTeams');
+            const showTeams = require('./tournament/showTeams');
             showTeams.showTeams(message, args, pool);
 
             return;
         }
 
         if (command === 'registerplayer') {
-            var registerOtherPlayer = require('./player/registerPlayer');
+            const registerOtherPlayer = require('./player/registerPlayer');
             registerOtherPlayer.registerPlayer(message, args, pool);
         }
 
         if (command === 'joinplayer') {
-            var joinPlayer = require('./player/joinPlayer');
+            const joinPlayer = require('./player/joinPlayer');
             joinPlayer.joinPlayer(message, args, pool);
         }
 
         if (command === 'leaveplayer') {
-            var leavePlayer = require('./player/leavePlayer');
+            const leavePlayer = require('./player/leavePlayer');
             leavePlayer.leavePlayer(message, args, pool);
         }
 
         if (command === 'endtournament') {
-            var endTournament = require('./tournament/endTournament.js');
+            const endTournament = require('./tournament/endTournament.js');
             endTournament.endTournament(message, args, pool);
         }
 
         if (command === 'showwinningteam') {
-            var showWinningTeam = require('./tournament/showWinningTeam.js');
+            const showWinningTeam = require('./tournament/showWinningTeam.js');
             showWinningTeam.showWinningTeam(message, args, pool);
         }
     }
