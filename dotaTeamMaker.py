@@ -384,7 +384,7 @@ def write_away(teams, max_spread, choice_tracker, teamless_player_list,
         writer.writerow(teamless_player_list)
 
 
-def __main__(playerfile, outfile='Outfile.csv'):
+def __main__(playerfile, outfile='outfile.csv'):
     players, teamless_players, team_amount = create_players(playerfile)
     #print('Player creation succesful')
     players, captains = update_captain_status(players, team_amount)
@@ -451,16 +451,7 @@ elif len(sys.argv) == 3:
         print('python <name of DotaTeamMaker> <Input data> <Optional: '
               'Outfile name>')
     try:
-        if isfile(sys.argv[2]):
-            print('This file will be overwritten: '
-                  + str(sys.argv[2]))
-            confirmation = input('Are you sure? (y/n)')
-            if confirmation == 'y':
-                __main__(sys.argv[1], sys.argv[2])
-            else:
-                print('Canceled.')
-        else:
-            __main__(sys.argv[1], sys.argv[2])
+        __main__(sys.argv[1], sys.argv[2])
     except FileNotFoundError:
         print('\nInput error')
         print('Input file doesn\'t exist')
