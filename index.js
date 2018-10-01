@@ -189,6 +189,20 @@ DiscordClient.on('message', async message =>
             return;
         }
 
+        if (command === 'scriptversion') {
+            const PythonShell = require('python-shell');
+            PythonShell.run('dotaTeamMaker.py', 'versioninfo', function (error, results) {
+                if (error) {
+                    log.err('Error in dotaTeamMaker.py: ' + error.toString());
+                    console.error(error.toString());
+                    return;
+                }
+                log.info('Results: ' + results);
+
+                message.channel.send(results);
+            });
+        }
+
         if (command === 'exportjoinedplayers'
             || command === 'exportplayers') {
             exportPlayers = require('./tournament/exportPlayers');
