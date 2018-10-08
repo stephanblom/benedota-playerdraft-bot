@@ -123,15 +123,11 @@ DiscordClient.on('message', async message =>
 {
     let exportPlayers;
 
-    if (!message.content.startsWith(process.env.botprefix)) {
-        return;
-    }
-
-    if (message.author.bot) {
-        return;
-    }
-
-    if (message.channel.type !== "text") {
+    if (!message.content.startsWith(process.env.botprefix)
+        || message.author.bot
+        || message.channel.type !== "text"
+        || message.channel.id !== process.env.onlyDeleteMessagesInChannel
+    ) {
         return;
     }
 
