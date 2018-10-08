@@ -80,6 +80,25 @@ DiscordClient.on('ready', function() {
         });
     });
 
+    pool.getConnection(function(error, connection) {
+        connection.query(`CREATE TABLE IF NOT EXISTS tournament_info (
+            ID INTEGER NOT NULL PRIMARY KEY,
+            line VARCHAR(255) NOT NULL
+        )`, (error, result) => {
+            connection.release();
+
+            if (error) {
+                log.err(error.toString());
+                console.error(error.toString());
+                throw error;
+            }
+
+            if (result.length > 0 ) {
+                log.info("Database 'team_player' created.");
+            }
+        })
+    });
+
     console.log(
         `Bot has started, with ${DiscordClient.users.size} users, in ${DiscordClient.channels.size} channels of` +
         ` ${DiscordClient.guilds.size} guilds.`
