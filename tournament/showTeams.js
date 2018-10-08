@@ -116,10 +116,9 @@ const showTournamentInfo = function (message, args, pool, results) {
 
     let description;
     results.forEach(function (result) {
-        console.log(result);
         description += result.line + '\r\n';
     });
-    embed.setDescription(results.join('\r\n'));
+    embed.setDescription(description);
 
     if (args[0] === 'live') {
         message.guild.channels.get(process.env.showteamsChannel).send({embed});
