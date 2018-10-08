@@ -115,8 +115,8 @@ const showTournamentInfo = function (message, args, pool, results) {
         .setTimestamp();
 
     let description;
-    results.forEach(function (line) {
-        description += line + '\r\n';
+    results.forEach(function (result) {
+        description += result.line + '\r\n';
     });
     embed.setDescription(results.join('\r\n'));
 
