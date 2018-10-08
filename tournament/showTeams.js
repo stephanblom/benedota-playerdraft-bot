@@ -114,7 +114,7 @@ const showTournamentInfo = function (message, args, pool, results) {
         .setThumbnail('https://benedota.com/thumbs/assets/images/benedota_transp_crop-217x250.png')
         .setTimestamp();
 
-    let description;
+    let description = '';
     results.forEach(function (result) {
         description += result.line + '\r\n';
     });
