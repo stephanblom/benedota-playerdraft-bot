@@ -236,7 +236,7 @@ DiscordClient.on('message', async message =>
 
         if (command === 'showteams') {
             const showTeams = require('./tournament/showTeams');
-            showTeams.showTeams(message, args, pool);
+            showTeams.getTournamentInfo(message, args, pool);
 
             return;
         }
