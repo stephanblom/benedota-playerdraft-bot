@@ -112,8 +112,13 @@ const showTournamentInfo = function (message, args, pool, results) {
         .setTitle('BeNeDota Player Draft Teams')
         .setFooter(`BeNeDota Kayzr Player Draft Team Info`)
         .setThumbnail('https://benedota.com/thumbs/assets/images/benedota_transp_crop-217x250.png')
-        .setTimestamp()
-        .setDescription(results.join('\r\n'));
+        .setTimestamp();
+
+    let description;
+    results.forEach(function (line) {
+        description += line + '\r\n';
+    });
+    embed.setDescription(results.join('\r\n'));
 
     if (args[0] === 'live') {
         message.guild.channels.get(process.env.showteamsChannel).send({embed});
