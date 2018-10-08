@@ -1,5 +1,5 @@
 exports.joinTournament = function (message, args, pool) {
-    var sql = `UPDATE player SET joined = NOW() WHERE playerID = ? AND joined IS NULL`;
+    const sql = `UPDATE player SET joined = NOW() WHERE playerID = ? AND joined IS NULL`;
 
     pool.getConnection(function(error, connection) {
         connection.query({
@@ -17,14 +17,13 @@ exports.joinTournament = function (message, args, pool) {
 
             if (results.affectedRows === 0) {
                 message.channel.send(`${message.author}, I couldn't join you, did you already join or are you not *!registered*?`);
-                return;
             } else {
                 message.channel.send(`${message.author}, you have now joined the BeNeDota Playerdraft!`);
+                message.channel.send(`The website of kayzr is https://www.kayzr.com`);
+                message.channel.send(`To set your Kayzr name, use \`!kayzrname\`.`);
                 message.channel.send(`The tournament check-in is open from 19:30 CET, please be on time!`);
-                return;
             }
         });
     });
 
-    return;
-}
+};
