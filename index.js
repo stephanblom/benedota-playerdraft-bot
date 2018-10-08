@@ -82,7 +82,7 @@ DiscordClient.on('ready', function() {
 
     pool.getConnection(function(error, connection) {
         connection.query(`CREATE TABLE IF NOT EXISTS tournament_info (
-            ID INTEGER NOT NULL PRIMARY KEY AUTO INCREMENT,
+            ID INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
             line VARCHAR(255) NOT NULL
         )`, (error, result) => {
             connection.release();
