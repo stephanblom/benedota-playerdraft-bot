@@ -53,7 +53,10 @@ const readCsv = function(message, args, pool)
                     addTeam.addTeam(this.message, args, this.pool);
                 }
                 i++;
-            } else if (data[0] !== '' && !data[0].startsWith('Team')) {
+            } else if (data[0] !== ''
+                && !data[0].startsWith('Team')
+                && !data[0].startsWith('Players without')
+            ) {
                 let sql = `INSERT INTO tournament_info (ID, line) VALUES (NULL, ${pool.escape(data[0])})`;
                 pool.getConnection(function(error, connection) {
                     connection.query(sql, function(error, results) {
