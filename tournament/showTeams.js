@@ -118,6 +118,7 @@ const showTournamentInfo = function (message, args, pool, results) {
     results.forEach(function (result) {
         description += result.line + '\r\n';
     });
+
     embed.setDescription(description);
 
     if (args[0] === 'live') {
@@ -130,7 +131,7 @@ const showTournamentInfo = function (message, args, pool, results) {
 };
 
 exports.getTournamentInfo = function (message, args, pool) {
-    let sql = `SELECT line FROM tournament_info`;
+    let sql = `SELECT line FROM tournament_info ORDER BY line DESC`;
 
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {
