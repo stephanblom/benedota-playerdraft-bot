@@ -79,13 +79,16 @@ exports.showWinningTeam = function(message, args, pool)
                     `${player['position']}. ${player['playername']} ${player.kayzrname ? '(Kayzr: ' + player.kayzrname + ')' : ''}`,
                     `Preferred role: ${player['preferred_positions']}, Preferred captain: ${player['preferred_captain'] == 1 ? 'Yes' : 'No'}`
                 );
-                embed.setColor(colors[player['team_ID']]);
-                let guildMember = message.guild.members.find('id', player['playerID']);
-                if (guildMember) {
-                    guildMember.addRole(kayzrAlphaWinnersRole)
-                        .catch(error => {
-                            logger.err(error)
-                        });
+
+                if (args.includes('updateRoles')) {
+                    embed.setColor(colors[player['team_ID']]);
+                    let guildMember = message.guild.members.find('id', player['playerID']);
+                    if (guildMember) {
+                        guildMember.addRole(kayzrAlphaWinnersRole)
+                            .catch(error => {
+                                logger.err(error)
+                            });
+                    }
                 }
             });
 
