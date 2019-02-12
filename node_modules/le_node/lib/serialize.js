@@ -78,7 +78,7 @@ var flat = function flat(serialize, arraysToo) {
     var serializedObj = JSON.parse(serialize(obj));
     if (!_lodash2.default.isObject(serializedObj)) return serializedObj;
 
-    var flatObj = _lodash2.default.reduce(serializedObj, function _flat(target, val, key) {
+    var flatObj = _lodash2.default.reduce(serializedObj, _lodash2.default.bind(function _flat(target, val, key) {
       var keyContext = this.slice();
       keyContext.push(key);
 
@@ -90,14 +90,14 @@ var flat = function flat(serialize, arraysToo) {
         newTarget[joinedKey] = val.map(function (newVal) {
           if (!_lodash2.default.isObject(newVal)) return newVal;
 
-          return _lodash2.default.reduce(newVal, _flat, {}, []);
+          return _lodash2.default.reduce(newVal, _lodash2.default.bind(_flat, []), {});
         });
       } else {
-        _lodash2.default.reduce(val, _flat, newTarget, keyContext);
+        _lodash2.default.reduce(val, _lodash2.default.bind(_flat, keyContext), newTarget);
       }
 
       return newTarget;
-    }, {}, []);
+    }, []), {});
 
     return (0, _jsonStringifySafe2.default)(flatObj);
   };

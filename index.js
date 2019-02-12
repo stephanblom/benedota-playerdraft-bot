@@ -14,6 +14,8 @@ const pool = mysql.createPool(process.env.CLEARDB_DATABASE_URL || {
     database: process.env.CLEARDB_DATABASE_NAME,
 });
 
+const schedule = require('node-schedule');
+
 DiscordClient.on('ready', function() {
     pool.getConnection(function(error, connection) {
         connection.query(`CREATE TABLE IF NOT EXISTS player (
@@ -99,10 +101,35 @@ DiscordClient.on('ready', function() {
         })
     });
 
+    schedule.scheduleJob({
+        hour: 19,
+        minute: 30,
+        dayOfWeek: 1
+    }, function () {
+        const openCheckin = require('./tournament/openCheckin');
+        openCheckin.openCheckinSchedule(
+            DiscordClient.guilds.get(process.env.guildId),
+            DiscordClient.channels.get(process.env.showteamsChannel)
+        );
+    });
+
+    schedule.scheduleJob({
+        hour: 19,
+        minute: 0,
+        dayOfWeek: 0
+    }, function () {
+        const openCheckin = require('./tournament/openCheckin');
+        openCheckin.openCheckinReminderSchedule(
+            DiscordClient.guilds.get(process.env.guildId),
+            DiscordClient.channels.get(process.env.showteamsChannel)
+        );
+    });
+
     console.log(
         `Bot has started, with ${DiscordClient.users.size} users, in ${DiscordClient.channels.size} channels of` +
         ` ${DiscordClient.guilds.size} guilds.`
     );
+
     log.info(
         `Bot has started, with ${DiscordClient.users.size} users, in ${DiscordClient.channels.size} channels of` +
         ` ${DiscordClient.guilds.size} guilds.`

@@ -115,7 +115,7 @@ var normalize = exports.normalize = function normalize(opts) {
     return custom[i] || lvl;
   });
 
-  var duplicates = (0, _lodash2.default)(levels).countBy().pick(function (count) {
+  var duplicates = (0, _lodash2.default)(levels).countBy().pickBy(function (count) {
     return count > 1;
   }).keys().value();
 
