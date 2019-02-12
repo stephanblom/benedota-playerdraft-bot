@@ -295,7 +295,6 @@ DiscordClient.on('message', async message =>
         }
     }
 
-
     if (
         message.channel.id == process.env.onlyDeleteMessagesInChannel
     ) {

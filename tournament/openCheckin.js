@@ -2,7 +2,7 @@ exports.openCheckinMessage = function (message, args) {
     let kayzrPlayerRole = message.guild.roles.find(role => role.name === 'Joined Kayzr');
     let messageToSend = `${kayzrPlayerRole} | De checkin is nu open! Head for https://www.kayzr.com, accept your team invite, and check in at the tournament.`;
 
-    if (args[0] === 'live') {
+    if (args.includes('live')) {
         message.guild.channels.get(process.env.showteamsChannel).send(messageToSend);
     } else {
         message.channel.send(messageToSend);

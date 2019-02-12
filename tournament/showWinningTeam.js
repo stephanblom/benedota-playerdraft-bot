@@ -71,6 +71,8 @@ exports.showWinningTeam = function(message, args, pool)
                 'a46900'
             ];
 
+            embed.setColor(colors[winningTeam]);
+
             let kayzrAlphaWinnersRole = message.guild.roles.find(role => role.name === 'Kayzr Alpha Winners');
 
             results.forEach(function(player) {
@@ -80,7 +82,6 @@ exports.showWinningTeam = function(message, args, pool)
                 );
 
                 if (args.includes('updateRoles')) {
-                    embed.setColor(colors[player['team_ID']]);
                     let guildMember = message.guild.members.find('id', player['playerID']);
                     if (guildMember) {
                         guildMember.addRole(kayzrAlphaWinnersRole)
@@ -91,12 +92,11 @@ exports.showWinningTeam = function(message, args, pool)
                 }
             });
 
-            if (args[1] === 'live') {
+            if (args.includes('live')) {
                 message.guild.channels.get(process.env.showteamsChannel).send({embed});
             } else {
                 message.channel.send({embed});
             }
-
         });
     });
 };

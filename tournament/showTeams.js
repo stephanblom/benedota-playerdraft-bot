@@ -121,7 +121,7 @@ const showTournamentInfo = function (message, args, pool, results) {
 
     embed.setDescription(description);
 
-    if (args[0] === 'live') {
+    if (args.includes('live')) {
         message.guild.channels.get(process.env.showteamsChannel).send({embed});
     } else {
         message.channel.send({embed})

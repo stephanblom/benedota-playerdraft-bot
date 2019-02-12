@@ -24,7 +24,7 @@ exports.endTournament = function (message, args, pool) {
             let kayzrPlayersRole = message.guild.roles.find(role => role.name === 'Kayzr Players');
             let notice = `${kayzrPlayersRole}! De spelerslijst is weer geleegd, en vanaf nu kan iedereen zich dus weer inschrijven!`;
 
-            if (args[1] === 'live') {
+            if (args.includes('live')) {
                 message.guild.channels.get(process.env.showteamsChannel).send(notice);
             } else {
                 message.channel.send(notice);
