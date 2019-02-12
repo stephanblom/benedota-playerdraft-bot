@@ -30,7 +30,6 @@ exports.showWinningTeam = function(message, args, pool)
         WHERE team.ID = ?
         ORDER BY team_player.position`;
 
-    console.log(winningTeam);
     pool.getConnection(function(error, connection) {
         connection.query({
             sql: sql,
