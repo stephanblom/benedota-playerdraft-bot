@@ -1,3 +1,8 @@
+const Logger = require('le_node');
+const logger = new Logger({
+    token: process.env.LOGENTRIES_TOKEN
+});
+
 exports.joinTournament = function (message, args, pool) {
     const sql = `UPDATE player SET joined = NOW() WHERE playerID = ? AND joined IS NULL`;
 
@@ -22,6 +27,11 @@ exports.joinTournament = function (message, args, pool) {
                 message.channel.send(`The website of kayzr is https://www.kayzr.com`);
                 message.channel.send(`To set your Kayzr name, use \`!kayzrname\`.`);
                 message.channel.send(`The tournament check-in is open from 19:30 CET, please be on time!`);
+
+                let kayzrPlayerRole = message.guild.roles.find(role => role.name === 'Joined Kayzr');
+                message.member.addRole(kayzrPlayerRole).catch(error => {
+                    logger.err(error)
+                });
             }
         });
     });

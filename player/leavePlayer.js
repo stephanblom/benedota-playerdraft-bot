@@ -1,5 +1,10 @@
+const Logger = require('le_node');
+const logger = new Logger({
+    token: process.env.LOGENTRIES_TOKEN
+});
+
 exports.leavePlayer = function (message, args, pool) {
-    var user = message.mentions.users.first();
+    let user = message.mentions.users.first();
 
     if (!user) {
         message.channel.send(
@@ -8,7 +13,7 @@ exports.leavePlayer = function (message, args, pool) {
 
         return;
     }
-    var sql = `UPDATE player SET joined = NULL WHERE playerID = ? AND joined IS NOT NULL`;
+    let sql = `UPDATE player SET joined = NULL WHERE playerID = ? AND joined IS NOT NULL`;
 
     pool.getConnection(function(error, connection) {
         connection.query({
@@ -29,10 +34,14 @@ exports.leavePlayer = function (message, args, pool) {
                 return;
             } else {
                 message.channel.send(`${user} has now left the BeNeDota Playerdraft.`);
-                return;
+
+                let kayzrPlayerRole = message.guild.roles.find(role => role.name === 'Joined Kayzr');
+                message.member.removeRole(kayzrPlayerRole).catch(error => {
+                    logger.err(error)
+                });
+
             }
         });
     });
 
-    return;
-}
+};

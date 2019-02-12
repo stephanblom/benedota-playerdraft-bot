@@ -21,7 +21,7 @@ DiscordClient.on('ready', function() {
             playername VARCHAR(255) NOT NULL,
             kayzrname VARCHAR(255) NOT NULL DEFAULT '',
             mmr INTEGER NOT NULL,
-            preferred_position VARCHAR(3) NOT NULL,
+            preferred_positions VARCHAR(255) NOT NULL,
             preferred_captain TINYINT(1) NOT NULL,
             joined datetime DEFAULT NULL
         )`, function (error, results, fields) {
@@ -253,13 +253,18 @@ DiscordClient.on('message', async message =>
         }
 
         if (command === 'endtournament') {
-            const endTournament = require('./tournament/endTournament.js');
+            const endTournament = require('./tournament/endTournament');
             endTournament.endTournament(message, args, pool);
         }
 
         if (command === 'showwinningteam') {
-            const showWinningTeam = require('./tournament/showWinningTeam.js');
+            const showWinningTeam = require('./tournament/showWinningTeam');
             showWinningTeam.showWinningTeam(message, args, pool);
+        }
+
+        if (command === 'opencheckin') {
+            const openCheckin = require('./tournament/openCheckin');
+            openCheckin.openCheckin(message, args);
         }
     }
 
