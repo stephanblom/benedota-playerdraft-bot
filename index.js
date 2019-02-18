@@ -172,7 +172,7 @@ DiscordClient.on('message', async message =>
         help.sendHelp(message, args);
     }
 
-    if (command === "playerlist") {
+    if (command === "playerlist" || command === 'players') {
         const playerlist = require('./tournament/playerlist');
         playerlist.getPlayerlist(message, args, pool);
     }
