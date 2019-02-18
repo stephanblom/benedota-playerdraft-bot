@@ -1,3 +1,5 @@
+const Discord = require('discord.js');
+
 exports.getPlayerlist = function (message, args, pool) {
     var sql = `SELECT * 
         FROM player 
@@ -20,20 +22,42 @@ exports.getPlayerlist = function (message, args, pool) {
             }
 
             addPlayersToList(message, results);
-            return;
         });
     });
 
-    return;
-}
+};
 
-addPlayersToList = function(message, allrows) {
-    var description = '';
-    var i = 1;
+const addPlayersToList = function(message, allrows) {
+    let description = '';
+    let players = '';
+    let i = 1;
+
+    const embed = new Discord.RichEmbed()
+        .setTitle('BeNeDota Player Draft Teams')
+        .setFooter(`BeNeDota Kayzr Player Draft Team Info`)
+        .setThumbnail('https://benedota.com/thumbs/assets/images/benedota_transp_crop-217x250.png')
+        .setTimestamp();
+
     allrows.forEach(function (player) {
-        description += `- ${player['playername']} \n`;
+        players += `- ${player['playername']} \n`;
         i++;
     });
 
-    message.channel.send(`${allrows.length} players: \n` + description);
-}
+    if (allrows.length < 10) {
+        embed.setColor('#ff0000');
+    } else {
+        embed.setColor('#00ff00');
+    }
+
+    if (allrows.length === 1) {
+        description = `1 player has joined so far. There are not enough players for a tournament yet!`;
+    } else if (allrows.length > 1 && allrows.length < 10) {
+        description = `${allrows.length} players have joined so far. There are not enough players for a tournament yet!`;
+    } else {
+        description = `${allrows.length} players have joined so far.`;
+    }
+
+    embed.setDescription(description);
+    embed.addField('Players', players);
+    message.channel.send({embed});
+};

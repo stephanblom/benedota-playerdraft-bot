@@ -291,8 +291,9 @@ DiscordClient.on('message', async message =>
 
         if (command === 'opencheckin') {
             const openCheckin = require('./tournament/openCheckin');
-            openCheckin.openCheckin(message, args);
+            openCheckin.openCheckinMessage(message, args);
         }
+
     }
 
     if (

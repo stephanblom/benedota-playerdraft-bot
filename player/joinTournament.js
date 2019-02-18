@@ -32,6 +32,9 @@ exports.joinTournament = function (message, args, pool) {
                 message.member.addRole(kayzrPlayerRole).catch(error => {
                     logger.err(error)
                 });
+
+                const playerlist = require('./../tournament/playerlist');
+                playerlist.getPlayerlist(message, args, pool);
             }
         });
     });
