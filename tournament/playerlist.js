@@ -62,6 +62,6 @@ const addPlayersToList = function(message, allrows) {
     }
 
     embed.setDescription(description);
-    embed.addField('Players', players);
+    embed.addField(`${allrows.length} players`, players);
     message.channel.send({embed});
 };
