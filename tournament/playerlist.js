@@ -33,8 +33,8 @@ const addPlayersToList = function(message, allrows) {
     let i = 1;
 
     const embed = new Discord.RichEmbed()
-        .setTitle('BeNeDota Player Draft Teams')
-        .setFooter(`BeNeDota Kayzr Player Draft Team Info`)
+        .setTitle('BeNeDota Kayzr Player Draft')
+        .setFooter(`BeNeDota Kayzr | Joined Players`)
         .setThumbnail('https://benedota.com/thumbs/assets/images/benedota_transp_crop-217x250.png')
         .setTimestamp();
 
@@ -50,9 +50,13 @@ const addPlayersToList = function(message, allrows) {
     }
 
     if (allrows.length === 1) {
-        description = `1 player has joined so far. There are not enough players for a tournament yet!`;
+        description = `1 player has joined so far. `
+            + `There are not enough players for a tournament yet! `
+            + `We'll need ${10 - allrows.length} more players.`;
     } else if (allrows.length > 1 && allrows.length < 10) {
-        description = `${allrows.length} players have joined so far. There are not enough players for a tournament yet!`;
+        description = `${allrows.length} players have joined so far. `
+            + `There are not enough players for a tournament yet! `
+            + `We'll need ${10 - allrows.length} more players.`;
     } else {
         description = `${allrows.length} players have joined so far.`;
     }
