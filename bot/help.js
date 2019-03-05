@@ -56,7 +56,7 @@ exports.sendHelp = function (message, args) {
             `This ends the current tournament, resets the "Joined Kayzr" roles and unjoins everyone from the playerlist. `
             + `This also unsets Kayzr Alpha Winner roles. `
             + `**live** Sends the message to the #kayzr channel. `
-            + **showWinningTeam #** Gives the winners role to the winning team. `
+            + `**showWinningTeam #** Gives the winners role to the winning team. `
         );
         embed.addField(
             '!showwinningteam <teamnumber> <live (optional)> <updateRoles (optional)',
