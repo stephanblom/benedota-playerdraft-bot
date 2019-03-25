@@ -23,8 +23,7 @@ exports.openCheckinSchedule = function (guild, channel) {
 };
 
 exports.openCheckinReminderSchedule = function (guild, channel) {
-    let kayzrPlayerRole = guild.roles.find(role => role.name === 'Kayzr Players');
-    let messageToSend = `${kayzrPlayerRole} | Tomorrow will be another Kayzr! Don't forget to sign up.`;
+    let messageToSend = `Tomorrow will be another Kayzr! Don't forget to sign up.`;
 
     channel.send(messageToSend);
 };
