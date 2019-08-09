@@ -104,7 +104,7 @@ DiscordClient.on('ready', function() {
     schedule.scheduleJob({
         hour: 19,
         minute: 30,
-        dayOfWeek: 1
+        dayOfWeek: 5
     }, function () {
         const openCheckin = require('./tournament/openCheckin');
         openCheckin.openCheckinSchedule(
