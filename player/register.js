@@ -13,7 +13,7 @@ exports.register = function (message, args, pool) {
 
     if (!mmr || isNaN(mmr) || !parseInt(mmr) || (mmr < 1 || mmr >= 10000)) {
         message.channel.send(
-            `Registering ${message.author} failed, invalid mmr given. 
+            `Registering ${message.author} failed, invalid mmr given (${mmr}). 
             ${exampleCommand}`
         );
 
@@ -22,7 +22,7 @@ exports.register = function (message, args, pool) {
 
     if (!preferred_positions) {
         message.channel.send(
-            `Registering ${message.author} failed, no position given. 
+            `Registering ${message.author} failed, no position given.
             ${exampleCommand}`
         );
         return;
@@ -30,7 +30,7 @@ exports.register = function (message, args, pool) {
 
     if (!preferred_captain) {
         message.channel.send(
-            `Registering ${message.author} failed, no preferred captain given. 
+            `Registering ${message.author} failed, no preferred captain given. This should be either 'yes' or 'no'. 
             ${exampleCommand}`
         );
         return;
@@ -50,7 +50,7 @@ exports.register = function (message, args, pool) {
                 break;
             default:
                 message.channel.send(
-                    `Registering ${message.author} failed, invalid preferred captain given. 
+                    `Registering ${message.author} failed, invalid preferred captain given (${preferred_captain}).
                     ${exampleCommand}`
                 );
                 return;
@@ -90,6 +90,7 @@ exports.register = function (message, args, pool) {
             ?
         )
         ON DUPLICATE KEY UPDATE
+            playername = ?,
             mmr = ?,
             preferred_positions = ?,
             preferred_captain = ?
@@ -104,6 +105,7 @@ exports.register = function (message, args, pool) {
                 mmr,
                 preferred_positions,
                 preferred_captain,
+                message.author.username,
                 mmr,
                 preferred_positions,
                 preferred_captain
