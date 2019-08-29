@@ -23,7 +23,8 @@ exports.playerstatus = function (message, args, pool) {
                     message.channel.send(`
                         This is the info, ${message.author}: 
                         - Username: ${player.playername} ${player.kayzrname ? '(on Kayzr: ' + player.kayzrname + ')': ''},
-                        - MMR: ${player.mmr},
+                        - Core MMR: ${player.coremmr},
+                        - Support MMR: ${player.supportmmr},
                         - Preferred positions: ${player.preferred_positions},
                         - Preferred captain: ${player.preferred_captain ? 'Yes' : 'No'},
                         - In next tournament: ${player.joined ? 'Yes' : 'No (maybe you\'d like to `!join` ?)'}
