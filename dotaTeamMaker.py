@@ -5,11 +5,14 @@ Created on Sat Jun 29 10:05:21 2019
 @author: thijs
 """
 
+
+
 import csv
 import sys
 from os.path import isfile
 
 POSSIBLE_ROLES = [1, 2, 3, 4, 5]
+
 
 class Player(object):
     # Didn't put in getters and setters because I'm not sure yet
@@ -329,3 +332,6 @@ def __main__(playerfile, outfile='outfile.csv'):
     choice_tracker = calc_preference_numbers(everyone)
     write_away(teams, maximum_spread, choice_tracker,
                teamless_players_out, outfile)
+
+
+__main__(sys.argv[1], sys.argv[2])

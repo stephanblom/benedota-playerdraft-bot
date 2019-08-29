@@ -4,7 +4,7 @@ const logger = new Logger({
 });
 
 exports.addTeam = function (message, args, pool) {
-    if (args.length < 4) {
+    if (Object.keys(args).length < 4) {
         message.channel.send(
             `Adding team failed, not enough arguments. 
             Ex. command: *!addteam <number> <players from csv> <captain> <avg mmr>*`
@@ -12,10 +12,10 @@ exports.addTeam = function (message, args, pool) {
         return;
     }
 
-    var team_ID = args[0];
-    var team_players = args[1];
-    var captain = args[2];
-    var avg_mmr = args[3];
+    let team_ID = args.ID;
+    let team_players = args.players;
+    let captain = args.captain;
+    let avg_mmr = args.avg_mmr;
 
     logger.debug(
         'TeamID: ' + team_ID,
@@ -24,7 +24,7 @@ exports.addTeam = function (message, args, pool) {
         'Captain: ' + captain
     );
 
-    var sql = `INSERT INTO team (ID, captain, avg_mmr)
+    let sql = `INSERT INTO team (ID, captain, avg_mmr)
         VALUES (?, (SELECT playername FROM player WHERE playerID = ?), ?)
     `;
 
@@ -33,6 +33,7 @@ exports.addTeam = function (message, args, pool) {
             console.error(error.toString());
             return;
         }
+
         connection.query({
             sql: sql,
             values: [
@@ -50,19 +51,16 @@ exports.addTeam = function (message, args, pool) {
             }
 
             addPlayers(message, pool, team_ID, team_players);
-            return;
         });
     });
-
-    return;
-}
+};
 
 function addPlayers(message, pool, team_ID, players)
 {
-    var playerList = players.split(';');
-    var sql = `INSERT INTO team_player (teamID, playerID, position) VALUES`;
+    let playerList = players.split(';');
+    let sql = `INSERT INTO team_player (teamID, playerID, position) VALUES`;
     playerList.forEach(function (player) {
-        var playerInfo = player.split(':');
+        let playerInfo = player.split(':');
         sql += `(${pool.escape(team_ID)}, ${pool.escape(playerInfo[1])}, ${pool.escape(playerInfo[0])}),`;
     });
 
@@ -80,9 +78,6 @@ function addPlayers(message, pool, team_ID, players)
             }
 
             message.channel.send(`Team ${team_ID} registered or updated. `);
-            return;
         });
     });
-
-    return;
-}
+};

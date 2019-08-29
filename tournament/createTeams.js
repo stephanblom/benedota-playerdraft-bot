@@ -4,23 +4,23 @@ const logger = new Logger({
 });
 
 exports.createTeams = function (message, args, pool) {
-    var fs = require('fs');
-    fs.exists('/tmp/players.csv', function() {
-        console.log('/tmp/players.csv exists.');
+    let fs = require('fs');
+    fs.exists('players.csv', function() {
+        console.log('players.csv exists.');
 
-        var PythonShell = require('python-shell');
-
-        var options = {
+        let options = {
             mode: 'text',
             args: [
-                "/tmp/players.csv",
-                "/tmp/outfile.csv"
+                '/tmp/players.csv',
+                '/tmp/outfile.csv'
             ]
         };
+
+        const {PythonShell} = require('python-shell')
         PythonShell.run('dotaTeamMaker.py', options, function (error, results) {
             if (error) {
-                logger.err('Error in dotaTeamMaker.py: ' + error.toString());
-                console.error(error.toString());
+                logger.err('Error in dotaTeamMaker.py: ' + error);
+                console.error(error);
                 return;
             }
             logger.info('Results: ' + results);
@@ -31,9 +31,9 @@ exports.createTeams = function (message, args, pool) {
 
             message.channel.send(`Dota TeamMaker has run.`);
 
-            var importTeams = require('./importTeams');
+            const importTeams = require('./importTeams');
             importTeams.importTeams(message, args, pool);
 
         });
     });
-}
+};

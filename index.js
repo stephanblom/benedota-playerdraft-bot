@@ -12,6 +12,8 @@ const pool = mysql.createPool(process.env.CLEARDB_DATABASE_URL || {
     user: process.env.CLEARDB_DATABASE_USER,
     password: process.env.CLEARDB_DATABASE_PASS,
     database: process.env.CLEARDB_DATABASE_NAME,
+    supportBigNumbers: true,
+    bigNumberStrings: true
 });
 
 const schedule = require('node-schedule');
@@ -246,13 +248,15 @@ DiscordClient.on('message', async message =>
         }
 
         if (command === 'exportjoinedplayers'
-            || command === 'exportplayers') {
+            || command === 'exportplayers'
+        ) {
             exportPlayers = require('./tournament/exportPlayers');
             exportPlayers.exportPlayers(message, args, pool);
         }
 
         if (command === 'createtournament'
-            || command === 'createteams') {
+            || command === 'createteams'
+        ) {
             exportPlayers = require('./tournament/exportPlayers');
             exportPlayers.exportPlayers(message, ['csv'], pool);
         }

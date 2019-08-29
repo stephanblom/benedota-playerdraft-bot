@@ -1,7 +1,7 @@
 exports.exportPlayers = function (message, args, pool) {
-    var exportType = args[0] ? args[0] : 'message';
+    let exportType = args[0] ? args[0] : 'message';
 
-    var sql = `SELECT * FROM player WHERE joined IS NOT NULL ORDER BY joined ASC`;
+    let sql = `SELECT * FROM player WHERE joined IS NOT NULL ORDER BY joined ASC`;
     pool.getConnection(function(error, connection) {
         connection.query(sql, function(error, results) {
             connection.release();
@@ -16,45 +16,38 @@ exports.exportPlayers = function (message, args, pool) {
                 return;
             }
 
-            var leftover_players_amount = results.length % 5;
+            let leftover_players_amount = results.length % 5;
             results = results.splice(0, results.length - leftover_players_amount);
 
-            if (exportType == 'csv') {
+            if (exportType === 'csv') {
                 exportToCsv(message, args, pool, results);
             } else {
                 showPlayers(message, results);
             }
 
-            return;
         });
     });
+};
 
-    return;
-}
-
-var showPlayers = function(message, allrows) {
-    var description = '';
-    var i = 1;
+const showPlayers = function(message, allrows) {
+    let description = '';
     allrows.forEach(function (player) {
-        player.preferred_positions = player.preferred_positions.replace(',', ';');
-        description += `${player.playername};${player.mmr};${player.preferred_captain ? 'True' : 'False'};${player.preferred_positions}\n`;
-        i++;
+        player.preferred_positions = player.preferred_positions.replace(/,/g, ';');
+        description += `${player.playername};${player.coremmr};${player.supportmmr};${player.preferred_captain ? 'True' : 'False'};${player.preferred_positions}\n`;
     });
 
     message.channel.send('```' + description + '```');
-}
+};
 
-var exportToCsv = function(message, args, pool, allrows) {
-    var description = '';
-    var i = 1;
+const exportToCsv = function(message, args, pool, allrows) {
+    let description = '';
     allrows.forEach(function (player) {
         player.preferred_positions = player.preferred_positions.replace(/,/g, ';');
-        description += `${player.playerID};${player.mmr};${player.preferred_captain ? 'True' : 'False'};${player.preferred_positions}\n`;
-        i++;
+        description += `${player.playerID};${player.coremmr};${player.supportmmr};${player.preferred_captain ? 'True' : 'False'};${player.preferred_positions}\n`;
     });
 
-    var fs = require('fs');
-    var filepath = '/tmp/players.csv';
+    let fs = require('fs');
+    let filepath = '/tmp/players.csv';
 
     fs.writeFile(filepath, description, { flag: 'w' }, function(error) {
         if (error) {
@@ -63,12 +56,7 @@ var exportToCsv = function(message, args, pool, allrows) {
         }
 
         message.channel.send(`Players have been exported to CSV.`);
-
-        var createTeams = require('./createTeams');
+        const createTeams = require('./createTeams');
         createTeams.createTeams(message, args, pool);
-
-        return;
     });
-
-    return;
-}
+};
