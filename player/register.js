@@ -1,5 +1,5 @@
 exports.register = function (message, args, pool) {
-    var exampleCommand = `Ex. command: *!register <mmr> <preferred captain> <position> <position (optional) ...>*`;
+    const exampleCommand = `Ex. command: *!register <coremmr> <supportmmr> <preferred captain> <position> <position (optional ...)>*`;
 
     if (args.length < 3) {
         message.channel.send(
@@ -9,11 +9,20 @@ exports.register = function (message, args, pool) {
         return;
     }
 
-    var [mmr, preferred_captain, ...preferred_positions] = args;
+    let [coremmr, supportmmr, preferred_captain, ...preferred_positions] = args;
 
-    if (!mmr || isNaN(mmr) || !parseInt(mmr) || (mmr < 1 || mmr >= 10000)) {
+    if (!coremmr || isNaN(coremmr) || !parseInt(coremmr) || (coremmr < 1 || coremmr >= 10000)) {
         message.channel.send(
-            `Registering ${message.author} failed, invalid mmr given (${mmr}). 
+            `Registering ${message.author} failed, invalid mmr given (${coremmr}). 
+            ${exampleCommand}`
+        );
+
+        return;
+    }
+
+    if (!supportmmr || isNaN(supportmmr) || !parseInt(supportmmr) || (supportmmr < 1 || supportmmr >= 10000)) {
+        message.channel.send(
+            `Registering ${message.author} failed, invalid mmr given (${supportmmr}). 
             ${exampleCommand}`
         );
 
@@ -57,7 +66,7 @@ exports.register = function (message, args, pool) {
         }
     }
 
-    var invalid_position = false;
+    let invalid_position = false;
     preferred_positions.forEach(function (preferred_position) {
         if (preferred_position.toLowerCase() === 'any') {
             preferred_positions = 'Any';
@@ -81,17 +90,19 @@ exports.register = function (message, args, pool) {
         preferred_positions = preferred_positions.join(',');
     }
 
-    var sql = `INSERT INTO player (playerID, playername, mmr, preferred_positions, preferred_captain)
-        VALUES ( 
+    let sql = `INSERT INTO player (playerID, playername, coremmr, supportmmr, preferred_positions, preferred_captain)
+        VALUES (
             ?,
-            "?", 
-            ?, 
-            ?, 
+            ?,
+            ?,
+            ?,
+            ?,
             ?
         )
         ON DUPLICATE KEY UPDATE
             playername = ?,
-            mmr = ?,
+            coremmr = ?,
+            supportmmr = ?,
             preferred_positions = ?,
             preferred_captain = ?
     `;
@@ -102,11 +113,13 @@ exports.register = function (message, args, pool) {
             values: [
                 message.author.id,
                 message.author.username,
-                mmr,
+                coremmr,
+                supportmmr,
                 preferred_positions,
                 preferred_captain,
                 message.author.username,
-                mmr,
+                coremmr,
+                supportmmr,
                 preferred_positions,
                 preferred_captain
             ]
@@ -119,9 +132,9 @@ exports.register = function (message, args, pool) {
                 throw error;
             }
 
-            message.channel.send(`${message.author} is registered or updated `
-                + `*(MMR: ${mmr}, Prefers position(s): ${preferred_positions}, `
+            message.channel.send(`${message.author} is registered or updated: `
+                + `*(Core MMR: ${coremmr}, Support MMR: ${supportmmr}, Prefers position(s): ${preferred_positions}, `
                 + `Prefers captain: ${preferred_captain ? 'Yes' : 'No'})*.`);
         });
     });
-}
+};
