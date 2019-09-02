@@ -12,6 +12,8 @@ const pool = mysql.createPool(process.env.CLEARDB_DATABASE_URL || {
     user: process.env.CLEARDB_DATABASE_USER,
     password: process.env.CLEARDB_DATABASE_PASS,
     database: process.env.CLEARDB_DATABASE_NAME,
+    supportBigNumbers: true,
+    bigNumberStrings: true
 });
 
 const schedule = require('node-schedule');
@@ -126,23 +128,23 @@ DiscordClient.on('ready', function() {
     });
 
     console.log(
-        `Bot has started, with ${DiscordClient.users.size} users, in ${DiscordClient.channels.size} channels of` +
-        ` ${DiscordClient.guilds.size} guilds.`
+        `Bot has started, with ${DiscordClient.users.size} users, in ${DiscordClient.channels.size} channels of`
+        + ` ${DiscordClient.guilds.size} guilds.`
     );
 
     log.info(
-        `Bot has started, with ${DiscordClient.users.size} users, in ${DiscordClient.channels.size} channels of` +
-        ` ${DiscordClient.guilds.size} guilds.`
+        `Bot has started, with ${DiscordClient.users.size} users, in ${DiscordClient.channels.size} channels of`
+        + ` ${DiscordClient.guilds.size} guilds.`
     );
 
-    DiscordClient.user.setGame(`BeNeDota PlayerDraft`);
+    DiscordClient.user.setActivity(`BeNeDota PlayerDraft`);
 });
 
-DiscordClient.on("guildCreate", guild => {
+DiscordClient.on('guildCreate', guild => {
     console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
 });
 
-DiscordClient.on("guildDelete", guild => {
+DiscordClient.on('guildDelete', guild => {
     console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
 });
 
@@ -152,7 +154,7 @@ DiscordClient.on('message', async message =>
 
     if (!message.content.startsWith(process.env.botprefix)
         || message.author.bot
-        || message.channel.type !== "text"
+        || message.channel.type !== 'text'
         || message.channel.id !== process.env.onlyDeleteMessagesInChannel
     ) {
         return;
@@ -167,12 +169,12 @@ DiscordClient.on('message', async message =>
 
     log.debug(`Received command ${command} message from ${message.author.username} with the arguments ${args.join(', ')}`);
 
-    if (command === "help") {
+    if (command === 'help') {
         const help = require('./bot/help');
         help.sendHelp(message, args);
     }
 
-    if (command === "playerlist" || command === 'players') {
+    if (command === 'playerlist' || command === 'players') {
         const playerlist = require('./tournament/playerlist');
         playerlist.getPlayerlist(message, args, pool);
     }
@@ -195,8 +197,8 @@ DiscordClient.on('message', async message =>
     if (command === 'status') {
         if (message.mentions.users.first()
             && (
-                message.member.roles.find("name", "Admin")
-                || message.member.roles.find("name", "Staff")
+                message.member.roles.find(role => role.name === 'Admin')
+                || message.member.roles.find(role => role.name === 'Staff')
                 || message.author.id === '157938886784319489'
             )
         ) {
@@ -214,14 +216,14 @@ DiscordClient.on('message', async message =>
     }
 
     if (
-        message.member.roles.find("name", "Admin")
-        || message.member.roles.find("name", "Staff")
-        || message.member.roles.find("name", "Kayzr MOD/CM")
+        message.member.roles.find(role => role.name === 'Admin')
+        || message.member.roles.find(role => role.name === 'Staff')
+        || message.member.roles.find(role => role.name === 'Kayzr MOD/CM')
         || message.author.id === '157938886784319489'
     ) {
-        if (command === "ping") {
+        if (command === 'ping') {
             const m = await
-                message.channel.send("Ping?");
+                message.channel.send('Ping?');
             m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(DiscordClient.ping)}ms`)
                 .then(msg => {
                     msg.delete(5000);
@@ -246,13 +248,15 @@ DiscordClient.on('message', async message =>
         }
 
         if (command === 'exportjoinedplayers'
-            || command === 'exportplayers') {
+            || command === 'exportplayers'
+        ) {
             exportPlayers = require('./tournament/exportPlayers');
             exportPlayers.exportPlayers(message, args, pool);
         }
 
         if (command === 'createtournament'
-            || command === 'createteams') {
+            || command === 'createteams'
+        ) {
             exportPlayers = require('./tournament/exportPlayers');
             exportPlayers.exportPlayers(message, ['csv'], pool);
         }

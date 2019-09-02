@@ -26,31 +26,34 @@ const readCsv = function(message, args, pool)
                 avg_mmr_info = team_info.pop().split(':');
                 team_players = team_info.join(';');
 
+                let team = [];
                 if (avg_mmr_info.length > 0
                     && captain_info.length > 0) {
-                    args[0] = team_ID;
-                    args[1] = team_players;
-                    args[2] = avg_mmr_info[1];
-                    args[3] = captain_info[1];
+                    team['ID'] = team_ID;
+                    team['players'] = team_players;
+                    team['avg_mmr'] = avg_mmr_info[1];
+                    team['captain'] = captain_info[1];
 
-                    addTeam.addTeam(this.message, args, this.pool);
+                    addTeam.addTeam(this.message, team, this.pool);
                 }
                 i++;
             } else if (data[0].startsWith('1:')) {
                 team_ID = i;
                 team_info = data[0].split(';');
-                captain_info = team_info.pop().split(':');
                 avg_mmr_info = team_info.pop().split(':');
+                captain_info = team_info.pop().split(':');
                 team_players = team_info.join(';');
 
                 if (avg_mmr_info.length > 0
-                    && captain_info.length > 0) {
-                    args[0] = team_ID;
-                    args[1] = team_players;
-                    args[2] = avg_mmr_info[1];
-                    args[3] = captain_info[1];
-
-                    addTeam.addTeam(this.message, args, this.pool);
+                    && captain_info.length > 0
+                ) {
+                    let team = {
+                        'ID': team_ID,
+                        'players': team_players,
+                        'avg_mmr': avg_mmr_info[1],
+                        'captain': captain_info[1]
+                    };
+                    addTeam.addTeam(this.message, team, this.pool);
                 }
                 i++;
             } else if (data[0] !== ''
@@ -87,7 +90,7 @@ const truncateTeams = function(message, args, pool)
 
             if (error) {
                 console.error(error.toString());
-                message.channel.send(`Truncating team table failed, an error occurred.`);
+                message.channel.send(`TRUNCATE TABLE team failed, an error occurred.`);
             }
         });
 
@@ -103,7 +106,7 @@ const truncateTournamentInfo = function (message, args, pool) {
 
             if (error) {
                 console.error(error.toString());
-                message.channel.send(`Getting players failed, an error occurred.`);
+                message.channel.send(`TRUNCATE TABLE tournament_info failed, an error occurred.`);
             }
         });
 
@@ -119,7 +122,7 @@ exports.importTeams = function (message, args, pool) {
 
             if (error) {
                 console.error(error.toString());
-                message.channel.send(`Getting players failed, an error occurred.`);
+                message.channel.send(`TRUNCATE TABLE team_player failed, an error occurred.`);
             }
         });
 

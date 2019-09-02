@@ -1,15 +1,15 @@
 exports.registerPlayer = function (message, args, pool) {
+    const exampleCommand = `Ex. command: *!register <coremmr> <supportmmr> <preferred captain> <position> <position (optional ...)>*`;
+
     if (args.length < 3) {
         message.channel.send(
-            `Registering failed, not enough parameters given. 
-            Ex. command: *!register <mmr> <preferred captain> <position> <position (optional ...)>*`
+            `Registering failed, not enough parameters given. `
+            + exampleCommand
         );
         return;
     }
 
-    var exampleCommand = `Ex. command: *!register <mmr> <preferred captain> <position> <position (optional ...)>*`;
-
-    var [user, mmr, preferred_captain, ...preferred_positions] = args;
+    let [user, coremmr, supportmmr, preferred_captain, ...preferred_positions] = args;
     user = message.mentions.users.first();
 
     if (!user) {
@@ -21,9 +21,18 @@ exports.registerPlayer = function (message, args, pool) {
         return;
     }
 
-    if (!mmr || isNaN(mmr) || (mmr < 1 || mmr >= 10000)) {
+    if (!coremmr || isNaN(coremmr) || (coremmr < 1 || coremmr >= 10000)) {
         message.channel.send(
-            `Registering failed, invalid mmr given.`
+            `Registering failed, invalid coremmr given ${coremmr}.`
+            + exampleCommand
+        );
+
+        return;
+    }
+
+    if (!supportmmr || isNaN(supportmmr) || (supportmmr < 1 || supportmmr >= 10000)) {
+        message.channel.send(
+            `Registering failed, invalid coremmr given ${supportmmr}.`
             + exampleCommand
         );
 
@@ -32,7 +41,7 @@ exports.registerPlayer = function (message, args, pool) {
 
     if (!preferred_positions) {
         message.channel.send(
-            `Registering failed, no position given.`
+            `Registering failed, no preferred positions given.`
             + exampleCommand
         );
         return;
@@ -40,7 +49,7 @@ exports.registerPlayer = function (message, args, pool) {
 
     if (!preferred_captain) {
         message.channel.send(
-            `Registering failed, no preferred captain given. `
+            `Registering failed, no preferred captain given. This should be either "Yes" or "No".`
             + exampleCommand
         );
         return;
@@ -60,14 +69,14 @@ exports.registerPlayer = function (message, args, pool) {
                 break;
             default:
                 message.channel.send(
-                    `Registering failed, invalid preferred captain given. `
+                    `Registering failed, invalid preferred captain given. This should be either "Yes" or "No".`
                     + exampleCommand
                 );
                 return;
         }
     }
 
-    var invalid_position = false;
+    let invalid_position = false;
     preferred_positions.forEach(function (preferred_position) {
         if (preferred_position.toLowerCase() === 'any') {
             preferred_positions = 'Any';
@@ -80,14 +89,21 @@ exports.registerPlayer = function (message, args, pool) {
 
     if (invalid_position) {
         message.channel.send(
-            `Registering failed, invalid preferred position given (${invalid_position}). 
-            Ex. command: *!register <mmr> <preferred captain> <position> <position (optional) ...>*`
+            `Registering failed, invalid preferred position given (${invalid_position}).`
+            + exampleCommand
         );
+
         return;
     }
 
-    var sql = `INSERT INTO player (playerID, playername, mmr, preferred_positions, preferred_captain)
+    if (Array.isArray(preferred_positions)) {
+        preferred_positions = preferred_positions.slice(0, 5);
+        preferred_positions = preferred_positions.join(',');
+    }
+
+    let sql = `INSERT INTO player (playerID, playername, coremmr, supportmmr, preferred_positions, preferred_captain)
         VALUES ( 
+            ?,
             ?,
             ?, 
             ?, 
@@ -96,7 +112,8 @@ exports.registerPlayer = function (message, args, pool) {
         )
         ON DUPLICATE KEY UPDATE
             playername = ?,
-            mmr = ?,
+            coremmr = ?,
+            supportmmr = ?,
             preferred_positions = ?,
             preferred_captain = ?
     `;
@@ -107,11 +124,13 @@ exports.registerPlayer = function (message, args, pool) {
             values: [
                 user.id,
                 user.username,
-                mmr,
+                coremmr,
+                supportmmr,
                 preferred_positions,
                 preferred_captain,
                 user.username,
-                mmr,
+                coremmr,
+                supportmmr,
                 preferred_positions,
                 preferred_captain
             ]
@@ -123,9 +142,11 @@ exports.registerPlayer = function (message, args, pool) {
                 throw error;
             }
 
-            message.channel.send(`${user} is registered or updated *(MMR: ${mmr}, `
-            + `Prefers position(s): ${preferred_positions}, `
-            + `Prefers captain: ${preferred_captain ? 'Yes' : 'No'}).*`);
+            message.channel.send(`${user} is registered or updated:`
+                + `*(CoreMMR: ${coremmr}, `
+                + `SupportMMR: ${supportmmr}, `
+                + `Prefers position(s): ${preferred_positions}, `
+                + `Prefers captain: ${preferred_captain ? 'Yes' : 'No'}).*`);
         });
     });
-}
+};
