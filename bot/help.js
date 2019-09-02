@@ -4,7 +4,7 @@ exports.sendHelp = function (message, args) {
     message.author.send(
         'Hi, here are the commands for the Kayzr Player Bot, for BeNeDota: \n'
         + '\n'
-        + '**!register (or !update)** <mmr> <preferred captain (Yes/No)> <position (1,2,3,4,5,Any)> *<position (optional, multiple allowed)>* \n'
+        + '**!register (or !update)** <coremmr> <supportmmr> <preferred captain (Yes/No)> <position (1,2,3,4,5,Any)> <position (optional, multiple allowed, separated by a space)>'
         + 'This command registers you to the bot, or updates your data, for example: \n'
         + '`!register 2700 Nee 5 4` \n'
         + '**!playerlist:** \n'
