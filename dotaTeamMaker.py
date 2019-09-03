@@ -1,11 +1,21 @@
-# -*- coding: utf-8 -*-
 """
-Created on Sat Jun 29 10:05:21 2019
+ This program sorts players into teams for Dota2 tournaments.
+ Copyright (C) 2019  Jonathan "Fusion" Driessen
 
-@author: thijs
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.
+    If not, see https://www.gnu.org/licenses/gpl.html.
 """
-
-
 
 import csv
 import sys
@@ -15,25 +25,19 @@ POSSIBLE_ROLES = [1, 2, 3, 4, 5]
 
 
 class Player(object):
-    # Didn't put in getters and setters because I'm not sure yet
-    # Where I want to go with this program.
     weights = {1: 1.3, 2: 1.3, 3: 1, 4: 0.7, 5: 0.7}
 
-    def __init__(self, name, cmmr, smmr, captain_pref, roles):
+    def __init__(self, name, core_mmr, support_mmr, captain_pref, roles):
         self.name = name
-
+        self.support_mmr = None
+        self. core_mmr = None
         try:
-            self.real_cmmr = int(cmmr)
+            self.real_core_mmr = int(core_mmr)
+            self.real_support_mmr = int(support_mmr)
         except:
-            sys.exit('Core MMR has to be a number. Not ' + cmmr)
-        
-        try:
-            self.real_smmr = int(smmr)
-        except:
-            sys.exit('Support MMR has to be a number. Not ' + smmr)
+            sys.exit('MMR has to be a number. Not ' + core_mmr + support_mmr)
 
-        self.cmmr = None
-        self.smmr = None
+        self.mmr = None
 
         role_list = list()
         for role in roles:
@@ -62,15 +66,13 @@ class Player(object):
 
     def __str__(self):
         return '%s: Core MMR = %s, Support MMR = %s, role_pref = %s, role = %s, captainpref = %s, ' \
-               'captainstatus = %s' % (self.name, self.real_cmmr,
-        self.real_smmr, self.role_preference, self.role,
-        self.captain_preference, self.active_captain)
+               'captainstatus = %s' % (self.name, self.real_core_mmr, self.real_support_mmr, self.role_preference, self.role, self.captain_preference, self.active_captain)
 
     def calc_mmr(self):
-        if self.role < 4:
-            self.mmr = self.real_cmmr * self.weights[self.role]
+        if self.role in [4,5]:
+            self.mmr = self.real_support_mmr * self.weights[self.role]
         else:
-            self.mmr = self.real_smmr * self.weights[self.role]
+            self.mmr = self.real_core_mmr * self.weights[self.role]
 
 
 class Team(object):
@@ -121,7 +123,7 @@ def create_players(playerfile):
         for line in reader:
             players.append(Player(line[0], line[1], line[2], line[3], line[4:]))
     team_amount = len(players) // 5
-    players = sorted(players, key=lambda x: x.real_cmmr, reverse=True)
+    players = sorted(players, key=lambda x: max(x.real_core_mmr,x.real_support_mmr), reverse=True)
     teamless_players = players[team_amount * 5:]
     players = players[:team_amount * 5]
     return players, teamless_players, team_amount
@@ -164,9 +166,9 @@ def distribute_roles(everyone, team_amount):
     # Amount of players in the bottom 60 percent.
     for proposed_role in [5, 4]:
         # The bottom 60 percent will get support priority and be given
-        # the support role if it is in their top 3. Until there are enough
+        # the support role if it is in their top 2. Until there are enough
         # supports.
-        for preference_number in range(3):
+        for preference_number in range(2):
             for person in everyone[:bottompercentplayeramount]:
                 if len(person.role_preference) > preference_number and \
                                 person.role is None:
@@ -179,6 +181,7 @@ def distribute_roles(everyone, team_amount):
                         role_amounts[proposed_role] += 1
                         person.calc_mmr()
                         continue
+    everyone.sort(key=lambda x: max(x.real_core_mmr, x.real_support_mmr), reverse=True)
     for preference_number in range(5):
         for person in everyone:
             if person.role is None and person.role_preference[0] != 'Any':
@@ -193,7 +196,6 @@ def distribute_roles(everyone, team_amount):
                         # receieve it and the role_amounts will be updated.
     # These next 2 loops distribute the remaining free roles amongst the
     # captains and players. Priorty: High->Low MMR,Position 1 -> Position 5
-    everyone.sort(key=lambda x: x.real_cmmr, reverse=True)
     for person in everyone:
         if person.role is None:
             for role_and_amount in enumerate(role_amounts):
@@ -236,7 +238,6 @@ def distribute_player(players, teams, cur_round, current_index=None):
             templist.append(team)
     min_team_avg = min([l.average for l in templist])
     min_avg_team = None
-    # Fucking IDE is crying so i have to put in this last line.
     for team in templist:
         if team.average == min_team_avg:
             min_avg_team = team
@@ -305,7 +306,7 @@ def write_away(teams, max_spread, choice_tracker, teamless_player_list,
         writer.writerow(teamless_player_list)
 
 
-def __main__(playerfile, outfile='outfile.csv'):
+def __main__(playerfile, outfile='Outfile.csv'):
     players, teamless_players, team_amount = create_players(playerfile)
     players, captains = update_captain_status(players, team_amount)
     everyone = list()
@@ -313,7 +314,7 @@ def __main__(playerfile, outfile='outfile.csv'):
         everyone.append(player)
     for captain in captains:
         everyone.append(captain)
-    everyone.sort(key=lambda x: x.real_cmmr)
+    everyone.sort(key=lambda x: max(x.real_core_mmr, x.real_support_mmr))
     teams = create_teams(team_amount)
     distribute_roles(everyone, team_amount)
     distribute_captains(captains, teams)
@@ -334,4 +335,39 @@ def __main__(playerfile, outfile='outfile.csv'):
                teamless_players_out, outfile)
 
 
-__main__(sys.argv[1], sys.argv[2])
+if len(sys.argv) == 1:
+    sys.argv.append('versioninfo')
+if sys.argv[1] == 'versioninfo':
+    print('\nDotaTeamMaker_LowSupp_Weighted')
+    print('Current weights: ' + str(Player.weights))
+    print('Written by Jonathan \'Fusion\' Driessen')
+    print('Current version: 1.3.a')
+    print('Last updated on 02/09/2019')
+elif len(sys.argv) == 2:
+    try:
+        __main__(sys.argv[1])
+    except FileNotFoundError:
+        print('\nInput error')
+        print('Input file doesn\'t exist')
+        print('Correct commandline input is:')
+        print('python <name of DotaTeamMaker> <Input data> <Optional: '
+              'Outfile name>')
+    except:
+        raise
+elif len(sys.argv) == 3:
+    if not sys.argv[2].endswith('.csv'):
+        print('\nInput error')
+        print('Output file is not a .csv file')
+        print('Correct commandline input is:')
+        print('python <name of DotaTeamMaker> <Input data> <Optional: '
+              'Outfile name>')
+    try:
+        __main__(sys.argv[1], sys.argv[2])
+    except FileNotFoundError:
+        print('\nInput error')
+        print('Input file doesn\'t exist')
+        print('Correct commandline input is:')
+        print('python <name of DotaTeamMaker> <Input data> <Optional: '
+              'Outfile name>')
+    except:
+        raise

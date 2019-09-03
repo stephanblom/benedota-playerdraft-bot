@@ -61,7 +61,12 @@ const addPlayersToList = function(message, allrows) {
         description = `${allrows.length} players have joined so far.`;
     }
 
-    embed.setDescription(description);
-    embed.addField(`${allrows.length} players`, players);
-    message.channel.send({embed});
+    if (players.length <= 1000) {
+        embed.setDescription(description);
+        embed.addField(`${allrows.length} players`, players);
+        message.channel.send({embed});
+    } else {
+        message.channel.send(description);
+        message.channel.send(players);
+    }
 };
