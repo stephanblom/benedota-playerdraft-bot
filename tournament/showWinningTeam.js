@@ -20,8 +20,7 @@ exports.showWinningTeam = function(message, args, pool)
             team_player.playerID as playerID, 
             playername, 
             position, 
-            kayzrname, 
-            mmr, 
+            kayzrname,
             preferred_positions, 
             preferred_captain 
         FROM team_player
